@@ -133,6 +133,47 @@ h1{font-size:3.2rem;margin:0}
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-.35rem)}75%{transform:translateX(.35rem)}}
 @keyframes pop{0%{transform:scale(.6);opacity:0}70%{transform:scale(1.08)}100%{transform:scale(1);opacity:1}}
 @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(0,0,0,.0),0 .3rem 0 rgba(0,0,0,.16)}50%{box-shadow:0 0 0 .45rem rgba(242,176,30,.55),0 .3rem 0 rgba(0,0,0,.16)}}
+
+/* ---------- Handy / kleine Bildschirme ---------- */
+.turn{display:none;font-size:1rem;background:#fff;border:.12rem dashed var(--line);border-radius:.8rem;padding:.4rem .8rem;text-align:center;margin:0}
+#home{overflow-y:auto}
+#stage{overflow:auto;align-items:flex-start;justify-content:flex-start}
+#stage>*{margin:auto}
+@media (max-height:520px){
+  html{font-size:clamp(9px,min(1.6vw,2.85vh),52px)}
+  #prompt{margin:.4rem 1rem .1rem;font-size:1.4rem}
+  #home{justify-content:flex-start;gap:.7rem;padding:.8rem 1rem}
+  h1{font-size:2.6rem}
+  .tile{min-height:13rem}
+  .nb{gap:1.2rem}
+}
+@media (max-width:640px){
+  html{font-size:14px}
+  #home{justify-content:flex-start;padding:1rem .8rem}
+  h1{font-size:2.3rem}
+  .sub{text-align:center}
+  .tiles{grid-template-columns:repeat(2,1fr)}
+  .tile{min-height:12.5rem}
+  .turn{display:block}
+  #game header{flex-wrap:wrap;gap:.5rem}
+  #game header .title{order:-1;flex:1 1 100%}
+  #game footer{grid-template-columns:1fr auto;gap:.5rem}
+  #fb{grid-column:1/-1;grid-row:1}
+  .key{width:3.9rem;height:4.1rem;font-size:2.5rem}
+  .find{flex-direction:column;gap:1.2rem}
+  .target{width:6rem;height:6.4rem;font-size:4.4rem}
+  .grid{grid-template-columns:repeat(4,auto)!important;gap:.55rem}
+  .choices{flex-wrap:wrap;justify-content:center}
+  .slot,.mid{width:4.8rem;height:5.2rem;font-size:3.2rem}
+  .sortrow{flex-wrap:wrap;justify-content:center;gap:.55rem}
+  .card{width:3.9rem;height:4.5rem;font-size:2.7rem}
+  .card.word{width:16rem;font-size:1.7rem;padding-left:.9rem}
+  .nums span{font-size:1.4rem}
+  .swapgrid{grid-template-columns:repeat(6,auto)!important;gap:.45rem}
+  .swapgrid .key{width:3.6rem;height:4rem;font-size:2.3rem}
+  #abcbar{flex-wrap:wrap;gap:.2rem;padding:.4rem .5rem}
+  #abcbar span{flex:0 0 calc(100%/13 - .2rem);font-size:1.25rem;padding:.15rem 0}
+}
 @media (prefers-reduced-motion:reduce){*{animation:none!important}}
 </style>
 </head>
@@ -142,6 +183,7 @@ h1{font-size:3.2rem;margin:0}
   <section id="home">
     <h1>Abc-Werkstatt</h1>
     <p class="sub">Tippe auf eine Station.</p>
+    <p class="turn">📱 Tipp: Am Handy ist es quer gehalten am schönsten.</p>
     <div class="tiles" id="tiles"></div>
     <div class="settings">
       <span>Buchstaben:</span>
