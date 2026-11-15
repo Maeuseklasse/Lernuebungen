@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lernwerkstatt Zahlen bis 100</title>
+<style>
+:root{--z:#1d4e89;--e:#2f8f3a;--el:#a6dc8f;--f:#8ec5ef;--bg:#faf6ee;--card:#fff;--line:#d9cfbd;--ink:#2b2b2b;--ok:#2e8b57;--warn:#d97a12;--hl:#ffe27a;--beige:#efdcb5;--beigel:#a8844f;--muted:#6b6250}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{font-family:"Andika","Century Gothic","Segoe UI","Helvetica Neue",Arial,sans-serif;background:var(--bg);color:var(--ink);font-size:18px;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
+button{font-family:inherit;cursor:pointer;color:inherit}
+.cz{color:var(--z)}.ce{color:var(--e)}.ck{color:var(--ink)}
+body.nocol .cz,body.nocol .ce,body.nocol .wz,body.nocol .we{color:inherit}
+.wz{color:var(--z)}.we{color:var(--e)}.wk{color:var(--ink)}
+.hidden{display:none!important}
+/* Start */
+#home{max-width:1150px;margin:0 auto;padding:1.2rem 1.2rem 2rem}
+#home h1{font-size:2.3rem;margin:.2rem 0 .2rem;display:flex;align-items:center;gap:.6rem}
+#home .sub{color:var(--muted);margin:0 0 1rem;font-size:1.1rem}
+.settings{display:flex;flex-wrap:wrap;gap:.6rem 1.4rem;align-items:center;background:var(--card);border:2px solid var(--line);border-radius:1rem;padding:.7rem 1rem;margin-bottom:1rem}
+.settings span{font-weight:bold}
+.seg{display:inline-flex;border:2px solid var(--line);border-radius:.8rem;overflow:hidden}
+.seg button{border:0;background:#fff;padding:.45rem .9rem;font-size:1.05rem}
+.seg button+button{border-left:2px solid var(--line)}
+.seg button.on{background:var(--z);color:#fff}
+.group{margin:1.1rem 0 .5rem;font-size:1.25rem;color:var(--muted);font-weight:bold;border-bottom:2px solid var(--line);padding-bottom:.2rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(205px,1fr));gap:.8rem}
+.st{background:var(--card);border:2px solid var(--line);border-radius:1rem;padding:.7rem .7rem .6rem;text-align:left;display:flex;flex-direction:column;gap:.35rem;min-height:170px;transition:transform .1s}
+.st:active{transform:scale(.97)}
+.st .ic{height:74px;display:flex;align-items:center;justify-content:center}
+.st .ic svg{max-height:74px;max-width:100%}
+.st b{font-size:1.15rem}
+.st .nr{display:inline-block;background:var(--z);color:#fff;border-radius:50%;width:1.6rem;height:1.6rem;text-align:center;line-height:1.6rem;font-size:.95rem;margin-right:.3rem}
+.st small{color:var(--muted);font-size:.9rem}
+.st .stars{font-size:.95rem;color:#c8961a;min-height:1.1rem}
+.foot{margin-top:1.4rem;color:var(--muted);text-align:right;font-size:.95rem}
+/* Game */
+#game{height:100%;display:flex;flex-direction:column}
+header{display:flex;align-items:center;gap:.6rem;padding:.5rem .8rem;background:var(--card);border-bottom:2px solid var(--line);flex-wrap:wrap}
+header h2{margin:0;font-size:1.35rem;flex:1;min-width:150px}
+.plain{border:2px solid var(--line);background:#fff;border-radius:.7rem;padding:.4rem .8rem;font-size:1.05rem}
+.plain.on{background:var(--hl);border-color:#e0b800}
+#homeBtn{font-size:1.5rem;padding:.2rem .9rem}
+#dots{display:flex;gap:.4rem;justify-content:center;padding:.6rem 0 .1rem}
+#dots i{width:1.1rem;height:1.1rem;border-radius:50%;border:2px solid var(--line);background:#fff}
+#dots i.cur{border-color:var(--z)}
+#dots i.star{background:#f2c230;border-color:#d9a400}
+#dots i.ok{background:var(--el);border-color:var(--e)}
+#dots i.miss{background:#f5c58f;border-color:var(--warn)}
+main{flex:1;overflow:auto;display:flex;flex-direction:column;align-items:center;padding:.4rem 1rem 1rem;gap:.8rem}
+#prompt{font-size:1.75rem;font-weight:bold;text-align:center;display:flex;align-items:center;gap:.6rem;justify-content:center;flex-wrap:wrap}
+#prompt .big{font-size:2.3rem}
+.spk{border:2px solid var(--line);background:#fff;border-radius:50%;width:2.6rem;height:2.6rem;font-size:1.3rem;padding:0;flex:none}
+.legend{font-size:1.1rem;color:var(--muted);display:flex;gap:1.2rem;flex-wrap:wrap;justify-content:center}
+.legend b{font-size:1.5rem;color:var(--ink)}
+#pic{display:flex;justify-content:center;align-items:center;max-width:100%}
+.pic{display:block;max-width:100%}
+svg.dienes{height:230px}
+svg.field{height:300px}
+svg.strahl{width:min(980px,94vw)}
+svg.kette{width:min(900px,94vw)}
+svg.money{max-height:260px;width:auto;max-width:min(700px,92vw)}
+#answer{display:flex;flex-direction:column;align-items:center;gap:.8rem;width:100%}
+.opts{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center}
+.opt{min-width:7rem;padding:.6rem 1.2rem;font-size:2.4rem;font-weight:bold;background:#fff;border:3px solid var(--line);border-radius:1rem}
+.opt.word{font-size:1.9rem;min-width:13rem}
+.opt.pic{padding:.5rem;min-width:0;display:flex;align-items:center;justify-content:center;width:min(300px,29vw);height:230px}
+.opt.pic.four{width:min(250px,22vw);height:210px}
+.opt.pic svg{max-width:100%;max-height:100%}
+.opt.pic .wordbox{font-size:1.7rem}
+.opt.arrow{font-size:3rem;min-width:5.5rem}
+.opt.bad{border-color:var(--warn);background:#fde9d2;opacity:.6}
+.opt.good{border-color:var(--ok);background:#dff3e4}
+.eq{font-size:2.4rem;font-weight:bold;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;justify-content:center}
+.eq .op{color:var(--muted)}
+.eq .lab{font-size:1.6rem}
+.fld{min-width:4.6rem;height:4rem;border:3px dashed #b8ab92;border-radius:.8rem;background:#fff;font-size:2.3rem;font-weight:bold;padding:0 .4rem}
+.fld.act{border-style:solid;border-color:#e0b800;background:#fff8d6}
+.fld.bad{border-style:solid;border-color:var(--warn);background:#fde9d2}
+.fld.good{border-style:solid;border-color:var(--ok);background:#dff3e4}
+.keys{display:grid;grid-template-columns:repeat(6,4.4rem);gap:.45rem}
+.key{height:4rem;font-size:2.1rem;font-weight:bold;background:#fff;border:2px solid var(--line);border-radius:.8rem}
+.key.wide{grid-column:span 2;font-size:1.4rem}
+.key:active,.opt:active,.tool:active{transform:scale(.95)}
+.check{background:var(--z);color:#fff;border:0;border-radius:.9rem;font-size:1.5rem;padding:.6rem 1.8rem;font-weight:bold}
+.tools{display:flex;gap:.6rem;flex-wrap:wrap;justify-content:center}
+.tool{background:#fff;border:2px solid var(--line);border-radius:.8rem;font-size:1.4rem;padding:.5rem 1rem;font-weight:bold;min-width:5rem}
+.tool.z{border-color:var(--z);color:var(--z)}
+.tool.e{border-color:var(--e);color:var(--e)}
+#fb{min-height:3.2rem;font-size:1.4rem;font-weight:bold;text-align:center;padding:.4rem 1rem;border-radius:.8rem;max-width:900px}
+#fb.ok{background:#dff3e4;color:#1d6b3e}
+#fb.warn{background:#fdebd3;color:#8a4a00}
+footer{display:flex;justify-content:flex-end;padding:.5rem 1rem;border-top:2px solid var(--line);background:var(--card)}
+#next{font-size:1.5rem;padding:.6rem 2rem;border-radius:.9rem;border:0;background:var(--ok);color:#fff;font-weight:bold}
+#next:disabled{background:#c9c2b4}
+/* Tafel */
+table.tafel{border-collapse:collapse;font-weight:bold;font-size:1.35rem;background:#fff}
+table.tafel td{border:1.5px solid #bdb19a;width:2.9rem;height:2.45rem;text-align:center;padding:0}
+table.tafel tr:nth-child(5) td{border-bottom:3px solid #8e8270}
+table.tafel td:nth-child(5){border-right:3px solid #8e8270}
+table.tafel.click td{cursor:pointer}
+table.tafel td.hl{background:var(--hl)}
+table.tafel td.start{background:var(--hl);outline:3px solid #e0b800;outline-offset:-3px}
+table.tafel td.bad{background:#f8cf9c}
+table.tafel td.good{background:#bfe8c5}
+.cross{display:grid;grid-template-columns:repeat(3,6rem);grid-template-rows:repeat(3,5rem);gap:0}
+.cross>div{border:2px solid #bdb19a;background:#fff;display:flex;align-items:center;justify-content:center;font-size:2.2rem;font-weight:bold}
+.cross>div.no{border:0;background:transparent}
+.cross>div.mid{background:var(--hl)}
+.cross .fld{min-width:5.2rem;height:4.2rem;border-radius:.5rem}
+/* Stellenwerttafel */
+table.swt{border-collapse:collapse;background:#fff;font-weight:bold}
+table.swt th{font-size:2rem;padding:.2rem 1.5rem;border:2px solid #8e8270;color:#fff}
+table.swt th.hz{background:var(--z)}table.swt th.he{background:var(--e)}
+table.swt td{border:2px solid #8e8270;vertical-align:middle;text-align:center;padding:.5rem;min-width:9.5rem;height:8rem}
+table.swt td.num{height:auto;font-size:2.4rem;padding:.3rem}
+.pl{display:inline-grid;grid-template-columns:repeat(5,1.5rem);gap:.3rem}
+.pl i{width:1.5rem;height:1.5rem;border-radius:50%;display:block}
+.pl i.pz{background:var(--z)}.pl i.pe{background:var(--el);border:2px solid var(--e)}
+.pl i.mv{outline:3px dashed var(--warn);outline-offset:2px}
+table.swt th.hh{background:#8a6d3b}table.swt td.tdh{min-width:5rem}
+.pl i.ph{background:#c9a86a;border:2px solid #8a6d3b;border-radius:.2rem}
+.gh{fill:none;stroke:#333;stroke-width:3}.gz{stroke:var(--z);stroke-width:5;stroke-linecap:round}.ge{fill:var(--e)}
+svg.geheim{height:90px;max-width:92vw}
+.tiles{display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center}
+.tile{font-size:1.8rem;font-weight:bold;background:#fff;border:2px solid var(--line);border-radius:.7rem;padding:.4rem .9rem}
+.tile.used{opacity:.3}
+.wline{min-height:4.2rem;min-width:22rem;border-bottom:4px solid #b8ab92;font-size:2.4rem;font-weight:bold;display:flex;align-items:flex-end;justify-content:center;padding:0 .5rem}
+.zdt{font-size:1.2rem;color:var(--muted);font-weight:bold}
+.settings input{font:inherit;font-size:1.1rem;width:7rem;padding:.35rem .5rem;border:2px solid var(--line);border-radius:.6rem}
+.mvnote{font-size:1.4rem;font-weight:bold;color:var(--muted)}
+.wordbig{font-size:3rem;font-weight:bold;background:#fff;border:3px solid var(--line);border-radius:1rem;padding:.6rem 1.6rem}
+.seq{display:flex;align-items:center;gap:.3rem;flex-wrap:wrap;justify-content:center;font-size:2.3rem;font-weight:bold}
+.seq .box{min-width:4.8rem;height:4rem;border:3px solid var(--line);border-radius:.8rem;background:#fff;display:flex;align-items:center;justify-content:center}
+.seq .ar{color:var(--muted);font-size:1.6rem}
+.nb{border-collapse:collapse;background:#fff}
+.nb th{font-size:1.05rem;padding:.3rem .5rem;border:2px solid #bdb19a;background:#f3ecdf}
+.nb td{border:2px solid #bdb19a;padding:.4rem;text-align:center;font-size:2.3rem;font-weight:bold;min-width:6rem}
+.nb td.mid{background:var(--hl)}
+.arrows{display:inline-flex;gap:.3rem;align-items:center}
+.arr{display:inline-flex;width:3rem;height:3rem;border:2px solid var(--line);border-radius:.6rem;background:#fff;align-items:center;justify-content:center;font-size:2rem}
+/* SVG classes */
+.db{fill:var(--beige);stroke:var(--beigel);stroke-width:1}
+.dbo{fill:none;stroke:#7d6136;stroke-width:1.6}
+.du{fill:var(--beige);stroke:#7d6136;stroke-width:1.4}
+.lbl{font:bold 15px sans-serif;fill:var(--muted);text-anchor:middle}
+.fd{fill:var(--z)}.fe{fill:#fff;stroke:#b9b0a0;stroke-width:1.6}
+.fclick circle{cursor:pointer}
+.ax{stroke:#333;stroke-width:3}
+.tk{stroke:#333;stroke-width:2}
+.sl{font:bold 22px sans-serif;fill:#333;text-anchor:middle}
+.mk{fill:var(--warn)}
+.kb{fill:var(--z);stroke:#0f2f57;stroke-width:1}.kw{fill:#fff;stroke:#777;stroke-width:1.2}
+.ks{stroke:#777;stroke-width:1.5}
+.clip{fill:#555}
+.kclick circle{cursor:pointer}
+.n10{fill:#f3c9c2;stroke:#a85a4e;stroke-width:2}.n5{fill:#dcdcd5;stroke:#7d7d73;stroke-width:2}
+.mt{font:bold 22px sans-serif;fill:#333;text-anchor:middle}
+.gold{fill:#e2c25a;stroke:#9f8020;stroke-width:1.5}.silv{fill:#d5d9dd;stroke:#8a9097;stroke-width:1.5}
+.ct{font:bold 15px sans-serif;fill:#222;text-anchor:middle}
+.mclick g{cursor:pointer}
+/* End */
+#end{position:fixed;inset:0;background:rgba(40,35,25,.45);display:flex;align-items:center;justify-content:center;z-index:5}
+#end .box{background:#fff;border-radius:1.4rem;padding:1.6rem 2rem;text-align:center;max-width:620px}
+#end h3{font-size:2.2rem;margin:.2rem 0}
+#end .stars{font-size:3rem;color:#e0a800;letter-spacing:.2rem;margin:.4rem 0 1rem}
+#end .row{display:flex;gap:.7rem;flex-wrap:wrap;justify-content:center}
+#end button{font-size:1.3rem;padding:.6rem 1.2rem;border-radius:.8rem;border:2px solid var(--line);background:#fff;font-weight:bold}
+#end button.main{background:var(--ok);color:#fff;border-color:var(--ok)}
+@media (max-width:700px){.keys{grid-template-columns:repeat(4,4rem)}#prompt{font-size:1.4rem}svg.field{height:240px}svg.dienes{height:180px}}
+
+/* Signatur */
+.sig{position:fixed;right:.7rem;bottom:.4rem;width:min(6.2rem,11vh);opacity:.85;pointer-events:none;z-index:3}
+.sig svg{display:block;width:100%;height:auto}
+#game:not(.hidden) ~ .sig{right:auto;left:.5rem;bottom:.25rem;width:min(4.6rem,8vh)}
+#game footer{padding-left:5.6rem}
+</style>
+</head>
+<body>
+<div id="home">
+  <h1>Lernwerkstatt: Zahlen bis 100</h1>
+  <p class="sub">Zahlen darstellen, zerlegen und sich orientieren. Jede Station hat 6 Aufgaben und drei Stufen.</p>
+  <div class="settings">
+    <span>Zahlenraum:</span>
+    <div class="seg" id="sMax"><button data-v="50">bis 50</button><button data-v="100">bis 100</button></div>
+    <span>Stufe:</span>
+    <div class="seg" id="sLv"><button data-v="0">leicht</button><button data-v="1">mittel</button><button data-v="2">schwer</button></div>
+    <span>Zahl des Tages:</span>
+    <input id="zdt" type="number" min="1" max="99" placeholder="zufällig" inputmode="numeric">
+    <span>Farbige Zahlen:</span>
+    <div class="seg" id="sCol"><button data-v="1">an</button><button data-v="0">aus</button></div>
+  </div>
+  <div id="stations"></div>
+</div>
+
+<div id="game" class="hidden">
+  <header>
+    <button class="plain" id="homeBtn" title="Zurück zu den Stationen" aria-label="Zurück zu den Stationen">&#8592;</button>
+    <h2 id="title"></h2>
+    <div class="seg" id="gLv"><button data-v="0">leicht</button><button data-v="1">mittel</button><button data-v="2">schwer</button></div>
+    <button class="plain" id="helpBtn">Hilfe</button>
+    <button class="plain" id="fsBtn">Vollbild</button>
+  </header>
+  <div id="dots"></div>
+  <main>
+    <div id="prompt"></div>
+    <div id="legend" class="legend hidden"><span><b>&#8594;</b> 1 mehr</span><span><b>&#8592;</b> 1 weniger</span><span><b>&#8595;</b> 10 mehr</span><span><b>&#8593;</b> 10 weniger</span></div>
+    <div id="pic"></div>
+    <div id="answer"></div>
+    <div id="fb"></div>
+  </main>
+  <footer><button id="next" disabled>Weiter &#8594;</button></footer>
+</div>
+
+<div id="end" class="hidden"><div class="box">
+  <h3 id="endT">Geschafft!</h3>
+  <div class="stars" id="endS"></div>
+  <p id="endP" style="font-size:1.2rem"></p>
+  <div class="row">
+    <button id="again">Nochmal spielen</button>
+    <button id="harder" class="main">Schwerer</button>
+    <button id="other">Andere Station</button>
+  </div>
+</div></div>
+
+<div class="sig" title="by J.Otto"><svg viewBox="478 66 164 152" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Maus mit Schild: by J.Otto"><circle cx="526" cy="92" r="20" fill="#c3beb7"/><circle cx="526" cy="92" r="13" fill="#f4b6c2"/><circle cx="594" cy="92" r="20" fill="#c3beb7"/><circle cx="594" cy="92" r="13" fill="#f4b6c2"/><path d="M522 170 A38 38 0 0 1 598 170 Z" fill="#c3beb7"/><circle cx="560" cy="136" r="38" fill="#c3beb7"/><ellipse cx="545" cy="132" rx="5.5" ry="6.5" fill="#2b2b2b"/><circle cx="547" cy="129" r="1.8" fill="#fff"/><ellipse cx="575" cy="132" rx="5.5" ry="6.5" fill="#2b2b2b"/><circle cx="577" cy="129" r="1.8" fill="#fff"/><ellipse cx="536" cy="147" rx="6.5" ry="4" fill="#f7a9b8"/><ellipse cx="584" cy="147" rx="6.5" ry="4" fill="#f7a9b8"/><circle cx="560" cy="145" r="5" fill="#ef7f97"/><path d="M555 152 Q560 157 565 152" fill="none" stroke="#5a4a44" stroke-width="2" stroke-linecap="round"/><path d="M549 147 L526 143 M549 151 L526 155 M571 147 L594 143 M571 151 L594 155" stroke="#8d867e" stroke-width="1.4" stroke-linecap="round"/><rect x="485" y="168" width="150" height="44" rx="8" fill="#f6ecd8" stroke="#a8854a" stroke-width="2"/><text x="560" y="197" text-anchor="middle" font-family="Verdana,DejaVu Sans,FreeSans,Arial,sans-serif" font-size="19" font-weight="bold" font-style="italic" fill="#6b4f2a">by J.Otto</text><ellipse cx="530" cy="170" rx="11" ry="8" fill="#c3beb7"/><ellipse cx="590" cy="170" rx="11" ry="8" fill="#c3beb7"/><path d="M524 166 L524 172 M530 165 L530 172 M536 166 L536 172 M584 166 L584 172 M590 165 L590 172 M596 166 L596 172" stroke="#9c958d" stroke-width="1.2" stroke-linecap="round"/></svg></div>
+<script>
+"use strict";
+/* ---------- Helfer ---------- */
+const $=s=>document.querySelector(s);
+function el(tag,cls,html){const e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e;}
+const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+const MINUS='−';
+const S={max:100,lv:0,help:false,col:true,st:0,tasks:[],i:0,tries:0,locked:false,res:[],best:{}};
+function cn(n){n=String(n);if(n.length===2)return '<span class="cz">'+n[0]+'</span><span class="ce">'+n[1]+'</span>';if(n.length===1)return '<span class="ce">'+n+'</span>';return '<span class="ck">'+n+'</span>';}
+let used=new Set();
+function num(lo,hi,opt){lo=lo==null?11:lo;hi=hi==null?S.max:hi;opt=opt||{};
+  for(let k=0;k<300;k++){
+    let n;
+    if(!opt.noTens&&!opt.filter&&Math.random()<0.12&&Math.floor(hi/10)>=Math.ceil(lo/10)) n=R(Math.ceil(lo/10),Math.floor(hi/10))*10; else n=R(lo,hi);
+    if(opt.noTens&&n%10===0)continue;
+    if(opt.filter&&!opt.filter(n))continue;
+    if(!used.has(n)||k>250){used.add(n);return n;}
+  }
+  return lo;
+}
+function swap(n){if(n<10||n>99)return null;const z=Math.floor(n/10),e=n%10;if(e===0||z===e)return null;const s=e*10+z;return s<=S.max?s:null;}
+function opts(n,k,lo){k=k||3;lo=lo==null?1:lo;const c=[];const s=swap(n);if(s!=null&&s>=lo)c.push(s);
+  shuffle([n+10,n-10,n+1,n-1,n+2,n-2]).forEach(v=>{if(v>=lo&&v<=S.max&&c.indexOf(v)<0&&v!==n)c.push(v);});
+  return shuffle([n].concat(c.slice(0,k-1)));}
+function numHint(n,v,zw,ew){zw=zw||'Zehner';ew=ew||'Einer';
+  if(v===swap(n))return 'Zahlendreher! Die Zehner schreibt man vorne, die Einer hinten.';
+  if(Math.abs(v-n)%10===0)return 'Zähle die '+zw+' noch einmal.';
+  if(Math.abs(v-n)<10)return 'Zähle die '+ew+' noch einmal.';
+  return 'Zähle zuerst die '+zw+', dann die '+ew+'.';}
+/* ---------- Zahlwörter ---------- */
+const ONES=['','ein','zwei','drei','vier','fünf','sechs','sieben','acht','neun'];
+const TENS={2:'zwanzig',3:'dreißig',4:'vierzig',5:'fünfzig',6:'sechzig',7:'siebzig',8:'achtzig',9:'neunzig'};
+function wparts(n){
+  if(n===100)return [['hundert','wk']];
+  if(n===11)return [['elf','wk']];
+  if(n===12)return [['zwölf','wk']];
+  if(n===10)return [['zehn','wz']];
+  if(n<10)return [[n===1?'eins':ONES[n],'we']];
+  const z=Math.floor(n/10),e=n%10;
+  if(z===1){const p=e===6?'sech':e===7?'sieb':ONES[e];return [[p,'we'],['zehn','wz']];}
+  if(e===0)return [[TENS[z],'wz']];
+  return [[ONES[e],'we'],['und','wk'],[TENS[z],'wz']];
+}
+function wtext(n){return wparts(n).map(p=>p[0]).join('');}
+function whtml(n){return wparts(n).map(p=>'<span class="'+p[1]+'">'+p[0]+'</span>').join('');}
+/* ---------- Sprache ---------- */
+function say(t){try{if(!window.speechSynthesis)return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='de-DE';u.rate=.85;const v=speechSynthesis.getVoices().filter(x=>/^de/i.test(x.lang));if(v.length)u.voice=v[0];speechSynthesis.speak(u);}catch(e){}}
+function plain(h){const d=document.createElement('div');d.innerHTML=h;return d.textContent.replace(/→/g,' nach rechts ').replace(/←/g,' nach links ').replace(/↓/g,' nach unten ').replace(/↑/g,' nach oben ');}
+/* ---------- Bilder ---------- */
+function svgGeheim(n,o){o=o||{};let h=Math.floor(n/100),z=Math.floor(n%100/10),e=n%10;if(o.z!=null){h=o.h||0;z=o.z;e=o.e;}let x=8,p='';
+  for(let i=0;i<h;i++){p+='<rect x="'+x+'" y="14" width="40" height="40" class="gh"/>';x+=52;}
+  for(let i=0;i<z;i++){if(i===5)x+=10;p+='<line x1="'+(x+4)+'" y1="10" x2="'+(x+4)+'" y2="58" class="gz"/>';x+=18;}
+  if(z&&e)x+=14;
+  for(let i=0;i<e;i++){if(i===5)x+=10;p+='<circle cx="'+(x+7)+'" cy="34" r="6.5" class="ge"/>';x+=20;}
+  const W=Math.max(x+8,60);return '<svg class="pic geheim" viewBox="0 0 '+W+' 68" xmlns="http://www.w3.org/2000/svg">'+p+'</svg>';}
+function svgDienes(z,e,o){o=o||{};const c=14,g=9;let x=4,p='';
+  if(z===10){for(let r=0;r<10;r++)for(let k=0;k<10;k++)p+='<rect x="'+(x+k*c)+'" y="'+(4+r*c)+'" width="'+c+'" height="'+c+'" class="db"/>';p+='<rect x="'+x+'" y="4" width="'+(10*c)+'" height="'+(10*c)+'" class="dbo"/>';if(o.help)p+='<text x="'+(x+5*c)+'" y="'+(10*c+22)+'" class="lbl">100</text>';x+=10*c+g;z=0;}
+  for(let i=0;i<z;i++){for(let k=0;k<10;k++)p+='<rect x="'+x+'" y="'+(4+k*c)+'" width="'+c+'" height="'+c+'" class="db"/>';
+    p+='<rect x="'+x+'" y="4" width="'+c+'" height="'+(10*c)+'" class="dbo"/>';
+    if(o.help)p+='<text x="'+(x+c/2)+'" y="'+(10*c+22)+'" class="lbl">'+((i+1)*10)+'</text>';x+=c+g;}
+  if(z&&e)x+=12;
+  for(let i=0;i<e;i++){const col=Math.floor(i/5),row=i%5;p+='<rect x="'+(x+col*(c+5))+'" y="'+(4+10*c-(row+1)*(c+4)+4)+'" width="'+c+'" height="'+c+'" class="du"/>';}
+  const W=Math.max(x+Math.ceil(e/5)*(c+5)+4,40),H=10*c+(o.help?30:10);
+  return '<svg class="pic dienes" viewBox="0 0 '+W+' '+H+'" xmlns="http://www.w3.org/2000/svg">'+p+'</svg>';}
+function fpos(i){const r=Math.floor(i/10),k=i%10,c=26,g=10;return [18+k*c+(k>=5?g:0),18+r*c+(r>=5?g:0)];}
+function svgField(n,o){o=o||{};let p='';
+  for(let i=0;i<100;i++){const q=fpos(i);p+='<circle cx="'+q[0]+'" cy="'+q[1]+'" r="10.5" class="'+(i<n?'fd':'fe')+'" data-i="'+i+'"/>';}
+  let W=18*2+9*26+10;
+  if(o.help){W+=48;for(let r=0;r<10;r++)if((r+1)*10<=n){const q=fpos(r*10+9);p+='<text x="'+(q[0]+38)+'" y="'+(q[1]+5)+'" class="lbl">'+((r+1)*10)+'</text>';}}
+  return '<svg class="pic field'+(o.click?' fclick':'')+'" viewBox="0 0 '+W+' '+(18*2+9*26+10)+'" xmlns="http://www.w3.org/2000/svg">'+p+'</svg>';}
+function svgStrahl(a,b,n,lab,o){o=o||{};const W=1000,pad=34,sc=(W-2*pad)/(b-a);let p='<line x1="'+(pad-14)+'" y1="70" x2="'+(W-pad+18)+'" y2="70" class="ax"/><path d="M'+(W-pad+26)+' 70 l-14 -8 v16 z" fill="#333"/>';
+  for(let v=a;v<=b;v++){const x=pad+(v-a)*sc,h=v%10===0?20:(v%5===0?13:7);p+='<line x1="'+x+'" y1="'+(70-h)+'" x2="'+x+'" y2="'+(70+h)+'" class="tk"/>';if(lab(v))p+='<text x="'+x+'" y="'+(v%10===0?116:110)+'" class="sl"'+(v%10===0?'':' style="font-size:17px;fill:#666"')+'>'+v+'</text>';}
+  if(n!=null){const x=pad+(n-a)*sc;p+='<path d="M'+x+' 48 l-10 -20 h20 z" class="mk"/><line x1="'+x+'" y1="22" x2="'+x+'" y2="30" stroke="#d97a12" stroke-width="4"/>';}
+  return '<svg class="pic strahl" viewBox="0 0 '+W+' 128" xmlns="http://www.w3.org/2000/svg">'+p+'</svg>';}
+function kpos(N){const xs=[];let x=14;for(let i=0;i<N;i++){if(i>0){x+=10.4;if(i%10===0)x+=5;else if(i%5===0)x+=1.6;}xs.push(x);}return xs;}
+function svgKette(N,clip,o){o=o||{};const per=Math.min(N,50),rows=Math.ceil(N/per),xs=kpos(per),W=xs[per-1]+22,RH=74;let p='';
+  for(let r=0;r<rows;r++){const y=36+r*RH;p+='<line x1="4" y1="'+y+'" x2="'+(W-4)+'" y2="'+y+'" class="ks"/>';
+    for(let k=0;k<per;k++){const i=r*per+k;if(i>=N)break;p+='<circle cx="'+xs[k]+'" cy="'+y+'" r="5" class="'+(Math.floor(i/10)%2===0?'kb':'kw')+'" data-i="'+i+'"/>';if(o.help&&(i+1)%10===0)p+='<text x="'+xs[k]+'" y="'+(y+22)+'" class="lbl" style="font-size:11px">'+(i+1)+'</text>';}}
+  if(clip!=null){let cx,y;if(clip===0){cx=xs[0]-7;y=36;}else{const i=clip-1,r=Math.floor(i/per);cx=xs[i%per]+5.2;y=36+r*RH;}p+='<rect x="'+(cx-2)+'" y="'+(y-16)+'" width="4" height="32" rx="2" class="clip"/><path d="M'+cx+' '+(y-18)+' l-6 -10 h12 z" class="clip"/>';}
+  return '<svg class="pic kette'+(o.click?' kclick':'')+'" viewBox="0 0 '+W+' '+(rows*RH)+'" xmlns="http://www.w3.org/2000/svg">'+p+'</svg>';}
+function moneyItems(n,mode){const it=[];let z=Math.floor(n/10),e=n%10;
+  if(mode==='simple'){for(let i=0;i<z;i++)it.push(10);for(let i=0;i<e;i++)it.push(1);return it;}
+  for(let i=0;i<z;i++){if(Math.random()<.2){it.push(5);it.push(5);}else it.push(10);}
+  if(e>=5&&Math.random()<.6){it.push(5);e-=5;}
+  while(e>=2&&Math.random()<.7){it.push(2);e-=2;}
+  for(let i=0;i<e;i++)it.push(1);
+  return it.sort((a,b)=>b-a);}
+function svgMoney(items,o){o=o||{};let p='';const notes=[],coins=[];items.forEach((v,k)=>(v>=5?notes:coins).push([v,k]));
+  const nw=96,nh=52,per=5;let y=6,W=10;
+  notes.forEach((q,j)=>{const x=6+(j%per)*(nw+8),yy=y+Math.floor(j/per)*(nh+8);W=Math.max(W,x+nw+6);
+    p+='<g data-k="'+q[1]+'"><rect x="'+x+'" y="'+yy+'" width="'+nw+'" height="'+nh+'" rx="6" class="'+(q[0]===10?'n10':'n5')+'"/><rect x="'+(x+6)+'" y="'+(yy+6)+'" width="'+(nw-12)+'" height="'+(nh-12)+'" rx="4" fill="none" stroke="rgba(0,0,0,.18)"/><text x="'+(x+nw/2)+'" y="'+(yy+nh/2+8)+'" class="mt">'+q[0]+' €</text></g>';});
+  if(notes.length)y+=Math.ceil(notes.length/per)*(nh+8)+4;
+  const r=24;coins.forEach((q,j)=>{const cx=6+r+(j%per)*(2*r+10)+(j%per>=5?6:0),cy=y+r+Math.floor(j/per)*(2*r+8);W=Math.max(W,cx+r+6);
+    const two=q[0]===2;p+='<g data-k="'+q[1]+'"><circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" class="'+(two?'silv':'gold')+'"/><circle cx="'+cx+'" cy="'+cy+'" r="15" class="'+(two?'gold':'silv')+'"/><text x="'+cx+'" y="'+(cy+5)+'" class="ct">'+q[0]+' €</text></g>';});
+  if(coins.length)y+=Math.ceil(coins.length/per)*(2*r+8);
+  const H=Math.max(y+4,30);
+  return '<svg class="pic money'+(o.click?' mclick':'')+'" viewBox="0 0 '+Math.max(W,60)+' '+H+'" xmlns="http://www.w3.org/2000/svg">'+p+'</svg>';}
+function plHTML(k,cls,mv){let h='<span class="pl">';for(let i=0;i<k;i++)h+='<i class="'+cls+(mv&&i===k-1?' mv':'')+'"></i>';return h+'</span>';}
+function swtHTML(z,e,o){o=o||{};let h=o.h||0;if(z>=10){h+=Math.floor(z/10);z=z%10;}const H=S.max===100||h>0;
+  return '<table class="swt"><tr>'+(H?'<th class="hh">H</th>':'')+'<th class="hz">Z</th><th class="he">E</th></tr><tr>'+(H?'<td class="tdh">'+plHTML(h,'ph')+'</td>':'')+'<td>'+plHTML(z,'pz',o.mvZ)+'</td><td>'+plHTML(e,'pe',o.mvE)+'</td></tr>'+(o.row?'<tr>'+(H?'<td class="num">'+(o.row.length>2?o.row[0]:'')+'</td>':'')+'<td class="num">'+o.row[o.row.length-2]+'</td><td class="num">'+o.row[o.row.length-1]+'</td></tr>':'')+'</table>';}
+function tafelHTML(o){o=o||{};const rows=S.max/10;let h='<table class="tafel'+(o.click?' click':'')+'">';
+  for(let r=0;r<rows;r++){h+='<tr>';for(let k=0;k<10;k++){const n=r*10+k+1,vis=o.show?o.show(n):true;h+='<td data-n="'+n+'" class="'+((o.cls&&o.cls[n])||'')+'">'+(vis?cn(n):'')+'</td>';}h+='</tr>';}
+  return h+'</table>';}
+function rep(t,n){const z=Math.floor(n/10),e=n%10;
+  if(t==='d')return svgDienes(z,e);
+  if(t==='f')return svgField(n);
+  if(t==='m')return svgMoney(moneyItems(n,'simple'));
+  if(t==='s')return '<div style="zoom:.62">'+swtHTML(z,e)+'</div>';
+  if(t==='w')return '<div class="wordbox"><b>'+whtml(n)+'</b></div>';
+  if(t==='g')return svgGeheim(n);
+  if(t==='n')return '<div style="font-size:3rem;font-weight:bold">'+cn(n)+'</div>';}
+const ARR={R:['→',1],L:['←',-1],D:['↓',10],U:['↑',-10]};
+function canGo(c,d){if(d==='R')return c%10!==0&&c+1<=S.max;if(d==='L')return c%10!==1;if(d==='D')return c+10<=S.max;return c-10>=1;}
+function arrHint(d){return {R:'→ heißt 1 mehr.',L:'← heißt 1 weniger.',D:'↓ heißt eine Reihe nach unten: 10 mehr.',U:'↑ heißt eine Reihe nach oben: 10 weniger.'}[d];}
+function path(start,len){for(let t=0;t<200;t++){let c=start,ds=[],ok=true;for(let i=0;i<len;i++){const prev=ds[ds.length-1];const opp={R:'L',L:'R',U:'D',D:'U'}[prev];const cand=['R','L','D','U'].filter(d=>canGo(c,d)&&d!==opp);if(!cand.length){ok=false;break;}const d=pick(cand);ds.push(d);c+=ARR[d][1];}if(ok)return {ds:ds,end:c};start=R(11,S.max-1);}return {ds:['R'],end:start+1};}
+function arrSpan(ds){return '<span class="arrows">'+ds.map(d=>'<span class="arr">'+ARR[d][0]+'</span>').join('')+'</span>';}
+const F=i=>'<button class="fld" data-f="'+i+'"></button>';
+
+/* ---------- Stationen ---------- */
+const ST=[
+{t:'Zahl des Tages',g:'Zahl des Tages',d:'Eine Zahl – sechs Aufgaben',zdt:true,icon:()=>'<div style="display:flex;flex-direction:column;align-items:center"><div style="font-size:2rem;font-weight:bold">'+cn(47)+'</div>'+svgGeheim(47).replace('class="pic geheim"','style="height:34px"')+'</div>',gen:[0,1,2].map(lv=>(i)=>zdtTask(lv,i,S.zn))},
+{t:'Zehner und Einer',g:'Zahlen darstellen',d:'Stangen und Würfel',icon:()=>svgDienes(3,4),gen:[
+  ()=>{const n=num(11,S.max),z=Math.floor(n/10),e=n%10;return {prompt:'Welche Zahl ist das?',pic:()=>svgDienes(z,e,{help:S.help}),type:'choice',options:opts(n).map(v=>({html:cn(v),val:v})),ans:n,hint:v=>numHint(n,v,'Stangen (Zehner)','Würfel (Einer)')};},
+  ()=>{const n=num(11,S.max),z=Math.floor(n/10),e=n%10;return {prompt:'Wie viele Zehner? Wie viele Einer?',pic:()=>svgDienes(z,e,{help:S.help}),type:'keys',layout:F(0)+'<span class="lab wz">Zehner</span>'+F(1)+'<span class="lab we">Einer</span><span class="op">=</span>'+F(2),fields:[z,e,n],
+    hintK:(v,w)=>w[0]?'Zähle die Stangen. Jede Stange ist 1 Zehner.':w[1]?'Zähle die Würfel. Jeder Würfel ist 1 Einer.':(v[2]===swap(n)?'Zahlendreher! Die Zehner schreibt man vorne.':'Schreibe zuerst die Zehner, dann die Einer.')};},
+  (i)=>{if(i%2===0){const n=num(11,S.max);return {prompt:'Lege die Zahl <span class="big">'+cn(n)+'</span>.',say:'Lege die Zahl '+n,type:'custom',solution:'Lege '+Math.floor(n/10)+' Stangen und '+(n%10)+' Würfel.',mount:(box)=>{
+      let z=0,e=0;const pic=el('div');const tools=el('div','tools');
+      const draw=()=>{pic.innerHTML=svgDienes(z,e,{help:S.help});};
+      [['+ Zehner',()=>{if(z<10)z++;},'z'],[MINUS+' Zehner',()=>{if(z>0)z--;},'z'],['+ Einer',()=>{if(e<19)e++;},'e'],[MINUS+' Einer',()=>{if(e>0)e--;},'e']].forEach(b=>{const x=el('button','tool '+b[2],b[0]);x.onclick=()=>{b[1]();draw();};tools.appendChild(x);});
+      draw();box.appendChild(pic);box.appendChild(tools);
+      return {check:()=>{const v=z*10+e;if(v===n&&e<=9)return {ok:true};if(v===n)return {ok:false,hint:'Du hast 10 oder mehr Würfel. Tausche 10 Würfel gegen 1 Stange.'};if(z*10!==Math.floor(n/10)*10&&e===n%10)return {ok:false,hint:'Die Einer stimmen. Zähle die Zehner noch einmal.'};if(z===Math.floor(n/10))return {ok:false,hint:'Die Zehner stimmen. Zähle die Einer noch einmal.'};return {ok:false,hint:'Lege zuerst die Zehner, dann die Einer.'};},solve:()=>{z=Math.floor(n/10);e=n%10;draw();}};}};}
+    const n=num(20,S.max,{filter:v=>v%10!==0||v<100}),z=Math.floor(n/10)-1,e=n%10+10;return {prompt:'Welche Zahl ist das?',pic:()=>svgDienes(z,e,{help:S.help}),type:'keys',layout:F(0),fields:[n],hintK:()=>'Tipp: 10 Würfel sind 1 Zehner. Bündle zuerst.'};}
+]},
+{t:'Stellenwerttafel',g:'Zahlen darstellen',d:'Plättchen in Z und E',icon:()=>'<div style="zoom:.4">'+swtHTML(3,4)+'</div>',gen:[
+  ()=>{const n=num(11,S.max),z=Math.floor(n/10),e=n%10;return {prompt:'Welche Zahl steht in der Stellenwerttafel?',pic:()=>swtHTML(z,e),type:'choice',options:opts(n).map(v=>({html:cn(v),val:v})),ans:n,hint:v=>n===100?'1 Plättchen bei H ist 1 Hunderter = 100.':numHint(n,v,'Plättchen bei Z','Plättchen bei E')};},
+  ()=>{const n=num(11,S.max);return {prompt:'Lege <span class="big">'+cn(n)+'</span> in die Stellenwerttafel.',say:'Lege '+n+' in die Stellenwerttafel',type:'custom',solution:n===100?'1 Plättchen bei H.':Math.floor(n/10)+' Plättchen bei Z, '+(n%10)+' Plättchen bei E.',mount:(box)=>{
+      let h=0,z=0,e=0;const pic=el('div');const tools=el('div','tools');
+      const draw=()=>{pic.innerHTML=swtHTML(z,e,{h:h,row:S.help?[h?String(h):'',(h||z)?'<span class="cz">'+z+'</span>':'',(h||z||e)?'<span class="ce">'+e+'</span>':'']:null});};
+      const tl=[['+ Z',()=>{if(z<9)z++;},'z'],[MINUS+' Z',()=>{if(z>0)z--;},'z'],['+ E',()=>{if(e<9)e++;},'e'],[MINUS+' E',()=>{if(e>0)e--;},'e']];
+      if(S.max===100)tl.unshift(['+ H',()=>{if(h<1)h++;},''],[MINUS+' H',()=>{if(h>0)h--;},'']);
+      tl.forEach(b=>{const x=el('button','tool '+b[2],b[0]);x.onclick=()=>{b[1]();draw();};tools.appendChild(x);});
+      draw();box.appendChild(pic);box.appendChild(tools);
+      return {check:()=>{const nh=Math.floor(n/100),nz=Math.floor(n%100/10),ne=n%10;if(h===nh&&z===nz&&e===ne)return {ok:true};if(nh)return {ok:false,hint:'100 ist 1 Hunderter, 0 Zehner und 0 Einer.'};if(h)return {ok:false,hint:'Die Zahl ist kleiner als 100. Bei H kommt kein Plättchen hin.'};if(z===ne&&e===nz)return {ok:false,hint:'Zahlendreher! Die erste Ziffer gehört zu Z (Zehner).'};if(z===nz)return {ok:false,hint:'Bei Z stimmt es. Schau noch einmal auf E.'};if(e===ne)return {ok:false,hint:'Bei E stimmt es. Schau noch einmal auf Z.'};return {ok:false,hint:'Z sind die Zehner, E sind die Einer.'};},solve:()=>{h=Math.floor(n/100);z=Math.floor(n%100/10);e=n%10;draw();}};}};},
+  (i)=>{if(i%2===0){let n,dir;for(let t=0;t<100;t++){n=num(11,Math.min(99,S.max),{noTens:false});const z=Math.floor(n/10),e=n%10;dir=Math.random()<.5?'ZE':'EZ';if(dir==='ZE'&&z>=1&&e<=8&&n-9>=1)break;if(dir==='EZ'&&e>=1&&z<=8&&n+9<=S.max)break;}
+      const z=Math.floor(n/10),e=n%10,res=dir==='ZE'?n-9:n+9;
+      return {prompt:'Ein Plättchen wandert von <span class="'+(dir==='ZE'?'wz':'we')+'">'+(dir==='ZE'?'Z':'E')+'</span> nach <span class="'+(dir==='ZE'?'we':'wz')+'">'+(dir==='ZE'?'E':'Z')+'</span>. Welche Zahl entsteht?',say:'Ein Plättchen wandert. Welche Zahl entsteht?',pic:()=>'<div style="display:flex;flex-direction:column;align-items:center;gap:.4rem">'+swtHTML(z,e,{mvZ:dir==='ZE',mvE:dir==='EZ',row:S.help?[cn(z).replace('ce','cz'),'<span class="ce">'+e+'</span>']:null})+'<div class="mvnote">Das Plättchen mit Rand wandert '+(dir==='ZE'?'nach rechts →':'← nach links')+'</div></div>',type:'keys',layout:F(0),fields:[res],
+        hintK:()=>'Nach dem Wandern: '+(dir==='ZE'?'1 Zehner weniger, 1 Einer mehr.':'1 Einer weniger, 1 Zehner mehr.')+' Lege es in Gedanken neu.'};}
+    const n=num(11,Math.min(99,S.max),{noTens:true}),z=Math.floor(n/10),e=n%10;return {prompt:'Welche Zahl ist das?',pic:()=>'<div class="wordbig" style="font-size:2.4rem"><span class="ce">'+e+'</span> <span class="we">Einer</span> und <span class="cz">'+z+'</span> <span class="wz">Zehner</span></div>',say:e+' Einer und '+z+' Zehner',type:'keys',layout:F(0),fields:[n],hintK:v=>v[0]===swap(n)?'Achtung, Falle! Die Einer stehen hier zuerst. Die Zehner schreibt man trotzdem vorne.':'Schreibe zuerst die Zehner, dann die Einer.'};}
+]},
+{t:'Hunderterfeld',g:'Zahlen darstellen',d:'Punkte lesen und zeigen',icon:()=>svgField(34),gen:[
+  ()=>{const n=num(11,S.max);return {prompt:'Welche Zahl ist das?',pic:()=>svgField(n,{help:S.help}),type:'choice',options:opts(n).map(v=>({html:cn(v),val:v})),ans:n,hint:v=>numHint(n,v,'vollen Reihen (Zehner)','Punkte in der letzten Reihe (Einer)')};},
+  ()=>{const n=num(11,S.max,{noTens:true}),z=Math.floor(n/10),e=n%10;return {prompt:'Zerlege die Zahl.',pic:()=>svgField(n,{help:S.help}),type:'keys',layout:F(0)+'<span class="op">+</span>'+F(1)+'<span class="op">=</span>'+F(2),fields:[z*10,e,n],
+    hintK:(v,w)=>w[0]?'Wie viele volle Reihen? Jede Reihe hat 10 Punkte. Schreibe die Zehnerzahl, z. B. 30.':w[1]?'Zähle die Punkte in der angefangenen Reihe.':'Rechne Zehner und Einer zusammen.'};},
+  ()=>{const n=num(11,S.max);return {prompt:'Zeige <span class="big">'+cn(n)+'</span> im Hunderterfeld.',say:'Zeige '+n+' im Hunderterfeld',type:'custom',solution:Math.floor(n/10)+' volle Reihen und '+(n%10)+' Punkte.',mount:(box)=>{
+      let f=0;const pic=el('div');const draw=()=>{pic.innerHTML=svgField(f,{click:true,help:S.help});pic.querySelectorAll('circle').forEach(c=>c.onclick=()=>{const i=+c.dataset.i;f=(f===i+1)?i:i+1;draw();});};
+      draw();box.appendChild(pic);const tools=el('div','tools');const clr=el('button','tool','Löschen');clr.onclick=()=>{f=0;draw();};tools.appendChild(clr);box.appendChild(el('div','legend','Tippe auf den letzten Punkt. Alle Punkte davor werden gefärbt.'));box.appendChild(tools);
+      return {check:()=>{if(f===n)return {ok:true};const d=f-n;if(d%10===0)return {ok:false,hint:'Die Einer stimmen. Wie viele volle Reihen brauchst du?'};if(Math.floor(f/10)===Math.floor(n/10))return {ok:false,hint:'Die vollen Reihen stimmen. Schau auf die Einer.'};return {ok:false,hint:'Färbe zuerst volle Reihen (Zehner), dann die Einer.'};},solve:()=>{f=n;draw();}};}};}
+]},
+{t:'Rechenkette',g:'Zahlen darstellen',d:'Perlen und Klammer',icon:()=>svgKette(20,13),gen:[
+  ()=>{const n=num(5,S.max);return {prompt:'Wie viele Perlen sind vor der Klammer?',pic:()=>svgKette(S.max,n,{help:S.help}),type:'choice',options:opts(n).map(v=>({html:cn(v),val:v})),ans:n,hint:v=>numHint(n,v,'Zehner (Farbwechsel)','Einer')};},
+  ()=>{const n=num(5,S.max);return {prompt:'Wie viele Perlen sind vor der Klammer?',pic:()=>svgKette(S.max,n,{help:S.help}),type:'keys',layout:F(0),fields:[n],hintK:v=>numHint(n,v[0],'Zehner (nach 10 Perlen wechselt die Farbe)','Einer')};},
+  ()=>{const n=num(5,S.max);return {prompt:'Schiebe die Klammer auf <span class="big">'+cn(n)+'</span>.',say:'Schiebe die Klammer auf '+n,type:'custom',solution:'Die Klammer gehört nach '+Math.floor(n/10)+' Zehnern und '+(n%10)+' Einern.',mount:(box)=>{
+      let c=0;const pic=el('div');const draw=()=>{pic.innerHTML=svgKette(S.max,c,{click:true,help:S.help});pic.querySelectorAll('circle').forEach(x=>x.onclick=()=>{c=+x.dataset.i+1;draw();});};
+      draw();box.appendChild(pic);const tools=el('div','tools');
+      [['« 10',-10],['‹ 1',-1],['1 ›',1],['10 »',10]].forEach(b=>{const x=el('button','tool '+(Math.abs(b[1])===10?'z':'e'),b[0]);x.onclick=()=>{c=Math.max(0,Math.min(S.max,c+b[1]));draw();};tools.appendChild(x);});
+      box.appendChild(tools);
+      return {check:()=>{if(c===n)return {ok:true};const d=Math.abs(c-n);return {ok:false,hint:d>=10?'Springe in Zehnern: Nach 10 Perlen wechselt die Farbe.':'Fast! Gehe in Einerschritten weiter.'};},solve:()=>{c=n;draw();}};}};}
+]},
+{t:'Geld',g:'Zahlen darstellen',d:'Scheine und Münzen',icon:()=>svgMoney([10,10,1,1]),gen:[
+  ()=>{const n=num(11,S.max);return {prompt:'Wie viel Geld ist das?',pic:()=>svgMoney(moneyItems(n,'simple')),type:'choice',options:opts(n).map(v=>({html:cn(v)+' €',val:v})),ans:n,hint:v=>numHint(n,v,'10-€-Scheine','1-€-Münzen')};},
+  ()=>{const n=num(11,S.max),it=moneyItems(n);return {prompt:'Wie viel Geld ist das?',pic:()=>svgMoney(it),type:'keys',layout:F(0)+'<span>€</span>',fields:[n],hintK:()=>'Zähle zuerst die Scheine, dann die Münzen. Ein 5-€-Schein und ein 2-€-Stück zählen mehr als 1.'};},
+  ()=>{const n=num(11,S.max);return {prompt:'Lege <span class="big">'+cn(n)+' €</span> in die Geldbörse.',say:'Lege '+n+' Euro',type:'custom',solution:'Zum Beispiel '+Math.floor(n/10)+' Zehner-Scheine und '+(n%10)+' Euro in Münzen.',mount:(box)=>{
+      let it=[];const pic=el('div');pic.style.minHeight='130px';pic.style.border='3px dashed #c9bda5';pic.style.borderRadius='1rem';pic.style.padding='.4rem';pic.style.minWidth='300px';pic.style.display='flex';pic.style.justifyContent='center';
+      const sum=el('div','legend');
+      const draw=()=>{it.sort((a,b)=>b-a);pic.innerHTML=it.length?svgMoney(it,{click:true}):'<div class="legend" style="align-self:center">Geldbörse ist leer</div>';pic.querySelectorAll('g[data-k]').forEach(g=>g.onclick=()=>{it.splice(+g.dataset.k,1);draw();});sum.textContent=S.help?('Zusammen: '+it.reduce((a,b)=>a+b,0)+' €'):'Tippe auf Geld in der Börse, um es wegzunehmen.';};
+      const tools=el('div','tools');[10,5,2,1].forEach(v=>{const x=el('button','tool',v+' €');x.onclick=()=>{if(it.length<24){it.push(v);draw();}};tools.appendChild(x);});
+      box.appendChild(tools);box.appendChild(pic);box.appendChild(sum);draw();
+      return {check:()=>{const s=it.reduce((a,b)=>a+b,0);if(s===n)return {ok:true};return {ok:false,hint:s<n?'Das ist noch zu wenig.':'Das ist zu viel. Nimm Geld weg.'};},solve:()=>{it=moneyItems(n,'simple');draw();}};}};}
+]},
+{t:'Zahlwort',g:'Zahlen darstellen',d:'Zahlen lesen und schreiben',icon:()=>'<div style="font-size:1.4rem;font-weight:bold">'+whtml(34)+'</div>',gen:[
+  ()=>{const n=num(11,S.max);return {prompt:'Welches Zahlwort passt zu <span class="big">'+cn(n)+'</span>?',say:'Welches Zahlwort passt?',type:'choice',optCls:'word',options:opts(n).map(v=>({html:whtml(v),val:v})),ans:n,hint:v=>v===swap(n)?'Zahlendreher! Beim Sprechen kommen die Einer zuerst, geschrieben stehen sie hinten.':'Lies das Wort langsam: zuerst die Einer, dann die Zehner.'};},
+  ()=>{const n=num(11,S.max);return {prompt:'Welche Zahl passt zum Wort?',say:wtext(n),pic:()=>'<div class="wordbig">'+whtml(n)+'</div>',type:'choice',options:opts(n).map(v=>({html:cn(v),val:v})),ans:n,hint:v=>v===swap(n)?'Zahlendreher! Wir sprechen die Einer zuerst, aber wir schreiben sie hinten.':'Hör genau hin: Wie viele Zehner? Wie viele Einer?'};},
+  ()=>{const n=num(13,S.max),z=Math.floor(n/10),e=n%10;return {prompt:'Lies das Zahlwort. Wie viele Zehner und Einer?',say:wtext(n),pic:()=>'<div class="wordbig">'+whtml(n)+'</div>',type:'keys',layout:F(0)+'<span class="lab wz">Zehner</span>'+F(1)+'<span class="lab we">Einer</span><span class="op">=</span>'+F(2),fields:[z,e,n],
+    hintK:(v,w)=>(v[0]===e&&v[1]===z)?'Zahlendreher! Der blaue Teil sind die Zehner.':w[2]&&!w[0]&&!w[1]?'Zehner vorne, Einer hinten.':'Blau sind die Zehner, grün sind die Einer.'};}
+]},
+{t:'Zahlen zerlegen',g:'Zahlen zerlegen',d:'47 = 40 + 7',icon:()=>'<div style="font-size:1.7rem;font-weight:bold">'+cn(47)+' = '+cn(40)+' + '+cn(7)+'</div>',gen:[
+  (i)=>{const n=num(11,S.max,{noTens:true}),z=Math.floor(n/10)*10,e=n%10,k=i%4;const lay=[cn(n)+'<span class="op">=</span>'+cn(z)+'<span class="op">+</span>'+F(0),cn(n)+'<span class="op">=</span>'+F(0)+'<span class="op">+</span>'+cn(e),cn(z)+'<span class="op">+</span>'+cn(e)+'<span class="op">=</span>'+F(0),cn(e)+'<span class="op">+</span>'+cn(z)+'<span class="op">=</span>'+F(0)][k];
+    return {prompt:'Zerlege und ergänze.',pic:()=>S.help?svgDienes(z/10,e):'',type:'keys',layout:lay,fields:[[e,z,n,n][k]],hintK:v=>(k===3&&v[0]===swap(n))?'Achtung: Hier stehen die Einer vorne. Die Zehner schreibt man trotzdem zuerst.':k===0?'Wie viele Einer fehlen noch?':k===1?'Wie viele Zehner hat die Zahl? Schreibe die Zehnerzahl.':'Zehner und Einer zusammen.'};},
+  (i)=>{const n=num(11,S.max,{noTens:true}),z=Math.floor(n/10),e=n%10,k=i%3;
+    if(k===0)return {prompt:'Zerlege in Zehner und Einer.',pic:()=>S.help?svgDienes(z,e):'',type:'keys',layout:cn(n)+'<span class="op">=</span>'+F(0)+'<span class="op">+</span>'+F(1),fields:[z*10,e],
+      checkK:v=>{const ok=(v[0]===z*10&&v[1]===e)||(v[0]===e&&v[1]===z*10);return {ok:ok,wrong:ok?[]:[v[0]!==z*10&&v[0]!==e,v[1]!==e&&v[1]!==z*10]};},hintK:()=>'Eine Zehnerzahl und die Einer, z. B. 47 = 40 + 7.'};
+    if(k===1)return {prompt:'Zerlege in Zehner und Einer.',pic:()=>S.help?svgDienes(z,e):'',type:'keys',layout:cn(n)+'<span class="op">=</span>'+F(0)+'<span class="lab wz">Z</span><span class="op">+</span>'+F(1)+'<span class="lab we">E</span>',fields:[z,e],hintK:(v,w)=>w[0]?'Wie viele Zehner?':'Wie viele Einer?'};
+    return {prompt:'Welche Zahl ist das?',type:'keys',pic:()=>S.help?svgDienes(z,e):'',layout:'<span class="ce">'+e+'</span><span class="lab we">E</span><span class="op">+</span><span class="cz">'+z+'</span><span class="lab wz">Z</span><span class="op">=</span>'+F(0),fields:[n],hintK:v=>v[0]===swap(n)?'Falle! Die Einer stehen vorne. Die Zehner schreibt man zuerst.':'Zehner vorne, Einer hinten.'};},
+  (i)=>{const n=num(21,S.max,{filter:v=>v%10!==0||v<100}),z=Math.floor(n/10),e=n%10,k=i%3;const zz=R(1,z-1);
+    if(k===0)return {prompt:'Zerlege anders.',pic:()=>S.help?svgDienes(zz,n-zz*10):'',type:'keys',layout:cn(n)+'<span class="op">=</span>'+cn(zz*10)+'<span class="op">+</span>'+F(0),fields:[n-zz*10],hintK:()=>'Wie viel fehlt von '+zz*10+' bis '+n+'? Es sind mehr als 10.'};
+    if(k===1)return {prompt:'Zerlege anders.',pic:()=>S.help?svgDienes(zz,n-zz*10):'',type:'keys',layout:cn(n)+'<span class="op">=</span>'+F(0)+'<span class="lab wz">Z</span><span class="op">+</span>'+(n-zz*10)+'<span class="lab we">E</span>',fields:[zz],hintK:()=>'Rechne: '+n+' '+MINUS+' '+(n-zz*10)+'. Wie viele Zehner bleiben?'};
+    return {prompt:'Zerlege anders.',pic:()=>S.help?svgDienes(zz,n-zz*10):'',type:'keys',layout:cn(n)+'<span class="op">=</span><span class="cz">'+zz+'</span><span class="lab wz">Z</span><span class="op">+</span>'+F(0)+'<span class="lab we">E</span>',fields:[n-zz*10],hintK:()=>'Ein Zehner sind 10 Einer. Wie viele Einer fehlen noch?'};}
+]},
+{t:'Hundertertafel',g:'Orientieren',d:'Zahlen finden – mit und ohne Zahlen',icon:()=>{let p='';for(let r=0;r<10;r++)for(let k=0;k<10;k++)p+='<rect x="'+(k*7)+'" y="'+(r*7)+'" width="7" height="7" fill="'+(r===3&&k===6?'#ffe27a':'#fff')+'" stroke="#bdb19a" stroke-width=".6"/>';return '<svg viewBox="-1 -1 72 72" style="height:72px">'+p+'<line x1="35" y1="0" x2="35" y2="70" stroke="#8e8270" stroke-width="1.4"/><line x1="0" y1="35" x2="70" y2="35" stroke="#8e8270" stroke-width="1.4"/></svg>';},gen:[
+  ()=>tafelTap(v=>true,'Tippe die'),
+  (i)=>i%2===0?tafelTap(v=>v<=10||v%10===0,'Nur wenige Zahlen stehen da. Tippe die'):tafelWhich(v=>v<=10||v%10===0||(S.help&&v%10===1)),
+  (i)=>{const k=i%3;const empty=v=>S.help&&(v<=10||v%10===0);if(k===0)return tafelTap(empty,'Die Tafel ist leer. Tippe die');if(k===1)return tafelWhich(empty);const c=num(12,S.max-11,{filter:v=>v%10>=2&&v%10<=9&&v>10&&v+10<=S.max});
+    const cell=(h,cls)=>'<div class="'+(cls||'')+'">'+h+'</div>';
+    return {prompt:'Fülle die Nachbarfelder aus.',pic:()=>S.help?'<div style="zoom:.55">'+tafelHTML({cls:{[c]:'hl'},show:v=>v<=10||v%10===0})+'</div>':'',type:'keys',
+      layout:'<div class="cross">'+cell('','no')+cell(F(0))+cell('','no')+cell(F(1))+cell(cn(c),'mid')+cell(F(2))+cell('','no')+cell(F(3))+cell('','no')+'</div>',fields:[c-10,c-1,c+1,c+10],
+      hintK:(v,w)=>w[0]?'Oben steht 10 weniger.':w[3]?'Unten steht 10 mehr.':w[1]?'Links steht 1 weniger.':'Rechts steht 1 mehr.'};}
+]},
+{t:'Pfeilwege',g:'Orientieren',d:'Mit Pfeilen springen',icon:()=>'<div style="font-size:1.6rem;font-weight:bold">'+cn(34)+' <span class="arr">↓</span><span class="arr">→</span></div>',legend:true,gen:[
+  (i)=>{const st=num(11,S.max-1),p=path(st,i<3?1:2);return {prompt:'Starte bei '+cn(st)+'. Gehe '+arrSpan(p.ds)+' Tippe das Ziel an.',say:'Starte bei '+st+'. Folge den Pfeilen. Tippe das Ziel an.',type:'custom',solution:'Das Ziel ist '+p.end+'.',mount:(box,api)=>{
+      const w=el('div');w.innerHTML=tafelHTML({click:true,cls:{[st]:'start'}});box.appendChild(w);
+      w.querySelectorAll('td').forEach(td=>td.onclick=()=>{if(S.locked)return;const v=+td.dataset.n;if(v===st)return;if(v===p.end){td.className='good';api.report(true);}else{td.className='bad';api.report(false,'Gehe Schritt für Schritt. '+arrHint(p.ds[0]));}});
+      return {immediate:true,solve:()=>api.report(true)};}};},
+  ()=>{const st=num(11,S.max-1),p=path(st,3);let c=st;const vals=p.ds.map(d=>(c+=ARR[d][1]));
+    return {prompt:'Folge den Pfeilen. Schreibe jede Zahl auf.',pic:()=>S.help?'<div style="zoom:.6">'+tafelHTML({cls:{[st]:'start'}})+'</div>':'',type:'keys',
+      layout:'<span class="seq"><span class="box">'+cn(st)+'</span>'+p.ds.map((d,k)=>'<span class="arr">'+ARR[d][0]+'</span>'+F(k)).join('')+'</span>',fields:vals,hintK:(v,w)=>arrHint(p.ds[w.indexOf(true)])};},
+  (i)=>{const k=i%3,st=num(11,S.max-1);
+    if(k===1){const d=pick(['R','L','D','U'].filter(x=>canGo(st,x)));const en=st+ARR[d][1];
+      return {prompt:'Welcher Pfeil fehlt?',pic:()=>'<div class="seq"><span class="box">'+cn(st)+'</span><span class="arr" style="background:#fff8d6">?</span><span class="box">'+cn(en)+'</span></div>',type:'choice',optCls:'arrow',options:['R','L','D','U'].map(x=>({html:ARR[x][0],val:x})),ans:d,hint:()=>'Ist die Zahl um 1 oder um 10 größer oder kleiner geworden?'};}
+    const p=path(st,R(3,4));
+    if(k===0)return {prompt:'Wo kommst du an?',pic:()=>S.help?'<div style="zoom:.6">'+tafelHTML({cls:{[st]:'start'}})+'</div>':'',type:'keys',layout:'<span class="seq"><span class="box">'+cn(st)+'</span>'+arrSpan(p.ds)+'<span class="op">=</span>'+F(0)+'</span>',fields:[p.end],hintK:()=>'Gehe Pfeil für Pfeil. → +1, ← '+MINUS+'1, ↓ +10, ↑ '+MINUS+'10.'};
+    return {prompt:'Wo bist du gestartet?',pic:()=>'',type:'keys',layout:'<span class="seq">'+F(0)+arrSpan(p.ds)+'<span class="op">=</span><span class="box">'+cn(p.end)+'</span></span>',fields:[st],hintK:()=>'Gehe rückwärts: Drehe jeden Pfeil um und starte beim Ziel.'};}
+]},
+{t:'Zahlenstrahl',g:'Orientieren',d:'Zahlen am Strahl finden',icon:()=>svgStrahl(0,20,13,v=>v%10===0),gen:[
+  ()=>{const n=num(3,S.max-1,{noTens:true});let a=Math.floor(n/10)*10-(n%10<5?10:0);a=Math.max(0,Math.min(a,S.max-20));return {prompt:'Welche Zahl zeigt der Pfeil?',pic:()=>svgStrahl(a,a+20,n,v=>v%10===0||(S.help&&v%5===0)),type:'choice',options:opts(n,3,a).map(v=>({html:cn(v),val:v})),ans:n,hint:()=>'Suche den Zehner vor dem Pfeil. Zähle dann in Einerschritten weiter.'};},
+  ()=>{const n=num(3,S.max-1);return {prompt:'Welche Zahl zeigt der Pfeil?',pic:()=>svgStrahl(0,S.max,n,v=>v%10===0||(S.help&&v%5===0)),type:'keys',layout:F(0),fields:[n],hintK:v=>numHint(n,v[0],'Zehner (lange Striche)','Einer (kurze Striche)')};},
+  ()=>{const n=num(3,S.max-1);return {prompt:'Welche Zahl zeigt der Pfeil?',pic:()=>svgStrahl(0,S.max,n,v=>v===0||v===S.max||v===S.max/2||(S.help&&v%10===0)),type:'keys',layout:F(0),fields:[n],hintK:()=>'Die langen Striche sind Zehner. Zähle von 0 oder von '+S.max/2+' in Zehnerschritten.'};}
+]},
+{t:'Nachbarn',g:'Orientieren',d:'Vorgänger, Nachfolger, ±10, Nachbarzehner',icon:()=>'<div style="font-size:1.5rem;font-weight:bold">'+cn(33)+' '+cn(34)+' '+cn(35)+'</div>',gen:[
+  (i)=>{const n=num(11,S.max-1,{filter:v=>v%10>=1&&v%10<=8}),nf=i%2===0;const strahl=()=>S.help?svgStrahl(Math.max(0,n-10),Math.max(0,n-10)+20>S.max?S.max:Math.max(0,n-10)+20,null,v=>true):'';
+    return nf?{prompt:'Wie heißt der Nachfolger?',pic:strahl,type:'keys',layout:'<table class="nb"><tr><th>Zahl</th><th>Nachfolger</th></tr><tr><td class="mid">'+cn(n)+'</td><td>'+F(0)+'</td></tr></table>',fields:[n+1],hintK:()=>'Der Nachfolger ist 1 mehr.'}
+      :{prompt:'Wie heißt der Vorgänger?',pic:strahl,type:'keys',layout:'<table class="nb"><tr><th>Vorgänger</th><th>Zahl</th></tr><tr><td>'+F(0)+'</td><td class="mid">'+cn(n)+'</td></tr></table>',fields:[n-1],hintK:()=>'Der Vorgänger ist 1 weniger.'};},
+  (i)=>{if(i%3===2){const n=num(11,S.max-10);return {prompt:'10 weniger und 10 mehr',pic:()=>S.help?svgField(n,{help:true}):'',type:'keys',layout:'<table class="nb"><tr><th>'+MINUS+' 10</th><th>Zahl</th><th>+ 10</th></tr><tr><td>'+F(0)+'</td><td class="mid">'+cn(n)+'</td><td>'+F(1)+'</td></tr></table>',fields:[n-10,n+10],hintK:(v,w)=>w[0]?'10 weniger: Die Zehnerziffer wird 1 kleiner, die Einer bleiben gleich.':'10 mehr: Die Zehnerziffer wird 1 größer, die Einer bleiben gleich.'};}
+    const n=i%2===0?num(11,S.max-1,{filter:v=>[0,9,1].indexOf(v%10)>=0&&v>10}):num(11,S.max-1);return {prompt:'Vorgänger und Nachfolger',pic:()=>S.help?svgStrahl(Math.max(0,Math.min(n-10,S.max-20)),Math.max(0,Math.min(n-10,S.max-20))+20,null,v=>true):'',type:'keys',
+    layout:'<table class="nb"><tr><th>Vorgänger</th><th>Zahl</th><th>Nachfolger</th></tr><tr><td>'+F(0)+'</td><td class="mid">'+cn(n)+'</td><td>'+F(1)+'</td></tr></table>',fields:[n-1,n+1],hintK:(v,w)=>w[0]?'Der Vorgänger ist 1 weniger.'+(n%10===0?' Achtung, Zehnerwechsel!':''):'Der Nachfolger ist 1 mehr.'+(n%10===9?' Achtung, Zehnerwechsel!':'')};},
+  (i)=>{const n=num(11,S.max-1,{noTens:true}),lo=Math.floor(n/10)*10,hi=lo+10;const strahl=()=>S.help?svgStrahl(lo,hi,n,v=>true):'';
+    if(i%2===0)return {prompt:'Wie heißen die Nachbarzehner?',pic:strahl,type:'keys',layout:F(0)+'<span class="op">&lt;</span>'+cn(n)+'<span class="op">&lt;</span>'+F(1),fields:[lo,hi],hintK:(v,w)=>w[0]?'Der Nachbarzehner davor ist die Zehnerzahl direkt vor '+n+'.':'Der Nachbarzehner danach ist die nächste Zehnerzahl.'};
+    return {prompt:'Fülle die Tabelle aus.',pic:strahl,type:'keys',layout:'<table class="nb"><tr><th>Nachbar-<br>zehner</th><th>Vor-<br>gänger</th><th>Zahl</th><th>Nach-<br>folger</th><th>Nachbar-<br>zehner</th></tr><tr><td>'+F(0)+'</td><td>'+F(1)+'</td><td class="mid">'+cn(n)+'</td><td>'+F(2)+'</td><td>'+F(3)+'</td></tr></table>',fields:[lo,n-1,n+1,hi],
+      hintK:(v,w)=>w[1]?'Der Vorgänger ist 1 weniger.':w[2]?'Der Nachfolger ist 1 mehr.':'Nachbarzehner sind die Zehnerzahlen direkt davor und danach.'};}
+]},
+{t:'Zahlenfolgen',g:'Orientieren',d:'Regeln finden, weiterzählen',icon:()=>'<div style="font-size:1.3rem;font-weight:bold">'+cn(20)+' '+cn(30)+' '+cn(40)+' …</div>',gen:[
+  ()=>{const st=pickSt([1,10,-1,-10,2]);const s=mkSeq(st,6);return {prompt:'Setze die Zahlenfolge fort.',pic:()=>'',type:'keys',layout:seqLay(s,[5]),fields:[s[5]],hintK:()=>seqHint(st)};},
+  ()=>{const st=pickSt([2,5,10,-2,-5,-10]);const s=mkSeq(st,6);const g=shuffle([1,2,3,4,5]).slice(0,2).sort();return {prompt:'Welche Zahlen fehlen?',pic:()=>'',type:'keys',layout:seqLay(s,g),fields:g.map(k=>s[k]),hintK:()=>seqHint(st)};},
+  ()=>{const st=pickSt([3,4,5,9,11,20,-3,-4,-5,-9,-11,-20]);const s=mkSeq(st,6);const g=shuffle([2,3,4,5]).slice(0,2).sort();return {prompt:'Welche Zahlen fehlen? Wie heißt die Regel?',pic:()=>'',type:'keys',layout:seqLay(s,g)+'<div class="eq" style="width:100%;justify-content:center;margin-top:.6rem"><span class="lab">Regel:</span><span>'+(st>0?'+':MINUS)+'</span>'+F(2)+'</div>',fields:g.map(k=>s[k]).concat([Math.abs(st)]),hintK:(v,w)=>w[2]?'Wie viel kommt von Zahl zu Zahl dazu oder weg?':seqHint(st)};}
+]},
+{t:'Darstellungen verbinden',g:'Darstellungen verbinden',d:'Was gehört zusammen?',icon:()=>'<div style="display:flex;gap:6px;align-items:center;height:70px">'+svgDienes(2,3).replace('class="pic dienes"','style="height:66px"')+svgField(23).replace('class="pic field"','style="height:66px"')+'</div>',gen:[
+  ()=>{const n=num(11,Math.min(99,S.max)),vals=opts(n),types=shuffle(['d','f','m','s','g']);return {prompt:'Welches Bild zeigt <span class="big">'+cn(n)+'</span>?',say:'Welches Bild zeigt '+n+'?',type:'choice',optCls:'pic',options:vals.map((v,k)=>({html:rep(types[k],v),val:v})),ans:n,hint:()=>'Zähle bei jedem Bild zuerst die Zehner, dann die Einer.'};},
+  ()=>{const n=num(11,Math.min(99,S.max)),t=shuffle(['d','f','m','s','w','g']);const a=t[0],b=t[1];const vals=opts(n);return {prompt:'Welches Bild zeigt die gleiche Zahl?',pic:()=>'<div style="border:3px solid #e0b800;border-radius:1rem;padding:.4rem;background:#fff;max-height:240px;display:flex;justify-content:center">'+rep(a,n).replace('class="pic dienes"','class="pic" style="height:200px"').replace('class="pic field"','class="pic" style="height:220px"')+'</div>',type:'choice',optCls:'pic',options:vals.map(v=>({html:rep(b,v),val:v})),ans:n,hint:()=>'Bestimme zuerst die Zahl im gelben Bild. Suche sie dann unten.'};},
+  ()=>{const n=num(11,Math.min(99,S.max),{noTens:true});let d=swap(n);if(d==null)d=pick([n+10,n-10,n+1,n-1].filter(v=>v>=11&&v<=99));const t=shuffle(['d','f','m','s','w','g']).slice(0,4);const odd=R(0,3);
+    return {prompt:'Welches Bild passt nicht?',type:'choice',optCls:'pic four',options:t.map((x,k)=>({html:rep(x,k===odd?d:n),val:k})),ans:odd,hint:()=>'Drei Bilder zeigen die gleiche Zahl. Bestimme bei jedem Bild die Zahl.'};}
+]}
+];
+function pairsSVG(e){let p='';for(let k=0;k<e;k++){const col=Math.floor(k/2),row=k%2;p+='<circle cx="'+(20+col*34)+'" cy="'+(18+row*30)+'" r="11" class="'+(e%2===1&&k===e-1?'fe':'fd')+'" style="'+(e%2===1&&k===e-1?'stroke:#d97a12;stroke-width:3':'')+'"/>';}
+  return '<svg class="pic" style="height:80px" viewBox="0 0 '+(Math.max(1,Math.ceil(e/2))*34+10)+' 64" xmlns="http://www.w3.org/2000/svg">'+p+'</svg>';}
+function zdtTask(lv,i,n){const P=t=>'<span class="zdt">Zahl des Tages:</span> <span class="big">'+cn(n)+'</span> – '+t;const z=Math.floor(n/10),e=n%10;
+  if(i===0){const leg='<div class="legend"><span><b>□</b> 1 Hunderter</span><span><b style="color:var(--z)">|</b> 1 Zehner</span><span><b style="color:var(--e)">•</b> 1 Einer</span></div>';
+    if(lv===0){let o=opts(n);return {prompt:P('Welche Geheimschrift passt?'),say:'Zahl des Tages '+n+'. Welche Geheimschrift passt?',pic:()=>leg,type:'choice',optCls:'pic',options:o.map(v=>({html:svgGeheim(v),val:v})),ans:n,hint:v=>v===swap(n)?'Zahlendreher! Striche sind Zehner, Punkte sind Einer.':'Zähle die Striche (Zehner) und die Punkte (Einer).'};}
+    return {prompt:P('Schreibe die Zahl in Geheimschrift.'),say:'Zahl des Tages '+n+'. Schreibe die Zahl in Geheimschrift.',pic:()=>leg,type:'custom',solution:n===100?'1 Quadrat.':z+' Striche und '+e+' Punkte.',mount:(box)=>{
+      let h=0,zz=0,ee=0;const pic=el('div');pic.style.minHeight='96px';pic.style.minWidth='300px';pic.style.border='3px dashed #c9bda5';pic.style.borderRadius='1rem';pic.style.display='flex';pic.style.justifyContent='center';pic.style.alignItems='center';
+      const draw=()=>{pic.innerHTML=(h||zz||ee)?svgGeheim(0,{h:h,z:zz,e:ee}):'<span class="legend">Tippe unten auf die Zeichen.</span>';};
+      const tools=el('div','tools');const tl=[['| Zehner',()=>{if(zz<10)zz++;},'z'],['• Einer',()=>{if(ee<12)ee++;},'e'],['&#9003; löschen',()=>{if(ee)ee--;else if(zz)zz--;else if(h)h--;},'']];
+      if(S.max===100)tl.unshift(['□ Hunderter',()=>{if(h<1)h++;},'']);
+      tl.forEach(b=>{const x=el('button','tool '+b[2],b[0]);x.onclick=()=>{b[1]();draw();};tools.appendChild(x);});
+      box.appendChild(pic);box.appendChild(tools);draw();
+      return {check:()=>{const v=h*100+zz*10+ee;if(v===n&&ee<=9&&zz<=9)return {ok:true};if(v===n)return {ok:false,hint:'Bündle: 10 Punkte sind 1 Strich, 10 Striche sind 1 Hunderter.'};if(zz===e&&ee===z&&z!==e)return {ok:false,hint:'Zahlendreher! Striche sind Zehner, Punkte sind Einer.'};if(zz===z&&!h)return {ok:false,hint:'Die Zehner stimmen. Zähle die Punkte.'};return {ok:false,hint:'Für jeden Zehner einen Strich, für jeden Einer einen Punkt.'};},solve:()=>{h=Math.floor(n/100);zz=Math.floor(n%100/10);ee=n%10;draw();}};}};}
+  if(i===1)return {prompt:P('Ist die Zahl gerade oder ungerade?'),say:'Zahl des Tages '+n+'. Ist die Zahl gerade oder ungerade?',pic:()=>(lv===0||S.help)?'<div style="display:flex;flex-direction:column;align-items:center;gap:.3rem"><div class="legend">Die Einer in Paaren: Bleibt einer übrig?</div>'+(e?pairsSVG(e):'<div class="legend"><b>0 Einer</b> – keiner bleibt übrig.</div>')+'</div>':'',type:'choice',optCls:'word',options:[{html:'gerade',val:0},{html:'ungerade',val:1}],ans:n%2,hint:()=>'Schau nur auf die Einer. Gerade Zahlen enden auf 0, 2, 4, 6 oder 8.'};
+  if(i===2){if(lv<2){const o=opts(n,lv===0?3:4);return {prompt:P('Wie heißt die Zahl als Wort?'),say:'Zahl des Tages '+n+'. Wie heißt die Zahl als Wort?',type:'choice',optCls:'word',options:o.map(v=>({html:whtml(v),val:v})),ans:n,hint:v=>v===swap(n)?'Zahlendreher! Beim Sprechen kommen die Einer zuerst.':'Sprich die Zahl leise: zuerst die Einer, dann die Zehner.'};}
+    const parts=wparts(n).map(p=>p[0]);const pool=parts.slice();const ds=[swap(n),n+10<=S.max?n+10:n-10,n+1<=S.max?n+1:n-1].filter(v=>v!=null&&v>0);ds.forEach(v=>wparts(v).forEach(p=>{if(pool.indexOf(p[0])<0&&pool.length<6)pool.push(p[0]);}));
+    return {prompt:P('Lege die Zahl als Wort.'),say:'Zahl des Tages '+n+'. Lege die Zahl als Wort.',type:'custom',solution:wtext(n),mount:(box)=>{
+      let seq=[];const line=el('div','wline');const tiles=el('div','tiles');const tl=shuffle(pool.slice());
+      const draw=()=>{line.textContent=seq.join('');};
+      tl.forEach(w=>{const b=el('button','tile',w);b.onclick=()=>{if(seq.length<4){seq.push(w);draw();}};tiles.appendChild(b);});
+      const del=el('button','tool','&#9003; löschen');del.onclick=()=>{seq.pop();draw();};
+      box.appendChild(line);box.appendChild(tiles);box.appendChild(del);draw();
+      return {check:()=>{const w=seq.join('');if(w===wtext(n))return {ok:true};if(swap(n)!=null&&w===wtext(swap(n)))return {ok:false,hint:'Zahlendreher! Die Einer spricht man zuerst.'};return {ok:false,hint:'Sprich die Zahl langsam. Was hörst du zuerst?'};},solve:()=>{seq=parts.slice();draw();}};}};}
+  if(i===3){const lo=n%10===0?n-10:Math.floor(n/10)*10,hi=n%10===0?n+10:lo+10;const four=lv>0;
+    return {prompt:P('Die Nachbarn der Zahl'),say:'Zahl des Tages '+n+'. Die Nachbarn der Zahl.',pic:()=>S.help?svgStrahl(Math.max(0,Math.min(lo,S.max-20)),Math.max(0,Math.min(lo,S.max-20))+20,n,v=>v%10===0||v===n):'',type:'keys',
+      layout:'<table class="nb"><tr><th>VZ</th><th>V</th><th>Z</th><th>N</th><th>NZ</th></tr><tr><td>'+(four?F(0):cn(lo))+'</td><td>'+F(four?1:0)+'</td><td class="mid">'+cn(n)+'</td><td>'+F(four?2:1)+'</td><td>'+(four?F(3):cn(hi))+'</td></tr></table><div class="legend" style="width:100%">VZ = Nachbarzehner davor, V = Vorgänger, Z = Zahl, N = Nachfolger, NZ = Nachbarzehner danach</div>',
+      fields:four?[lo,n-1,n+1,hi]:[n-1,n+1],hintK:(v,w)=>{const k=w.indexOf(true);const names=four?['VZ','V','N','NZ']:['V','N'];const nm=names[k];return nm==='V'?'Der Vorgänger ist 1 weniger.':nm==='N'?'Der Nachfolger ist 1 mehr.':'Nachbarzehner sind die Zehnerzahlen direkt davor und danach.';}};}
+  if(i===4){const fs=[],cells=[];if(n-10>=0){cells.push('<th>'+MINUS+' 10</th>');fs.push(n-10);}cells.push('<th>Zahl</th>');if(n+10<=S.max){cells.push('<th>+ 10</th>');fs.push(n+10);}
+    let k=0;const row=(n-10>=0?'<td>'+F(k++)+'</td>':'')+'<td class="mid">'+cn(n)+'</td>'+(n+10<=S.max?'<td>'+F(k++)+'</td>':'');
+    return {prompt:P('10 weniger und 10 mehr'),say:'Zahl des Tages '+n+'. 10 weniger und 10 mehr.',pic:()=>(lv===0||S.help)?svgField(n,{help:S.help}):'',type:'keys',layout:'<table class="nb"><tr>'+cells.join('')+'</tr><tr>'+row+'</tr></table>',fields:fs,hintK:()=>'Bei 10 mehr oder 10 weniger ändern sich nur die Zehner. Die Einer bleiben gleich.'};}
+  // i===5 Zerlegen und Stellenwerttafel
+  const zz=Math.floor(n/10);const r1='<div class="eq" style="width:100%">'+F(0)+'<span class="lab wz">Z</span><span class="op">+</span>'+F(1)+'<span class="lab we">E</span></div>';
+  if(lv===0)return {prompt:P('Zerlege in Zehner und Einer.'),say:'Zahl des Tages '+n+'. Zerlege in Zehner und Einer.',pic:()=>S.help?svgDienes(zz,e,{help:true}):'',type:'keys',layout:r1,fields:[zz,e],hintK:(v,w)=>w[0]?'Wie viele Zehner hat die Zahl?':'Wie viele Einer hat die Zahl?'};
+  const r2='<div class="eq" style="width:100%">'+F(2)+'<span class="op">+</span>'+F(3)+'</div>';
+  if(lv===1)return {prompt:P('Zerlege die Zahl.'),say:'Zahl des Tages '+n+'. Zerlege die Zahl.',pic:()=>S.help?svgDienes(zz,e,{help:true}):'',type:'keys',layout:r1+r2,fields:[zz,e,zz*10,e],hintK:(v,w)=>(w[0]||w[1])?'Oben: Wie viele Zehner, wie viele Einer?':'Unten: Schreibe die Zehnerzahl und die Einer, z. B. 40 + 7.'};
+  const big=n===100;const swt='<table class="swt"><tr><th class="hh">H</th><th class="hz">Z</th><th class="he">E</th></tr><tr><td class="num">'+(big?F(4):'')+'</td><td class="num">'+F(big?5:4)+'</td><td class="num">'+F(big?6:5)+'</td></tr></table>';
+  return {prompt:P('Stellenwerttafel und Zerlegung'),say:'Zahl des Tages '+n+'. Fülle die Stellenwerttafel aus und zerlege die Zahl.',pic:()=>S.help?svgDienes(zz,e,{help:true}):'',type:'keys',layout:r1+r2+'<div class="eq" style="width:100%">'+swt+'</div>',fields:big?[10,0,100,0,1,0,0]:[zz,e,zz*10,e,zz,e],
+    hintK:(v,w)=>(w[4]||w[5]||w[6])?'In die Stellenwerttafel: Zehner unter Z, Einer unter E.':(w[0]||w[1])?'Wie viele Zehner, wie viele Einer?':'Schreibe die Zehnerzahl und die Einer.'};}
+function tafelTap(show,txt){const n=num(2,S.max);return {prompt:txt+' <span class="big">'+cn(n)+'</span> an.',say:txt+' '+n+' an',type:'custom',solution:'Die '+n+' steht in Reihe '+Math.ceil(n/10)+', Spalte '+((n-1)%10+1)+'.',mount:(box,api)=>{
+      const w=el('div');w.innerHTML=tafelHTML({click:true,show:show});box.appendChild(w);
+      w.querySelectorAll('td').forEach(td=>td.onclick=()=>{if(S.locked)return;const v=+td.dataset.n;if(v===n){td.className='good';td.innerHTML=cn(v);api.report(true);}else{td.className='bad';td.innerHTML=cn(v);const rn=Math.ceil(n/10),rv=Math.ceil(v/10);api.report(false,v===swap(n)?'Das ist '+v+'. Zahlendreher! Schau genau auf die Zehner.':'Das ist '+v+'. '+(rn===rv?'Die Reihe stimmt. Gehe nach links oder rechts.':(n%10===v%10?'Die Spalte stimmt. Gehe nach oben oder unten.':'Suche zuerst die richtige Reihe (Zehner).')));}});
+      return {immediate:true,solve:()=>api.report(true)};}};}
+function tafelWhich(show){const n=num(12,S.max,{filter:v=>v%10!==0&&v>10});return {prompt:'Welche Zahl gehört in das gelbe Feld?',pic:()=>tafelHTML({show:show,cls:{[n]:'hl'}}),type:'keys',layout:F(0),fields:[n],hintK:v=>v[0]===swap(n)?'Zahlendreher!':'Zähle die Reihen: Jede Reihe ist ein Zehner mehr. Zähle dann in der Reihe die Einer.'};}
+function pickSt(l){return pick(l.filter(v=>Math.abs(v)*5<=S.max));}
+function mkSeq(st,len){for(let t=0;t<200;t++){const a=st>0?R(0,S.max-st*(len-1)):R(-st*(len-1),S.max);const s=[];for(let k=0;k<len;k++)s.push(a+k*st);if(s.every(v=>v>=0&&v<=S.max))return s;}const s=[];for(let k=0;k<len;k++)s.push(k*Math.abs(st));return s;}
+function seqLay(s,gaps){return '<span class="seq">'+s.map((v,k)=>(k?'<span class="ar">›</span>':'')+(gaps.indexOf(k)>=0?F(gaps.indexOf(k)):'<span class="box">'+cn(v)+'</span>')).join('')+'</span>';}
+function seqHint(st){return 'Schau genau: Wird die Zahl größer oder kleiner? Um wie viel?'+(S.help?' Die Regel ist '+(st>0?'+':MINUS)+Math.abs(st)+'.':'');}
+const GROUPS=['Zahl des Tages','Zahlen darstellen','Zahlen zerlegen','Orientieren','Darstellungen verbinden'];
+const LV=['leicht','mittel','schwer'];
+
+/* ---------- Ablauf ---------- */
+function seg(id,key,cb){document.querySelectorAll(id+' button').forEach(b=>{b.onclick=()=>{S[key]=+b.dataset.v;mark(id,S[key]);cb&&cb();};});mark(id,S[key]);}
+function mark(id,v){document.querySelectorAll(id+' button').forEach(b=>b.classList.toggle('on',+b.dataset.v===+v));}
+function buildHome(){const box=$('#stations');box.innerHTML='';
+  GROUPS.forEach(g=>{box.appendChild(el('div','group',g));const grid=el('div','grid');
+    ST.forEach((s,id)=>{if(s.g!==g)return;const b=el('button','st');const best=S.best[id+'_'+S.max]||{};
+      b.innerHTML='<div class="ic">'+s.icon()+'</div><b><span class="nr">'+(id+1)+'</span>'+s.t+'</b><small>'+s.d+'</small><div class="stars">'+LV.map((l,k)=>best[k]!=null?l[0].toUpperCase()+': '+'★'.repeat(best[k]):'').filter(Boolean).join('  ')+'</div>';
+      b.onclick=()=>start(id,S.lv);grid.appendChild(b);});box.appendChild(grid);});}
+function start(id,lv){S.st=id;S.lv=lv;used=new Set();S.tasks=[];
+  if(ST[id].zdt){const v=parseInt(($('#zdt')||{}).value,10);S.zn=(v>=1&&v<S.max)?v:(S.zn&&S.zn<S.max&&S.st===id&&S.keepZn?S.zn:num(11,S.max-10));S.keepZn=false;}
+  for(let i=0;i<6;i++)S.tasks.push(ST[id].gen[lv](i));
+  S.i=0;S.res=[];$('#home').classList.add('hidden');$('#end').classList.add('hidden');$('#game').classList.remove('hidden');
+  $('#title').innerHTML='<span class="nr" style="display:inline-block;background:var(--z);color:#fff;border-radius:50%;width:2rem;height:2rem;text-align:center;line-height:2rem;font-size:1.1rem;margin-right:.4rem">'+(id+1)+'</span>'+ST[id].t;
+  mark('#gLv',lv);$('#legend').classList.toggle('hidden',!ST[id].legend);render();}
+function dots(){const d=$('#dots');d.innerHTML='';for(let i=0;i<6;i++){const x=el('i');if(i<S.res.length)x.className=S.res[i];else if(i===S.i)x.className='cur';d.appendChild(x);}}
+let cur=null;
+function render(){const t=S.tasks[S.i];S.tries=0;S.locked=false;cur={t:t};dots();
+  const fb=$('#fb');fb.className='';fb.textContent='';$('#next').disabled=true;
+  const pr=$('#prompt');pr.innerHTML='';const sp=el('button','spk','&#128264;');sp.title='Vorlesen';sp.onclick=()=>say(t.say||plain(t.prompt));pr.appendChild(sp);pr.appendChild(el('span','',t.prompt));
+  $('#pic').innerHTML=t.pic?t.pic():'';
+  const A=$('#answer');A.innerHTML='';
+  if(t.type==='choice'){const o=el('div','opts');t.options.forEach(op=>{const b=el('button','opt '+(t.optCls||''),op.html);b.onclick=()=>{if(S.locked||b.classList.contains('bad'))return;if(op.val===t.ans){b.classList.add('good');report(true);}else{b.classList.add('bad');report(false,t.hint?t.hint(op.val):'Schau noch einmal genau.');}};o.appendChild(b);});A.appendChild(o);cur.check=null;}
+  else if(t.type==='keys'){const eq=el('div','eq',t.layout);A.appendChild(eq);const fl=[...eq.querySelectorAll('.fld')].sort((a,b)=>a.dataset.f-b.dataset.f);cur.fl=fl;cur.vals=fl.map(()=> '');cur.act=0;
+    const upd=()=>fl.forEach((f,k)=>{f.innerHTML=cur.vals[k]===''?'':cn(cur.vals[k]);f.classList.toggle('act',k===cur.act&&!S.locked);});
+    fl.forEach((f,k)=>f.onclick=()=>{if(S.locked)return;cur.act=k;upd();});
+    const keys=el('div','keys');[1,2,3,4,5,6,7,8,9,0].forEach(d=>{const b=el('button','key',String(d));b.onclick=()=>{if(S.locked)return;const k=cur.act;fl[k].classList.remove('bad');if(cur.vals[k].length<3)cur.vals[k]=(cur.vals[k]==='0'?'':cur.vals[k])+d;upd();};keys.appendChild(b);});
+    const del=el('button','key wide','&#9003; löschen');del.onclick=()=>{if(S.locked)return;const k=cur.act;cur.vals[k]=cur.vals[k].slice(0,-1);fl[k].classList.remove('bad');upd();};keys.appendChild(del);
+    A.appendChild(keys);const ck=el('button','check','Prüfen');A.appendChild(ck);
+    cur.upd=upd;cur.check=()=>{if(S.locked)return;if(cur.vals.some(v=>v==='')){fb.className='warn';fb.textContent='Fülle alle Kästchen aus.';const k=cur.vals.findIndex(v=>v==='');cur.act=k;upd();return;}
+      const v=cur.vals.map(Number);let r;if(t.checkK)r=t.checkK(v);else{const w=t.fields.map((a,k)=>a!==v[k]);r={ok:!w.some(Boolean),wrong:w};}
+      fl.forEach((f,k)=>{f.classList.toggle('bad',!!r.wrong[k]);f.classList.toggle('good',!r.wrong[k]&&!r.ok?false:!r.wrong[k]);});
+      if(r.ok)report(true);else{const k=r.wrong.findIndex(Boolean);cur.act=k<0?0:k;upd();report(false,t.hintK?t.hintK(v,r.wrong):'Schau noch einmal genau.');}};
+    ck.onclick=cur.check;upd();}
+  else{const box=el('div','');box.style.display='flex';box.style.flexDirection='column';box.style.alignItems='center';box.style.gap='.7rem';A.appendChild(box);
+    const api={report:report};const m=t.mount(box,api);cur.custom=m;
+    if(!m.immediate){const ck=el('button','check','Prüfen');ck.onclick=()=>{if(S.locked)return;const r=m.check();if(r.ok)report(true);else report(false,r.hint);};A.appendChild(ck);cur.check=ck.onclick;}}
+}
+const PRAISE=['Super!','Richtig!','Klasse!','Prima!','Toll gemacht!','Stark!'];
+function report(ok,hint){if(S.locked)return;const fb=$('#fb');
+  if(ok){S.locked=true;S.res[S.i]=S.tries===0?'star':'ok';fb.className='ok';fb.textContent=pick(PRAISE)+(S.tries===0?' ★':'');finish();return;}
+  S.tries++;
+  if(S.tries>=3){S.locked=true;S.res[S.i]='miss';fb.className='warn';fb.innerHTML='Schau dir die Lösung an: '+solution();showSolution();finish();return;}
+  fb.className='warn';fb.textContent=hint||'Versuche es noch einmal.';}
+function solution(){const t=cur.t;if(t.type==='choice'){const o=t.options.find(x=>x.val===t.ans);return t.optCls&&t.optCls.indexOf('pic')>=0?'Das markierte Bild.':o.html;}if(t.type==='keys')return t.fields.map(cn).join(', ');return t.solution||'';}
+function showSolution(){const t=cur.t;if(t.type==='choice'){document.querySelectorAll('#answer .opt').forEach((b,k)=>{if(t.options[k].val===t.ans)b.classList.add('good');});}
+  else if(t.type==='keys'){cur.vals=t.fields.map(String);cur.fl.forEach(f=>{f.classList.remove('bad');f.classList.add('good');});cur.upd();}
+  else if(cur.custom&&cur.custom.solve&&!cur.custom.immediate){cur.custom.solve();}}
+function finish(){dots();const n=$('#next');n.disabled=false;n.textContent=S.i<5?'Weiter →':'Fertig ✓';if(cur.fl)cur.upd();}
+$('#next').onclick=()=>{if(S.i<5){S.i++;render();}else endRound();};
+function endRound(){const st=S.res.filter(r=>r==='star').length;const key=S.st+'_'+S.max;S.best[key]=S.best[key]||{};S.best[key][S.lv]=Math.max(S.best[key][S.lv]||0,st);
+  $('#endS').textContent='★'.repeat(st)+'☆'.repeat(6-st);$('#endT').textContent=st>=5?'Super gemacht!':st>=3?'Gut gemacht!':'Geschafft!';
+  $('#endP').textContent=ST[S.st].t+' – '+LV[S.lv]+': '+st+' von 6 Sternen.'+(st>=5&&S.lv<2?' Probier doch die nächste Stufe!':st<3&&S.lv>0?' Tipp: Üb noch einmal oder nimm eine leichtere Stufe.':'');
+  $('#harder').classList.toggle('hidden',S.lv>=2);$('#end').classList.remove('hidden');}
+$('#again').onclick=()=>{S.keepZn=true;start(S.st,S.lv);};
+$('#harder').onclick=()=>{S.keepZn=true;start(S.st,Math.min(2,S.lv+1));};
+$('#other').onclick=goHome;
+$('#homeBtn').onclick=goHome;
+function goHome(){$('#end').classList.add('hidden');$('#game').classList.add('hidden');$('#home').classList.remove('hidden');buildHome();try{speechSynthesis.cancel();}catch(e){}}
+$('#helpBtn').onclick=()=>{S.help=!S.help;$('#helpBtn').classList.toggle('on',S.help);if(!S.locked){const t=S.tasks[S.i];if(t.type==='keys'||t.type==='choice'){$('#pic').innerHTML=t.pic?t.pic():'';}else render();}};
+$('#fsBtn').onclick=()=>{try{if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen();}catch(e){}};
+seg('#sMax','max',buildHome);seg('#sLv','lv');
+seg('#gLv','lv',()=>start(S.st,S.lv));
+document.querySelectorAll('#sCol button').forEach(b=>b.onclick=()=>{S.col=b.dataset.v==='1';document.body.classList.toggle('nocol',!S.col);mark('#sCol',S.col?1:0);});mark('#sCol',1);
+document.addEventListener('keydown',e=>{if($('#game').classList.contains('hidden'))return;if(/^[0-9]$/.test(e.key)){const b=[...document.querySelectorAll('.key')].find(x=>x.textContent===e.key);b&&b.click();}else if(e.key==='Backspace'){const b=document.querySelector('.key.wide');b&&b.click();}else if(e.key==='Enter'){if(!$('#next').disabled)$('#next').click();else if(cur&&cur.check)cur.check();}});
+buildHome();
+
+/* ---------- Selbsttest ---------- */
+window.__selftest=function(rounds){rounds=rounds||25;const errs=[];let count=0;const keep={max:S.max,help:S.help};
+  [50,100].forEach(mx=>{S.max=mx;[false,true].forEach(h=>{S.help=h;ST.forEach((s,id)=>{for(let lv=0;lv<3;lv++)for(let r=0;r<rounds;r++){
+    try{start(id,lv);for(let i=0;i<6;i++){const t=S.tasks[i];count++;const tag=s.t+'/'+LV[lv]+'/'+mx+'#'+i;
+      if(t.type==='choice'){const vs=t.options.map(o=>o.val);if(vs.indexOf(t.ans)<0)errs.push(tag+' ans fehlt');if(new Set(vs).size!==vs.length)errs.push(tag+' doppelt '+vs);if(vs.length<2)errs.push(tag+' zu wenig Optionen');
+        if(typeof t.ans==='number'&&(t.ans<0||t.ans>mx))errs.push(tag+' ans außerhalb '+t.ans);
+        vs.forEach(v=>{if(typeof v==='number'&&t.optCls!=='pic four'&&(v<0||v>mx))errs.push(tag+' Option außerhalb '+v);});
+        const k=vs.indexOf(t.ans);document.querySelectorAll('#answer .opt')[k].click();}
+      else if(t.type==='keys'){t.fields.forEach(a=>{if(!Number.isInteger(a)||a<0||a>mx)errs.push(tag+' Feld '+a);});if(cur.fl.length!==t.fields.length)errs.push(tag+' Felderzahl');cur.vals=t.fields.map(String);cur.check();}
+      else{if(cur.custom.immediate)cur.custom.solve();else{cur.custom.solve();cur.check();}}
+      if(!S.locked||S.res[i]!=='star')errs.push(tag+' nicht gelöst: '+$('#fb').textContent+' | '+(t.fields||t.ans));
+      if(i<5){S.i++;render();}}}catch(e){errs.push(s.t+'/'+lv+' '+e.message);}
+  }});});});
+  S.max=keep.max;S.help=keep.help;goHome();return {count:count,errs:errs.slice(0,40),nerr:errs.length};};
+</script>
+</body>
+</html>
