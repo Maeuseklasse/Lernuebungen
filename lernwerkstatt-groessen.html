@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lernwerkstatt Größen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--z:#1d4e89;--e:#2f8f3a;--el:#a6dc8f;--f:#8ec5ef;--bg:#faf6ee;--card:#fff;--line:#d9cfbd;--ink:#2b2b2b;--ok:#2e8b57;--warn:#d97a12;--hl:#ffe27a;--beige:#efdcb5;--beigel:#a8844f;--muted:#6b6250}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{font-family:"Andika","Andika New Basic","Century Gothic","Segoe UI","Helvetica Neue",Arial,sans-serif;background:var(--bg);color:var(--ink);font-size:18px;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
+button{font-family:inherit;cursor:pointer;color:inherit}
+.cz{color:var(--z)}.ce{color:var(--e)}.ck{color:var(--ink)}
+body.nocol .cz,body.nocol .ce,body.nocol .wz,body.nocol .we{color:inherit}
+.wz{color:var(--z)}.we{color:var(--e)}.wk{color:var(--ink)}
+.hidden{display:none!important}
+/* Start */
+#home{max-width:1150px;margin:0 auto;padding:1.2rem 1.2rem 2rem}
+#home h1{font-size:2.3rem;margin:.2rem 0 .2rem;display:flex;align-items:center;gap:.6rem}
+#home .sub{color:var(--muted);margin:0 0 1rem;font-size:1.1rem}
+.settings{display:flex;flex-wrap:wrap;gap:.6rem 1.4rem;align-items:center;background:var(--card);border:2px solid var(--line);border-radius:1rem;padding:.7rem 1rem;margin-bottom:1rem}
+.settings span{font-weight:bold}
+.seg{display:inline-flex;border:2px solid var(--line);border-radius:.8rem;overflow:hidden}
+.seg button{border:0;background:#fff;padding:.45rem .9rem;font-size:1.05rem}
+.seg button+button{border-left:2px solid var(--line)}
+.seg button.on{background:var(--z);color:#fff}
+.group{margin:1.1rem 0 .5rem;font-size:1.25rem;color:var(--muted);font-weight:bold;border-bottom:2px solid var(--line);padding-bottom:.2rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(205px,1fr));gap:.8rem}
+.st{background:var(--card);border:2px solid var(--line);border-radius:1rem;padding:.7rem .7rem .6rem;text-align:left;display:flex;flex-direction:column;gap:.35rem;min-height:170px;transition:transform .1s}
+.st:active{transform:scale(.97)}
+.st .ic{height:74px;display:flex;align-items:center;justify-content:center}
+.st .ic svg{max-height:74px;max-width:100%}
+.st b{font-size:1.15rem}
+.st .nr{display:inline-block;background:var(--z);color:#fff;border-radius:50%;width:1.6rem;height:1.6rem;text-align:center;line-height:1.6rem;font-size:.95rem;margin-right:.3rem}
+.st small{color:var(--muted);font-size:.9rem}
+.st .stars{font-size:.95rem;color:#c8961a;min-height:1.1rem}
+.foot{margin-top:1.4rem;color:var(--muted);text-align:right;font-size:.95rem}
+/* Game */
+#game{height:100%;display:flex;flex-direction:column}
+header{display:flex;align-items:center;gap:.6rem;padding:.5rem .8rem;background:var(--card);border-bottom:2px solid var(--line);flex-wrap:wrap}
+header h2{margin:0;font-size:1.35rem;flex:1;min-width:150px}
+.plain{border:2px solid var(--line);background:#fff;border-radius:.7rem;padding:.4rem .8rem;font-size:1.05rem}
+.plain.on{background:var(--hl);border-color:#e0b800}
+#homeBtn{font-size:1.5rem;padding:.2rem .9rem}
+#dots{display:flex;gap:.4rem;justify-content:center;padding:.6rem 0 .1rem}
+#dots i{width:1.1rem;height:1.1rem;border-radius:50%;border:2px solid var(--line);background:#fff}
+#dots i.cur{border-color:var(--z)}
+#dots i.star{background:#f2c230;border-color:#d9a400}
+#dots i.ok{background:var(--el);border-color:var(--e)}
+#dots i.miss{background:#f5c58f;border-color:var(--warn)}
+main{flex:1;overflow:auto;display:flex;flex-direction:column;align-items:center;padding:.4rem 1rem 1rem;gap:.8rem}
+#prompt{font-size:1.75rem;font-weight:bold;text-align:center;display:flex;align-items:center;gap:.6rem;justify-content:center;flex-wrap:wrap}
+#prompt .big{font-size:2.3rem}
+.spk{border:2px solid var(--line);background:#fff;border-radius:50%;width:2.6rem;height:2.6rem;font-size:1.3rem;padding:0;flex:none}
+.legend{font-size:1.1rem;color:var(--muted);display:flex;gap:1.2rem;flex-wrap:wrap;justify-content:center}
+.legend b{font-size:1.5rem;color:var(--ink)}
+#pic{display:flex;justify-content:center;align-items:center;max-width:100%}
+.pic{display:block;max-width:100%}
+svg.dienes{height:230px}
+svg.field{height:300px}
+svg.strahl{width:min(980px,94vw)}
+svg.kette{width:min(900px,94vw)}
+svg.money{max-height:260px;width:auto;max-width:min(700px,92vw)}
+#answer{display:flex;flex-direction:column;align-items:center;gap:.8rem;width:100%}
+.opts{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center}
+.opt{min-width:7rem;padding:.6rem 1.2rem;font-size:2.4rem;font-weight:bold;background:#fff;border:3px solid var(--line);border-radius:1rem}
+.opt.word{font-size:1.9rem;min-width:13rem}
+.opt.pic{padding:.5rem;min-width:0;display:flex;align-items:center;justify-content:center;width:min(300px,29vw);height:230px}
+.opt.pic.four{width:min(250px,22vw);height:210px}
+.opt.pic svg{max-width:100%;max-height:100%}
+.opt.pic .wordbox{font-size:1.7rem}
+.opt.arrow{font-size:3rem;min-width:5.5rem}
+.opt.bad{border-color:var(--warn);background:#fde9d2;opacity:.6}
+.opt.good{border-color:var(--ok);background:#dff3e4}
+.eq{font-size:2.4rem;font-weight:bold;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;justify-content:center}
+.eq .op{color:var(--muted)}
+.eq .lab{font-size:1.6rem}
+.fld{min-width:4.6rem;height:4rem;border:3px dashed #b8ab92;border-radius:.8rem;background:#fff;font-size:2.3rem;font-weight:bold;padding:0 .4rem}
+.fld.act{border-style:solid;border-color:#e0b800;background:#fff8d6}
+.fld.bad{border-style:solid;border-color:var(--warn);background:#fde9d2}
+.fld.good{border-style:solid;border-color:var(--ok);background:#dff3e4}
+.keys{display:grid;grid-template-columns:repeat(6,4.4rem);gap:.45rem}
+.key{height:4rem;font-size:2.1rem;font-weight:bold;background:#fff;border:2px solid var(--line);border-radius:.8rem}
+.key.wide{grid-column:span 2;font-size:1.4rem}
+.key:active,.opt:active,.tool:active{transform:scale(.95)}
+.check{background:var(--z);color:#fff;border:0;border-radius:.9rem;font-size:1.5rem;padding:.6rem 1.8rem;font-weight:bold}
+.tools{display:flex;gap:.6rem;flex-wrap:wrap;justify-content:center}
+.tool{background:#fff;border:2px solid var(--line);border-radius:.8rem;font-size:1.4rem;padding:.5rem 1rem;font-weight:bold;min-width:5rem}
+.tool.z{border-color:var(--z);color:var(--z)}
+.tool.e{border-color:var(--e);color:var(--e)}
+#fb{min-height:3.2rem;font-size:1.4rem;font-weight:bold;text-align:center;padding:.4rem 1rem;border-radius:.8rem;max-width:900px}
+#fb.ok{background:#dff3e4;color:#1d6b3e}
+#fb.warn{background:#fdebd3;color:#8a4a00}
+footer{display:flex;justify-content:flex-end;padding:.5rem 1rem;border-top:2px solid var(--line);background:var(--card)}
+#next{font-size:1.5rem;padding:.6rem 2rem;border-radius:.9rem;border:0;background:var(--ok);color:#fff;font-weight:bold}
+#next:disabled{background:#c9c2b4}
+/* Tafel */
+table.tafel{border-collapse:collapse;font-weight:bold;font-size:1.35rem;background:#fff}
+table.tafel td{border:1.5px solid #bdb19a;width:2.9rem;height:2.45rem;text-align:center;padding:0}
+table.tafel tr:nth-child(5) td{border-bottom:3px solid #8e8270}
+table.tafel td:nth-child(5){border-right:3px solid #8e8270}
+table.tafel.click td{cursor:pointer}
+table.tafel td.hl{background:var(--hl)}
+table.tafel td.start{background:var(--hl);outline:3px solid #e0b800;outline-offset:-3px}
+table.tafel td.bad{background:#f8cf9c}
+table.tafel td.good{background:#bfe8c5}
+.cross{display:grid;grid-template-columns:repeat(3,6rem);grid-template-rows:repeat(3,5rem);gap:0}
+.cross>div{border:2px solid #bdb19a;background:#fff;display:flex;align-items:center;justify-content:center;font-size:2.2rem;font-weight:bold}
+.cross>div.no{border:0;background:transparent}
+.cross>div.mid{background:var(--hl)}
+.cross .fld{min-width:5.2rem;height:4.2rem;border-radius:.5rem}
+/* Stellenwerttafel */
+table.swt{border-collapse:collapse;background:#fff;font-weight:bold}
+table.swt th{font-size:2rem;padding:.2rem 1.5rem;border:2px solid #8e8270;color:#fff}
+table.swt th.hz{background:var(--z)}table.swt th.he{background:var(--e)}
+table.swt td{border:2px solid #8e8270;vertical-align:middle;text-align:center;padding:.5rem;min-width:9.5rem;height:8rem}
+table.swt td.num{height:auto;font-size:2.4rem;padding:.3rem}
+.pl{display:inline-grid;grid-template-columns:repeat(5,1.5rem);gap:.3rem}
+.pl i{width:1.5rem;height:1.5rem;border-radius:50%;display:block}
+.pl i.pz{background:var(--z)}.pl i.pe{background:var(--el);border:2px solid var(--e)}
+.pl i.mv{outline:3px dashed var(--warn);outline-offset:2px}
+table.swt th.hh{background:#8a6d3b}table.swt td.tdh{min-width:5rem}
+.pl i.ph{background:#c9a86a;border:2px solid #8a6d3b;border-radius:.2rem}
+.gh{fill:none;stroke:#333;stroke-width:3}.gz{stroke:var(--z);stroke-width:5;stroke-linecap:round}.ge{fill:var(--e)}
+svg.geheim{height:90px;max-width:92vw}
+.tiles{display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center}
+.tile{font-size:1.8rem;font-weight:bold;background:#fff;border:2px solid var(--line);border-radius:.7rem;padding:.4rem .9rem}
+.tile.used{opacity:.3}
+.wline{min-height:4.2rem;min-width:22rem;border-bottom:4px solid #b8ab92;font-size:2.4rem;font-weight:bold;display:flex;align-items:flex-end;justify-content:center;padding:0 .5rem}
+.zdt{font-size:1.2rem;color:var(--muted);font-weight:bold}
+.settings input{font:inherit;font-size:1.1rem;width:7rem;padding:.35rem .5rem;border:2px solid var(--line);border-radius:.6rem}
+.mvnote{font-size:1.4rem;font-weight:bold;color:var(--muted)}
+.wordbig{font-size:3rem;font-weight:bold;background:#fff;border:3px solid var(--line);border-radius:1rem;padding:.6rem 1.6rem}
+.seq{display:flex;align-items:center;gap:.3rem;flex-wrap:wrap;justify-content:center;font-size:2.3rem;font-weight:bold}
+.seq .box{min-width:4.8rem;height:4rem;border:3px solid var(--line);border-radius:.8rem;background:#fff;display:flex;align-items:center;justify-content:center}
+.seq .ar{color:var(--muted);font-size:1.6rem}
+.nb{border-collapse:collapse;background:#fff}
+.nb th{font-size:1.05rem;padding:.3rem .5rem;border:2px solid #bdb19a;background:#f3ecdf}
+.nb td{border:2px solid #bdb19a;padding:.4rem;text-align:center;font-size:2.3rem;font-weight:bold;min-width:6rem}
+.nb td.mid{background:var(--hl)}
+.arrows{display:inline-flex;gap:.3rem;align-items:center}
+.arr{display:inline-flex;width:3rem;height:3rem;border:2px solid var(--line);border-radius:.6rem;background:#fff;align-items:center;justify-content:center;font-size:2rem}
+/* SVG classes */
+.db{fill:var(--beige);stroke:var(--beigel);stroke-width:1}
+.dbo{fill:none;stroke:#7d6136;stroke-width:1.6}
+.du{fill:var(--beige);stroke:#7d6136;stroke-width:1.4}
+.lbl{font:bold 15px sans-serif;fill:var(--muted);text-anchor:middle}
+.fd{fill:var(--z)}.fe{fill:#fff;stroke:#b9b0a0;stroke-width:1.6}
+.fclick circle{cursor:pointer}
+.ax{stroke:#333;stroke-width:3}
+.tk{stroke:#333;stroke-width:2}
+.sl{font:bold 22px sans-serif;fill:#333;text-anchor:middle}
+.mk{fill:var(--warn)}
+.kb{fill:var(--z);stroke:#0f2f57;stroke-width:1}.kw{fill:#fff;stroke:#777;stroke-width:1.2}
+.ks{stroke:#777;stroke-width:1.5}
+.clip{fill:#555}
+.kclick circle{cursor:pointer}
+.n10{fill:#f3c9c2;stroke:#a85a4e;stroke-width:2}.n5{fill:#dcdcd5;stroke:#7d7d73;stroke-width:2}
+.mt{font:bold 22px sans-serif;fill:#333;text-anchor:middle}
+.gold{fill:#e2c25a;stroke:#9f8020;stroke-width:1.5}.silv{fill:#d5d9dd;stroke:#8a9097;stroke-width:1.5}
+.ct{font:bold 15px sans-serif;fill:#222;text-anchor:middle}
+.mclick g{cursor:pointer}
+/* End */
+#end{position:fixed;inset:0;background:rgba(40,35,25,.45);display:flex;align-items:center;justify-content:center;z-index:5}
+#end .box{background:#fff;border-radius:1.4rem;padding:1.6rem 2rem;text-align:center;max-width:620px}
+#end h3{font-size:2.2rem;margin:.2rem 0}
+#end .stars{font-size:3rem;color:#e0a800;letter-spacing:.2rem;margin:.4rem 0 1rem}
+#end .row{display:flex;gap:.7rem;flex-wrap:wrap;justify-content:center}
+#end button{font-size:1.3rem;padding:.6rem 1.2rem;border-radius:.8rem;border:2px solid var(--line);background:#fff;font-weight:bold}
+#end button.main{background:var(--ok);color:#fff;border-color:var(--ok)}
+@media (max-width:700px){.keys{grid-template-columns:repeat(4,4rem)}#prompt{font-size:1.4rem}svg.field{height:240px}svg.dienes{height:180px}}
+
+/* Signatur */
+.sig{position:fixed;right:.7rem;bottom:.4rem;width:min(6.2rem,11vh);opacity:.85;pointer-events:none;z-index:3}
+.sig svg{display:block;width:100%;height:auto}
+#game:not(.hidden) ~ .sig{right:auto;left:.5rem;bottom:.25rem;width:min(4.6rem,8vh)}
+#game footer{padding-left:5.6rem}
+.emo{font-size:6rem;line-height:1.1;text-align:center}
+.word{font-size:2.4rem;font-weight:bold;text-align:center;letter-spacing:.03em}
+.wbig{font-size:3rem}
+.sent{font-size:2.3rem;font-weight:bold;text-align:center;line-height:1.5;max-width:min(1000px,94vw)}
+.big2{font-size:2.8rem}
+.mk2{background:var(--hl);border-radius:.35rem;padding:0 .25rem;box-shadow:0 0 0 2px #e0b800 inset}
+.gap{color:var(--warn);padding:0 .15rem}
+.hint2{color:var(--muted);font-size:1.3rem;font-weight:normal}
+.opt.word2{font-size:2.1rem;min-width:9rem}
+.opt.let{font-size:2.8rem;min-width:5.5rem}
+.opt.ord{font-size:2.3rem}
+.opt.usedx{opacity:.25}
+.taps{display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center;align-items:flex-end;max-width:min(1000px,96vw)}
+.tapb{background:#fff;border:3px solid var(--line);border-radius:.8rem;font-weight:bold;font-size:2.2rem;padding:.25rem .7rem}
+.taps.letter .tapb{min-width:4.2rem;height:4.6rem;font-size:2.8rem;padding:0}
+.taps.letter{gap:.35rem}
+.tapb.on{background:var(--hl);border-color:#e0b800}
+.tapb.good{background:#dff3e4;border-color:var(--ok)}
+.tapb.bad{background:#fde9d2;border-color:var(--warn)}
+.tail{font-size:2.2rem;font-weight:bold;margin-left:-.3rem}
+#help{display:flex;justify-content:center;width:100%}
+.merk{background:#fffbe8;border:2px dashed #e0b800;border-radius:1rem;padding:.5rem 1.1rem;font-size:1.2rem;line-height:1.55;max-width:min(880px,94vw);text-align:center}
+.ptab{border-collapse:collapse;margin:.2rem auto .3rem;font-size:1.2rem}
+.ptab td{border:1.5px solid #d9c27a;padding:.15rem .6rem;background:#fff}
+.vh{background:#ffe9a8;border-radius:.3rem;padding:0 .2rem}
+.steig{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;justify-content:center}
+.sbox,.fld.fake{display:inline-flex;align-items:center;justify-content:center;min-width:10rem;height:4.4rem;border:3px solid var(--line);border-radius:.8rem;background:#fff;font-size:2.1rem;font-weight:bold;padding:0 .6rem}
+.fld.fake{border-style:dashed;color:var(--muted)}
+.steig .ar{color:var(--muted);font-size:1.8rem}
+.slab{display:flex;gap:.4rem;justify-content:center;flex-wrap:wrap;color:var(--muted);font-size:1rem}
+.slab span{min-width:10.9rem;text-align:center}
+.sb{color:var(--warn);padding:0 .25rem}
+.slots{display:flex;gap:.6rem;flex-wrap:wrap;justify-content:center}
+.slot{min-width:7rem;height:4.2rem;border:3px dashed #b8ab92;border-radius:.9rem;background:#fff;font-size:2.2rem;font-weight:bold;display:flex;align-items:center;justify-content:center;padding:0 .8rem}
+.slot.full{border-style:solid;border-color:var(--z)}
+.st .ic{font-size:1.45rem;font-weight:bold;color:var(--ink);text-align:center;line-height:1.2}
+@media (max-width:700px){.emo{font-size:4.2rem}.sent{font-size:1.6rem}.word{font-size:1.8rem}.wbig{font-size:2.2rem}.big2{font-size:2rem}.opt.word2{font-size:1.6rem;min-width:7rem}.tapb{font-size:1.6rem}.taps.letter .tapb{min-width:3rem;height:3.6rem;font-size:2rem}.sbox,.fld.fake{min-width:7rem;font-size:1.5rem;height:3.4rem}.slab span{min-width:7.5rem}.merk{font-size:1rem}}
+@media (max-height:560px) and (orientation:landscape){.emo{font-size:3.4rem}main{gap:.4rem}.sent{font-size:1.6rem}.wbig{font-size:2.2rem}}
+#pic{flex-direction:column;gap:.3rem}
+.wN{color:#cf2e2e}.wV{color:#1f5fbf}.wA{color:#2a8a3a}.wT{color:#e07a10}
+.tapb.cN,.opt.cN{color:#cf2e2e}.tapb.cV,.opt.cV{color:#1f5fbf}.tapb.cA,.opt.cA{color:#2a8a3a}.tapb.cT,.opt.cT{color:#e07a10}
+.tapb.good.cN,.tapb.good.cV,.tapb.good.cA,.tapb.good.cT{font-weight:bold}
+.merk .wN,.merk .wV,.merk .wA,.merk .wT{font-weight:bold}
+.sym{width:1.7em;height:1.7em;vertical-align:-.5em;display:inline-block}
+.symbig{width:4.4rem;height:4.4rem;display:block;margin:0 auto .2rem}
+.opt.symopt{display:flex;flex-direction:column;align-items:center;min-width:9.5rem;padding:.5rem .8rem}
+.opt.symopt small{font-size:1.15rem;font-weight:bold}
+.opt.sentopt{font-size:1.7rem;min-width:0}
+.vhint{font-size:1.6rem;color:var(--muted);display:flex;align-items:center;gap:.5rem;justify-content:center;font-weight:bold}
+.group{display:flex;align-items:center;gap:.5rem}
+.group .plain.small{margin-left:auto;font-size:.9rem;padding:.2rem .7rem}
+.st.off{opacity:.4;border-style:dashed}
+.st .ic .sym{width:2.6rem;height:2.6rem;margin:0 .1rem}
+.merk .sym{width:1.9em;height:1.9em}
+#editHint{color:var(--muted);font-size:1rem}
+.grow .gname{display:inline-flex;align-items:center;gap:.3rem}
+@media (max-width:700px){.symbig{width:3.2rem;height:3.2rem}.opt.symopt{min-width:6.5rem}.opt.symopt small{font-size:.9rem}.opt.sentopt{font-size:1.2rem}}
+.clk{width:min(290px,62vw);height:auto;display:block}
+.clk.sm{width:110px}
+.st .ic .clk.sm{width:74px}
+.opt.clkopt{padding:.35rem;min-width:0}
+.opt.clkopt svg{width:min(165px,26vw)}
+.money{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;justify-content:center;max-width:min(900px,94vw)}
+.note{width:128px;height:auto;display:block}
+.coin{height:auto;display:block}
+.st .ic .note{width:90px}.st .ic .coin{width:56px!important}
+.opt.monopt{padding:.4rem;min-width:0}
+.pursebox{min-height:96px;border:3px dashed #b8ab92;border-radius:1rem;padding:.5rem;display:flex;flex-wrap:wrap;gap:.35rem;width:min(760px,92vw);justify-content:center;align-items:center;background:#fff}
+.palette{display:flex;flex-wrap:wrap;gap:.45rem;justify-content:center;align-items:center;max-width:min(900px,94vw)}
+.mbtn{border:0;background:transparent;padding:0}
+.mbtn:active{transform:scale(.94)}
+.empty{color:var(--muted);font-size:1.2rem}
+.clkctr{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;justify-content:center}
+.clab{font-weight:bold;margin-left:.8rem;font-size:1.2rem}
+.clkctr .tool{font-size:1.8rem;min-width:4rem}
+.ruler{width:min(900px,95vw);height:auto;display:block}
+.custom{display:flex;flex-direction:column;align-items:center;gap:.6rem}
+.group .sym{width:1.9em;height:1.9em}
+@media (max-width:700px){.note{width:96px}.clk{width:min(230px,70vw)}}
+.opt.repopt{display:flex;flex-direction:column;align-items:center;min-width:10rem;max-width:15rem;padding:.4rem .7rem}.opt.repopt .em{font-size:3.4rem;line-height:1.2}.opt.repopt small{font-size:1.05rem;line-height:1.25}
+</style>
+</head>
+<body>
+<div id="home">
+  <h1>Lernwerkstatt: Größen</h1>
+  <p class="sub">Uhrzeit, Geld und Längen. Jede Gruppe kann ein- und ausgeblendet werden. Jede Station hat 6 Aufgaben und drei Stufen.</p>
+  <div class="settings">
+    <span>Stufe:</span>
+    <div class="seg" id="sLv"><button data-v="0">leicht</button><button data-v="1">mittel</button><button data-v="2">schwer</button></div>
+    <button class="plain" id="editBtn">Stationen ein-/ausblenden</button>
+    <span id="editHint" class="hidden">Tippe auf eine Station, um sie ein- oder auszublenden. Das Gerät merkt sich die Auswahl.</span>
+  </div>
+  <div id="stations"></div>
+</div>
+<div id="game" class="hidden">
+  <header>
+    <button class="plain" id="homeBtn" title="Zurück zu den Stationen" aria-label="Zurück zu den Stationen">&#8592;</button>
+    <h2 id="title"></h2>
+    <div class="seg" id="gLv"><button data-v="0">leicht</button><button data-v="1">mittel</button><button data-v="2">schwer</button></div>
+    <button class="plain" id="helpBtn">Merkhilfe</button>
+    <button class="plain" id="fsBtn">Vollbild</button>
+  </header>
+  <div id="dots"></div>
+  <main><div id="help"></div><div id="prompt"></div><div id="pic"></div><div id="answer"></div><div id="fb"></div></main>
+  <footer><button id="next" disabled>Weiter &#8594;</button></footer>
+</div>
+<div id="end" class="hidden"><div class="box">
+  <h3 id="endT">Geschafft!</h3>
+  <div class="stars" id="endS"></div>
+  <p id="endP" style="font-size:1.2rem"></p>
+  <div class="row"><button id="again">Nochmal spielen</button><button id="harder" class="main">Schwerer</button><button id="other">Andere Station</button></div>
+</div></div>
+<div class="sig" title="by J.Otto"><svg viewBox="478 66 164 152" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Maus mit Schild: by J.Otto"><circle cx="526" cy="92" r="20" fill="#c3beb7"/><circle cx="526" cy="92" r="13" fill="#f4b6c2"/><circle cx="594" cy="92" r="20" fill="#c3beb7"/><circle cx="594" cy="92" r="13" fill="#f4b6c2"/><path d="M522 170 A38 38 0 0 1 598 170 Z" fill="#c3beb7"/><circle cx="560" cy="136" r="38" fill="#c3beb7"/><ellipse cx="545" cy="132" rx="5.5" ry="6.5" fill="#2b2b2b"/><circle cx="547" cy="129" r="1.8" fill="#fff"/><ellipse cx="575" cy="132" rx="5.5" ry="6.5" fill="#2b2b2b"/><circle cx="577" cy="129" r="1.8" fill="#fff"/><ellipse cx="536" cy="147" rx="6.5" ry="4" fill="#f7a9b8"/><ellipse cx="584" cy="147" rx="6.5" ry="4" fill="#f7a9b8"/><circle cx="560" cy="145" r="5" fill="#ef7f97"/><path d="M555 152 Q560 157 565 152" fill="none" stroke="#5a4a44" stroke-width="2" stroke-linecap="round"/><path d="M549 147 L526 143 M549 151 L526 155 M571 147 L594 143 M571 151 L594 155" stroke="#8d867e" stroke-width="1.4" stroke-linecap="round"/><rect x="485" y="168" width="150" height="44" rx="8" fill="#f6ecd8" stroke="#a8854a" stroke-width="2"/><text x="560" y="197" text-anchor="middle" font-family="Verdana,DejaVu Sans,FreeSans,Arial,sans-serif" font-size="19" font-weight="bold" font-style="italic" fill="#6b4f2a">by J.Otto</text><ellipse cx="530" cy="170" rx="11" ry="8" fill="#c3beb7"/><ellipse cx="590" cy="170" rx="11" ry="8" fill="#c3beb7"/><path d="M524 166 L524 172 M530 165 L530 172 M536 166 L536 172 M584 166 L584 172 M590 165 L590 172 M596 166 L596 172" stroke="#9c958d" stroke-width="1.2" stroke-linecap="round"/></svg></div>
+<script>
+"use strict";
+/* ---------- Helfer ---------- */
+const $=s=>document.querySelector(s);
+function el(tag,cls,html){const e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e;}
+const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+const uniqArr=a=>a.filter((x,k)=>a.indexOf(x)===k);
+let used=new Set();
+function uniq(fn){for(let k=0;k<80;k++){const v=fn();const s=JSON.stringify(v);if(!used.has(s)){used.add(s);return v;}}return fn();}
+const S0={help:0};
+const big=w=>'<span class="wbig">'+w+'</span>';
+
+/* ================= Größen: Uhrzeit, Geld, Längen ================= */
+function SYM(k,cls){const c='<circle cx="24" cy="24" r="21.5" fill="#fff" stroke="#111" stroke-width="2.4"/>';let p='';
+  if(k==='uhr')p='<circle cx="24" cy="24" r="14" fill="none" stroke="#111" stroke-width="2.2"/><line x1="24" y1="24" x2="24" y2="14" stroke="#111" stroke-width="2.6" stroke-linecap="round"/><line x1="24" y1="24" x2="31" y2="27" stroke="#111" stroke-width="2.6" stroke-linecap="round"/>';
+  else if(k==='geld')p='<circle cx="24" cy="24" r="13" fill="#e2c25a" stroke="#8a6d1a" stroke-width="2"/><text x="24" y="29.5" text-anchor="middle" font-family="Arial,sans-serif" font-size="15" font-weight="bold" fill="#5a4310">€</text>';
+  else if(k==='laenge')p='<rect x="8" y="18" width="32" height="12" rx="2" fill="#f3e3b5" stroke="#111" stroke-width="2"/>'+[12,16,20,24,28,32,36].map((x,i)=>'<line x1="'+x+'" y1="18" x2="'+x+'" y2="'+(i%2?23:25)+'" stroke="#111" stroke-width="1.5"/>').join('');
+  return '<svg class="'+(cls||'sym')+'" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">'+c+p+'</svg>';}
+const emo=(e,n)=>e?'<div class="emo">'+Array(n||1).fill(e).join('')+'</div>':'';
+const chOpts=list=>list.map(x=>({html:x,val:x}));
+const wbox=h=>'<div class="word wbig">'+h+'</div>';
+const sbox=h=>'<div class="sent">'+h+'</div>';
+function numOpts(ans,cands,n,fmt){fmt=fmt||(x=>String(x));const o=[ans];shuffle(cands.slice()).forEach(c=>{if(o.length<n&&!o.includes(c)&&c>0)o.push(c);});let d=1;while(o.length<n){[ans+d,ans-d].forEach(c=>{if(o.length<n&&c>0&&!o.includes(c))o.push(c);});d++;}return shuffle(o).map(x=>({html:fmt(x),val:x}));}
+
+/* ---------- Uhr ---------- */
+function clockSVG(h,m,o){o=o||{};let p='<circle cx="100" cy="100" r="94" fill="#fff" stroke="#333" stroke-width="5"/>';
+  for(let i=0;i<60;i++){const a=i*6*Math.PI/180,r1=i%5?86:80,r2=90;p+='<line x1="'+(100+r1*Math.sin(a)).toFixed(1)+'" y1="'+(100-r1*Math.cos(a)).toFixed(1)+'" x2="'+(100+r2*Math.sin(a)).toFixed(1)+'" y2="'+(100-r2*Math.cos(a)).toFixed(1)+'" stroke="#555" stroke-width="'+(i%5?1.4:3)+'"/>';}
+  for(let i=1;i<=12;i++){const a=i*30*Math.PI/180;p+='<text x="'+(100+66*Math.sin(a)).toFixed(1)+'" y="'+(100-66*Math.cos(a)+7).toFixed(1)+'" text-anchor="middle" font-family="Andika,Arial,sans-serif" font-size="20" font-weight="bold" fill="#222">'+i+'</text>';}
+  const ha=((h%12)+m/60)*30*Math.PI/180,ma=m*6*Math.PI/180;
+  p+='<line x1="100" y1="100" x2="'+(100+44*Math.sin(ha)).toFixed(1)+'" y2="'+(100-44*Math.cos(ha)).toFixed(1)+'" stroke="#222" stroke-width="9" stroke-linecap="round"/>';
+  p+='<line x1="100" y1="100" x2="'+(100+76*Math.sin(ma)).toFixed(1)+'" y2="'+(100-76*Math.cos(ma)).toFixed(1)+'" stroke="#1d4e89" stroke-width="5" stroke-linecap="round"/><circle cx="100" cy="100" r="6" fill="#222"/>';
+  return '<svg class="'+(o.small?'clk sm':'clk')+'" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">'+p+'</svg>';}
+const H12=h=>((h-1)%12+12)%12+1;
+const dig=(h,m)=>h+':'+String(m).padStart(2,'0')+' Uhr';
+function tword(h,m){h=H12(h);if(m===0)return h+' Uhr';if(m===30)return 'halb '+H12(h+1);if(m===15)return 'Viertel nach '+h;if(m===45)return 'Viertel vor '+H12(h+1);return dig(h,m);}
+function tsay(h,m){h=H12(h);if([0,15,30,45].includes(m))return tword(h,m);if(m<30)return m+' Minuten nach '+h;return (60-m)+' Minuten vor '+H12(h+1);}
+function uhrLesen(lv){const ms=lv===0?[0,30]:lv===1?[0,15,30,45]:[5,10,20,25,35,40,50,55,15,45];const [h,m]=uniq(()=>[R(1,12),pick(ms)]);
+  if(lv<2){const ans=tword(h,m);const c=uniqArr([tword(h+1,m),tword(h-1,m),tword(h,(m+30)%60),tword(h,m===15?45:m===45?15:(m+15)%60),m===30?'halb '+h:tword(h,0)]).filter(x=>x!==ans);
+    const o=[ans].concat(shuffle(c).slice(0,2));return {prompt:'Wie spät ist es?',say:'Wie spät ist es?',pic:()=>clockSVG(h,m),type:'choice',optCls:'word2',options:chOpts(shuffle(o)),ans:ans,hint:()=>'Der lange Zeiger zeigt die Minuten, der kurze Zeiger die Stunde. Bei „halb“ zählt schon die nächste Stunde.',after:ans+' ('+dig(h,m)+')'};}
+  const ans=dig(h,m);const c=uniqArr([dig(H12(h+1),m),dig(H12(h-1),m),dig(h,(60-m)%60||30),dig(h,(m+5)%60),dig(h,(m+55)%60)]).filter(x=>x!==ans);
+  return {prompt:'Wie spät ist es?',say:'Wie spät ist es?',pic:()=>clockSVG(h,m),type:'choice',optCls:'word2',options:chOpts(shuffle([ans].concat(shuffle(c).slice(0,2)))),ans:ans,hint:()=>'Zähle beim langen Zeiger in 5er-Schritten: 5, 10, 15 … Der kurze Zeiger: Welche Zahl hat er schon überschritten?',after:tsay(h,m)};}
+function uhrStellen(lv){const step=lv===0?30:lv===1?15:5;const h=R(1,12),m=R(0,60/step-1)*step;const target=lv===2?dig(h,m):tword(h,m);
+  return {prompt:'Stelle die Uhr auf <b>'+target+'</b>.',say:'Stelle die Uhr auf '+tsay(h,m),type:'custom',solution:target,mount:box=>{let ch=12,cm=0;const pic=el('div','clkwrap');box.appendChild(pic);
+    const ctr=el('div','clkctr');const mk=(lab,fn)=>{const b=el('button','tool',lab);b.onclick=()=>{if(cur.locked())return;fn();draw();};return b;};
+    ctr.appendChild(el('span','clab','Stunde'));ctr.appendChild(mk('−',()=>{ch=H12(ch-1);}));ctr.appendChild(mk('+',()=>{ch=H12(ch+1);}));
+    ctr.appendChild(el('span','clab','Minuten'));ctr.appendChild(mk('−',()=>{cm-=step;if(cm<0){cm+=60;ch=H12(ch-1);}}));ctr.appendChild(mk('+',()=>{cm+=step;if(cm>=60){cm-=60;ch=H12(ch+1);}}));
+    box.appendChild(ctr);const draw=()=>{pic.innerHTML=clockSVG(ch,cm);};draw();
+    return {check:()=>({ok:ch===h&&cm===m,hint:cm!==m?'Schau zuerst auf den langen Zeiger (Minuten).':'Die Minuten stimmen. Jetzt den kurzen Zeiger (Stunde) richtig stellen.'}),solve:()=>{ch=h;cm=m;draw();}};}};}
+function uhrDigital(lv){
+  if(lv===0){const [h,m]=uniq(()=>[R(1,12),pick([0,30])]);const ans=dig(h,m);const o=uniqArr([ans,dig(H12(h+1),m),dig(h,(m+30)%60)]);
+    return {prompt:'Welche Uhr zeigt <b>'+ans+'</b>?',say:'Welche Uhr zeigt '+tsay(h,m)+'?',type:'choice',optCls:'clkopt',options:shuffle(o.map(x=>{const [hh,mm]=x.replace(' Uhr','').split(':').map(Number);return {html:clockSVG(hh,mm,{small:1}),val:x};})),ans:ans,hint:()=>'Bei :30 zeigt der lange Zeiger auf die 6, bei :00 auf die 12.',after:tword(h,m)};}
+  if(lv===1){const h=R(13,22),m=pick([0,15,30,45]);const ans=h+':'+String(m).padStart(2,'0');const w=tword(h-12,m);
+    const o=uniqArr([ans,(h-12)+':'+String(m).padStart(2,'0'),(h+1)+':'+String(m).padStart(2,'0'),(m===30?(h-1):h)+':'+String((m+30)%60).padStart(2,'0')]).slice(0,3);
+    return {prompt:'Am Nachmittag oder Abend ist es <b>'+w+'</b>. Was zeigt die Digitaluhr?',say:'Am Nachmittag ist es '+tsay(h-12,m)+'. Was zeigt die Digitaluhr?',pic:()=>clockSVG(h-12,m),type:'choice',optCls:'word2',options:chOpts(shuffle(o)),ans:ans,hint:()=>'Am Nachmittag zählt man weiter: 1 Uhr = 13 Uhr, 2 Uhr = 14 Uhr …',after:ans+' Uhr'};}
+  const h=R(13,23),m=R(0,11)*5;const ans=tsay(h-12,m);const o=uniqArr([ans,tsay(h-11,m),tsay(h-13,m),tsay(h-12,(m+30)%60)]).slice(0,3);
+  return {prompt:'Die Digitaluhr zeigt <b>'+h+':'+String(m).padStart(2,'0')+'</b>. Wie sagt man?',say:'',type:'choice',optCls:'word2',options:chOpts(shuffle(o)),ans:ans,hint:()=>'Ziehe 12 ab: 15 Uhr ist 3 Uhr am Nachmittag.'};}
+function uhrSpanne(lv){
+  if(lv===0){const h=R(6,9),d=R(1,3);const ans=dig(h+d,0);return {prompt:'Es ist <b>'+dig(h,0)+'</b>. Wie spät ist es in <b>'+d+' Stunde'+(d>1?'n':'')+'</b>?',pic:()=>clockSVG(h,0),type:'choice',optCls:'word2',options:chOpts(shuffle(uniqArr([ans,dig(h+d+1,0),dig(h+d-1,0)]))),ans:ans,hint:()=>'Drehe den kurzen Zeiger weiter: eine Stunde, noch eine Stunde …'};}
+  if(lv===1){const h=R(7,15),m=pick([0,30]),d=pick([30,60,90,120]);const t=h*60+m+d;const ans=dig(Math.floor(t/60),t%60);const w=d===30?'einer halben Stunde':d===60?'einer Stunde':d===90?'eineinhalb Stunden':'zwei Stunden';
+    const o=uniqArr([ans,dig(Math.floor((t+30)/60),(t+30)%60),dig(Math.floor((t-30)/60),(t-30)%60),dig(Math.floor((t+60)/60),(t+60)%60)]).slice(0,3);
+    return {prompt:'Es ist <b>'+dig(h,m)+'</b>. Wie spät ist es in <b>'+w+'</b>?',type:'choice',optCls:'word2',options:chOpts(shuffle(o)),ans:ans,hint:()=>'Eine halbe Stunde sind 30 Minuten, eine Stunde sind 60 Minuten.'};}
+  const h=R(7,15),m=pick([0,15,30,45]),d=pick([15,30,45,60,75,90]);const t=h*60+m+d;
+  return {prompt:'Von <b>'+dig(h,m)+'</b> bis <b>'+dig(Math.floor(t/60),t%60)+'</b>. Wie viele Minuten sind das?',type:'choice',optCls:'word2',options:numOpts(d,[d+15,d-15,d+30,d+10],3,x=>x+' min'),ans:d,hint:()=>'Zähle in 15-Minuten-Schritten weiter. 60 Minuten sind eine Stunde.'};}
+const TAGE=['Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag','Sonntag'];
+const MONATE=['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+const ZE=[['Zähne putzen dauert etwa 3 ___.','Minuten'],['Ein Schultag dauert etwa 5 ___.','Stunden'],['In der Nacht schlafe ich etwa 10 ___.','Stunden'],['Die Sommerferien dauern 6 ___.','Wochen'],['Ein Augenzwinkern dauert 1 ___.','Sekunde'],['Bis zum nächsten Geburtstag dauert es 1 ___.','Jahr'],['Eine Pause dauert 20 ___.','Minuten'],['Ein Fußballspiel dauert etwa 90 ___.','Minuten'],['Ein Wochenende dauert 2 ___.','Tage'],['Einmal in die Hände klatschen dauert 1 ___.','Sekunde']];
+const ZEU={Minuten:['Minuten','Stunden','Sekunden'],Stunden:['Stunden','Minuten','Tage'],Wochen:['Wochen','Tage','Stunden'],Sekunde:['Sekunde','Minute','Stunde'],Jahr:['Jahr','Monat','Tag'],Tage:['Tage','Stunden','Wochen']};
+const MTAGE=[31,'28 (im Schaltjahr 29)',31,30,31,30,31,31,30,31,30,31];
+function kalTask(lv){
+  if(lv===0){const i=uniq(()=>R(0,6)+'_'+R(0,1));const [k,nn]=i.split('_').map(Number);const nach=nn===1;const ans=nach?TAGE[(k+1)%7]:TAGE[(k+6)%7];
+    return {prompt:'Welcher Tag kommt '+(nach?'<b>nach</b>':'<b>vor</b>')+' <b>'+TAGE[k]+'</b>?',type:'choice',optCls:'word2',options:chOpts(shuffle(uniqArr([ans,TAGE[(k+2)%7],TAGE[(k+5)%7]]))),ans:ans,hint:()=>'Sag die Wochentage der Reihe nach: Montag, Dienstag, Mittwoch, Donnerstag, Freitag, Samstag, Sonntag.'};}
+  if(lv===1){const t=R(0,2);
+    if(t===0){const [k,nn]=uniq(()=>R(0,11)+'_'+R(0,1)).split('_').map(Number);const nach=nn===1;const ans=nach?MONATE[(k+1)%12]:MONATE[(k+11)%12];
+      return {prompt:'Welcher Monat kommt '+(nach?'<b>nach</b>':'<b>vor</b>')+' <b>'+MONATE[k]+'</b>?',type:'choice',optCls:'word2',options:chOpts(shuffle(uniqArr([ans,MONATE[(k+2)%12],MONATE[(k+10)%12]]))),ans:ans,hint:()=>'Sag die Monate der Reihe nach: Januar, Februar, März, April …'};}
+    if(t===1){const k=uniq(()=>R(0,11));return {prompt:'Der wievielte Monat im Jahr ist der <b>'+MONATE[k]+'</b>?',type:'choice',options:numOpts(k+1,[k,k+2,k+3],3,x=>x+'.'),ans:k+1,hint:()=>'Zähle mit den Fingern: Januar ist der 1., Februar der 2. …',after:MONATE[k]+' ist der '+(k+1)+'. Monat'};}
+    const k=uniq(()=>R(0,11));const ans=MONATE[k];return {prompt:'Welcher Monat ist der <b>'+(k+1)+'.</b> Monat im Jahr?',type:'choice',optCls:'word2',options:chOpts(shuffle(uniqArr([ans,MONATE[(k+1)%12],MONATE[(k+11)%12]]))),ans:ans,hint:()=>'Zähle die Monate mit den Fingern.'};}
+  if(Math.random()<.6){const k=uniq(()=>R(0,11));const ans=String(MTAGE[k]);return {prompt:'Wie viele Tage hat der <b>'+MONATE[k]+'</b>?',type:'choice',optCls:'word2',options:chOpts(k===1?shuffle(['28 (im Schaltjahr 29)','30','31']):shuffle(['30','31','28 (im Schaltjahr 29)'])),ans:ans,hint:()=>'Tipp: Knöchel-Regel! Auf dem Knöchel: 31 Tage, in der Lücke: 30 Tage (Februar 28 oder 29).',after:MONATE[k]+': '+MTAGE[k]+' Tage'};}
+  const ms=uniq(()=>shuffle(MONATE.map((m,i)=>i)).slice(0,6));return {prompt:'Tippe alle Monate mit <b>31 Tagen</b> an.',type:'tap',unit:'word',tokens:ms.map(i=>({html:MONATE[i],ok:MTAGE[i]===31})),hint:()=>'31 Tage haben: Januar, März, Mai, Juli, August, Oktober, Dezember.'};}
+const JZ=[['Frühling','🌷',[2,3,4]],['Sommer','☀️',[5,6,7]],['Herbst','🍂',[8,9,10]],['Winter','⛄',[11,0,1]]];
+const JZB=[['⛄','Ein Schneemann','Winter'],['🌷','Tulpen blühen','Frühling'],['🍂','Bunte Blätter fallen','Herbst'],['🏖️','Baden am Strand','Sommer'],['🐣','Küken schlüpfen','Frühling'],['🍦','Eis essen in der Hitze','Sommer'],['🎃','Kürbisse ernten','Herbst'],['🛷','Schlitten fahren','Winter'],['🌰','Kastanien sammeln','Herbst'],['🍓','Erdbeeren ernten','Sommer'],['🎄','Weihnachten','Winter'],['🪁','Drachen steigen lassen','Herbst']];
+const jzOpts=()=>JZ.map(j=>({html:'<span class="em">'+j[1]+'</span><small>'+j[0]+'</small>',val:j[0]}));
+const jzOf=m=>JZ.find(j=>j[2].includes(m))[0];
+function jzTask(lv){
+  if(lv===0){if(Math.random()<.5){const b=uniq(()=>pick(JZB));return {prompt:'Welche <b>Jahreszeit</b> passt?',say:b[1],pic:()=>emo(b[0])+'<div class="word">'+b[1]+'</div>',type:'choice',optCls:'repopt',options:jzOpts(),ans:b[2],hint:()=>'Denk an das Wetter: Ist es warm oder kalt? Blüht etwas?',after:b[1]+': '+b[2]};}
+    const m=uniq(()=>R(0,11));const ans=jzOf(m);return {prompt:'In welcher <b>Jahreszeit</b> ist der <b>'+MONATE[m]+'</b>?',type:'choice',optCls:'repopt',options:jzOpts(),ans:ans,hint:()=>'Frühling: März, April, Mai · Sommer: Juni, Juli, August · Herbst: September, Oktober, November · Winter: Dezember, Januar, Februar',after:MONATE[m]+' → '+ans};}
+  if(lv===1){if(Math.random()<.4){const i=uniq(()=>R(0,3));const nach=Math.random()<.5;const ans=JZ[(i+(nach?1:3))%4][0];return {prompt:'Welche Jahreszeit kommt '+(nach?'<b>nach</b>':'<b>vor</b>')+' dem <b>'+JZ[i][0]+'</b>?',type:'choice',optCls:'repopt',options:jzOpts().filter(o=>o.val!==JZ[i][0]),ans:ans,hint:()=>'Die Reihenfolge: Frühling, Sommer, Herbst, Winter – und dann wieder Frühling.'};}
+    const j=uniq(()=>pick(JZ));const right=j[2].map(m=>MONATE[m]).join(', ');const o=[right].concat(shuffle(JZ.filter(x=>x!==j)).slice(0,2).map(x=>x[2].map(m=>MONATE[m]).join(', ')));
+    return {prompt:'Welche Monate gehören zum <b>'+j[0]+'</b> '+j[1]+'?',type:'choice',optCls:'sentopt',options:chOpts(shuffle(o)),ans:right,hint:()=>'Jede Jahreszeit hat 3 Monate. Der '+j[0]+' beginnt im '+MONATE[j[2][0]]+'.'};}
+  if(Math.random()<.4){const KAL=[['Frühling','🌷','am 20. März'],['Sommer','☀️','am 21. Juni'],['Herbst','🍂','am 22. September'],['Winter','⛄','am 21. Dezember']];
+    if(Math.random()<.5){const k=uniq(()=>R(0,3));const ans=KAL[k][2];return {prompt:'Wann beginnt der <b>'+KAL[k][0]+'</b> '+KAL[k][1]+' im <b>Kalender</b>?',type:'choice',optCls:'word2',options:chOpts(shuffle([ans].concat(shuffle(KAL.filter((x,i)=>i!==k).map(x=>x[2])).slice(0,1),['am 1. '+MONATE[JZ[k][2][0]]]))),ans:ans,hint:()=>'Im Kalender beginnen die Jahreszeiten erst um den 20. bis 23. des Monats: 20. März, 21. Juni, 22. September, 21. Dezember.',after:KAL[k][0]+'sanfang '+ans};}
+    const tests=[['10. März','Winter'],['25. März','Frühling'],['15. Juni','Frühling'],['30. Juni','Sommer'],['10. September','Sommer'],['30. September','Herbst'],['15. Dezember','Herbst'],['24. Dezember','Winter'],['1. Mai','Frühling'],['1. August','Sommer'],['1. November','Herbst'],['1. Februar','Winter']];
+    const t=uniq(()=>pick(tests));return {prompt:'Welche Jahreszeit ist am <b>'+t[0]+'</b> im <b>Kalender</b>?',type:'choice',optCls:'repopt',options:jzOpts(),ans:t[1],hint:()=>'Kalender: Frühling ab 20. März · Sommer ab 21. Juni · Herbst ab 22. September · Winter ab 21. Dezember',after:t[0]+': '+t[1]+' (kalendarisch)'};}
+  if(Math.random()<.65){const j=uniq(()=>pick(JZ));const ms=shuffle(j[2].concat(shuffle(MONATE.map((x,i)=>i).filter(i=>!j[2].includes(i))).slice(0,4)));
+    return {prompt:'Tippe alle Monate an, die zum <b>'+j[0]+'</b> '+j[1]+' gehören.',type:'tap',unit:'word',tokens:ms.map(i=>({html:MONATE[i],ok:j[2].includes(i)})),hint:()=>'Es sind 3 Monate. Der '+j[0]+' beginnt im '+MONATE[j[2][0]]+'.',after:j[0]+': '+j[2].map(m=>MONATE[m]).join(', ')};}
+  const q=uniq(()=>pick([['Wie viele Jahreszeiten gibt es?',4,[3,12,2]],['Wie viele Monate hat eine Jahreszeit?',3,[4,12,6]],['Wie viele Monate sind 2 Jahreszeiten?',6,[3,8,4]]]));
+  return {prompt:q[0],type:'choice',options:numOpts(q[1],q[2],3),ans:q[1],hint:()=>'4 Jahreszeiten mit je 3 Monaten = 12 Monate.'};}
+const EINH=[['Wie viele Tage hat eine Woche?',7,[5,10,12]],['Wie viele Stunden hat ein Tag?',24,[12,60,7]],['Wie viele Minuten hat eine Stunde?',60,[30,100,24]],['Wie viele Monate hat ein Jahr?',12,[10,7,24]]];
+const EINH2=[['Wie viele Tage hat ein Jahr?',365,[300,360,100]],['Wie viele Tage hat ein Schaltjahr?',366,[365,300,360]],['Wie viele Sekunden hat eine Minute?',60,[100,30,10]],['Wie viele Minuten hat eine halbe Stunde?',30,[15,50,60]],['Wie viele Minuten hat eine Viertelstunde?',15,[25,4,30]],['Wie viele Tage hat der Februar im Schaltjahr?',29,[28,30,31]],['Wie viele Wochentage gibt es?',7,[5,6,12]]];
+const EINH3=[['Wie viele Tage haben 2 Wochen?',14,[12,7,21]],['Wie viele Monate sind ein halbes Jahr?',6,[5,12,3]],['Wie viele Stunden sind ein halber Tag?',12,[6,24,10]],['Wie viele Minuten sind 2 Stunden?',120,[100,60,200]],['Wie viele Tage haben 3 Wochen?',21,[14,18,24]],['Wie viele Monate sind 2 Jahre?',24,[20,12,14]],['Alle wie viele Jahre gibt es ein Schaltjahr?',4,[2,5,10]]];
+function einhTask(lv){
+  if(lv===2&&Math.random()<.5){const z=uniq(()=>pick(ZE));return {prompt:'Welches Wort passt?',say:z[0].replace('___','…'),pic:()=>sbox(z[0].replace('___','<span class="gap">___</span>')),type:'choice',optCls:'word2',options:chOpts(shuffle(ZEU[z[1]].slice())),ans:z[1],hint:()=>'Stell es dir vor: Dauert das lang oder kurz?',after:z[0].replace('___',z[1])};}
+  const pool=lv===0?EINH:lv===1?EINH.concat(EINH2):EINH2.concat(EINH3);const q=uniq(()=>pick(pool));
+  return {prompt:q[0],type:'choice',options:numOpts(q[1],q[2],3),ans:q[1],hint:()=>'1 Woche = 7 Tage · 1 Tag = 24 Stunden · 1 Stunde = 60 Minuten · 1 Jahr = 12 Monate = 365 Tage (Schaltjahr 366)'};}
+/* ---------- Geld (in Cent) ---------- */
+const MONEY=[1,2,5,10,20,50,100,200,500,1000,2000,5000,10000];
+const isNote=v=>v>=500;
+function fmt(ct){if(ct%100===0)return (ct/100)+' €';if(ct<100)return ct+' ct';return Math.floor(ct/100)+' € '+(ct%100)+' ct';}
+function itemSVG(v){if(isNote(v)){const col={500:['#cfcfc9','#77776f'],1000:['#f0b9b0','#a85a4e'],2000:['#b9cdf0','#4a6aa8'],5000:['#f6c99a','#b06a2a'],10000:['#b9e3c0','#3f8a4f']}[v];
+    return '<svg class="note" viewBox="0 0 120 64" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="116" height="60" rx="7" fill="'+col[0]+'" stroke="'+col[1]+'" stroke-width="2.5"/><rect x="9" y="9" width="102" height="46" rx="4" fill="none" stroke="rgba(0,0,0,.18)"/><text x="60" y="41" text-anchor="middle" font-family="Arial,sans-serif" font-size="22" font-weight="bold" fill="#222">'+(v/100)+' €</text></svg>';}
+  const r=v>=100?30:v>=10?26+(v===50?3:v===20?1:0):20+(v===5?3:v===2?1:0);const lab=v>=100?(v/100)+' €':v+' ct';let fill,ring;
+  if(v===100){fill='#d5d9dd';ring='#e2c25a';}else if(v===200){fill='#e2c25a';ring='#d5d9dd';}else if(v>=10){fill='#e8c95e';ring=null;}else{fill='#d08a55';ring=null;}
+  const s=2*r+4;return '<svg class="coin" style="width:'+(s*1.25)+'px" viewBox="0 0 '+s+' '+s+'" xmlns="http://www.w3.org/2000/svg">'+(ring?'<circle cx="'+(s/2)+'" cy="'+(s/2)+'" r="'+r+'" fill="'+ring+'" stroke="#777" stroke-width="1.5"/><circle cx="'+(s/2)+'" cy="'+(s/2)+'" r="'+(r*.68)+'" fill="'+fill+'"/>':'<circle cx="'+(s/2)+'" cy="'+(s/2)+'" r="'+r+'" fill="'+fill+'" stroke="'+(v<10?'#8a4f22':'#9f8020')+'" stroke-width="1.8"/>')+'<text x="'+(s/2)+'" y="'+(s/2+5)+'" text-anchor="middle" font-family="Arial,sans-serif" font-size="'+(v>=100?15:12)+'" font-weight="bold" fill="#222">'+lab+'</text></svg>';}
+const purse=items=>'<div class="money">'+items.slice().sort((a,b)=>b-a).map(itemSVG).join('')+'</div>';
+function greedy(ct,allowed){const out=[];allowed=allowed.slice().sort((a,b)=>b-a);allowed.forEach(v=>{while(ct>=v){out.push(v);ct-=v;}});return out;}
+function randItems(total,allowed){/* zufällige Zerlegung */const out=[];let rest=total;const al=allowed.slice().sort((a,b)=>b-a);
+  while(rest>0){const ok=al.filter(v=>v<=rest);const v=Math.random()<.65?ok[0]:pick(ok);out.push(v);rest-=v;}return out;}
+function geldErkennen(lv){
+  if(lv<2){const pool=lv===0?[1,2,5,10,20,50,100,200]:[500,1000,2000,5000,10000,100,200,50];const v=uniq(()=>pick(pool));const o=numOpts(v,MONEY.filter(x=>x!==v),3,fmt);
+    return {prompt:'Wie viel ist das wert?',pic:()=>purse([v]),type:'choice',optCls:'word2',options:o,ans:v,hint:()=>'Lies die Zahl auf der Münze oder dem Schein. Achte auf € oder ct.',after:fmt(v)};}
+  if(Math.random()<.5){const [a,b]=uniq(()=>shuffle(MONEY.slice()).slice(0,2));const ans=Math.max(a,b);return {prompt:'Was ist <b>mehr</b> wert?',type:'choice',optCls:'monopt',options:shuffle([a,b]).map(v=>({html:itemSVG(v),val:v})),ans:ans,hint:()=>'1 Euro sind 100 Cent. Ein Euro ist mehr als jede Cent-Münze.',after:fmt(ans)};}
+  const q=uniq(()=>pick([['Wie viele Cent sind 1 Euro?',100,[10,50,1000]],['Wie viele 50-ct-Münzen sind 1 Euro?',2,[5,50,1]],['Wie viele 10-ct-Münzen sind 1 Euro?',10,[100,5,20]],['Wie viele 20-ct-Münzen sind 1 Euro?',5,[2,20,10]],['Wie viele 1-€-Münzen sind 5 €?',5,[1,10,50]],['Wie viele 2-€-Münzen sind 10 €?',5,[2,10,20]],['Wie viele 10-€-Scheine sind 50 €?',5,[10,2,50]]]));
+  return {prompt:q[0],type:'choice',options:numOpts(q[1],q[2],3),ans:q[1],hint:()=>'1 € = 100 ct.'};}
+function geldZaehlen(lv){const al=lv===0?[100,200,500,1000]:lv===1?[100,200,500,1000,2000,5000]:[5,10,20,50,100,200];
+  const total=uniq(()=>lv===0?R(3,20)*100:lv===1?R(12,99)*100:R(3,60)*5+R(0,4)*100);const items=randItems(total,al);
+  const st=lv===2?[10,20,50,100,5]:[100,200,500,1000];return {prompt:'Wie viel Geld ist das?',pic:()=>purse(items),type:'choice',optCls:'word2',options:numOpts(total,st.map(x=>total+x).concat(st.map(x=>total-x)),3,fmt),ans:total,hint:()=>'Zähle zuerst die Scheine, dann die großen Münzen, dann die kleinen.',after:fmt(total)};}
+function geldLegen(lv){const al=lv===0?[100,200,500,1000]:lv===1?[100,200,500,1000,2000,5000]:[5,10,20,50,100,200];
+  const total=uniq(()=>lv===0?R(3,20)*100:lv===1?R(15,99)*100:R(1,4)*100+R(1,19)*5);const minN=greedy(total,al).length;
+  return {prompt:'Lege <b>'+fmt(total)+'</b>.'+(lv===2?' Nimm <b>möglichst wenig</b> Münzen.':''),say:'Lege '+fmt(total).replace('€','Euro').replace('ct','Cent'),type:'custom',solution:greedy(total,al).map(fmt).join(' + '),mount:box=>{let got=[];const shown=el('div','pursebox');const pal=el('div','palette');
+    box.appendChild(el('div','legend','Tippe auf das Geld unten. Zum Zurücklegen oben auf Münze oder Schein tippen.'));box.appendChild(shown);box.appendChild(pal);
+    const draw=()=>{shown.innerHTML='';if(!got.length)shown.appendChild(el('span','empty','Geldbörse'));got.forEach((v,k)=>{const b=el('button','mbtn',itemSVG(v));b.onclick=()=>{if(cur.locked())return;got.splice(k,1);draw();};shown.appendChild(b);});};
+    al.slice().sort((a,b)=>b-a).forEach(v=>{const b=el('button','mbtn',itemSVG(v));b.onclick=()=>{if(cur.locked())return;got.push(v);got.sort((a,c)=>c-a);draw();};pal.appendChild(b);});draw();
+    return {check:()=>{const s=got.reduce((a,b)=>a+b,0);if(s!==total)return {ok:false,hint:s<total?'Das ist noch zu wenig. Es fehlen '+fmt(total-s)+'.':'Das ist zu viel.'};if(lv===2&&got.length>minN)return {ok:false,hint:'Der Betrag stimmt! Aber es geht mit weniger Münzen. Nimm größere Münzen.'};return {ok:true};},solve:()=>{got=greedy(total,al);draw();}};}};}
+const WAREN=[['ein Eis','🍦'],['ein Buch','📖'],['einen Ball','⚽'],['einen Saft','🧃'],['eine Brezel','🥨'],['ein Spielzeugauto','🚗'],['einen Teddy','🧸'],['einen Apfel','🍎'],['einen Stift','✏️'],['eine Pizza','🍕'],['einen Kuchen','🍰'],['eine Banane','🍌']];
+const WAREN2=[['einen Roller','🛴'],['einen Rucksack','🎒'],['ein Spiel','🎲'],['einen Teddy','🧸'],['Fußballschuhe','👟'],['eine Jacke','🧥'],['einen Fußball','⚽'],['eine Puppe','🪆'],['ein Fahrradschloss','🔒'],['Inliner','🛼']];
+function rueckgeld(lv){const w=uniq(()=>pick(lv===1?WAREN2:WAREN));let price,paid;
+  if(lv===0){paid=pick([500,1000]);price=R(1,paid/100-1)*100;}else if(lv===1){paid=pick([2000,5000,10000]);price=R(2,paid/500-1)*500;}else{paid=pick([100,200,500]);price=R(2,paid/10-2)*10;}
+  const ans=paid-price;const st=lv===2?[10,20,50]:lv===1?[500,1000]:[100,200];
+  return {prompt:'Du kaufst <b>'+w[0]+'</b> für <b>'+fmt(price)+'</b>. Du bezahlst mit <b>'+fmt(paid)+'</b>. Wie viel Rückgeld bekommst du?',pic:()=>emo(w[1])+purse([paid]),type:'choice',optCls:'word2',options:numOpts(ans,st.map(x=>ans+x).concat(st.map(x=>ans-x)).filter(x=>x>0),3,fmt),ans:ans,hint:()=>'Rechne von '+fmt(price)+' bis '+fmt(paid)+' weiter. Ergänze!',after:fmt(price)+' + '+fmt(ans)+' = '+fmt(paid)};}
+function geldUmrechnen(lv){
+  if(lv===0){const [a,b]=uniq(()=>{const a=R(1,20),b=Math.random()<.2?a:R(1,20);return [a,b];});const ans=a>b?'>':a<b?'<':'=';
+    return {prompt:'Vergleiche: <b>&lt;</b>, <b>&gt;</b> oder <b>=</b>?',pic:()=>wbox(a+' € <span class="gap">○</span> '+b+' €'),type:'choice',optCls:'let',options:chOpts(['<','=','>']),ans:ans,hint:()=>'Das Krokodil frisst immer die größere Zahl: 5 > 3.',after:a+' € '+ans+' '+b+' €'};}
+  if(lv===1){const ct=uniq(()=>{let c;do{c=R(11,99)*10+pick([0,0,5]);}while(c%100===0);return c;});const ans=fmt(ct);const e=Math.floor(ct/100),c=ct%100;const o=uniqArr([ans,Math.floor(ct/10)+' €',e+' € '+Math.floor(c/10)+' ct',(e+1)+' € '+c+' ct']).filter(x=>x!==ans);
+    return {prompt:'<b>'+ct+' ct</b> sind wie viel?',type:'choice',optCls:'word2',options:chOpts(shuffle([ans].concat(o.slice(0,2)))),ans:ans,hint:()=>'100 ct sind 1 €. Wie oft passt 100 in '+ct+'?'};}
+  const a=R(1,4)*100+R(0,9)*10,b=Math.random()<.25?a:a+pick([-50,-20,-10,10,20,50]);const ans=a>b?'>':a<b?'<':'=';const left=fmt(a),right=b+' ct';
+  return {prompt:'Vergleiche: <b>&lt;</b>, <b>&gt;</b> oder <b>=</b>?',pic:()=>wbox(left+' <span class="gap">○</span> '+right),type:'choice',optCls:'let',options:chOpts(['<','=','>']),ans:ans,hint:()=>'Rechne beides in Cent um: 1 € = 100 ct.',after:left+' '+ans+' '+right+' ('+a+' ct)'};}
+
+/* ---------- Längen ---------- */
+function rulerSVG(bars,o){o=o||{};const L=o.len||15,sc=44,pad=20,W=pad*2+L*sc;let p='';const barH=22;let y=10;
+  bars.forEach((b,i)=>{p+='<rect x="'+(pad+b[0]*sc)+'" y="'+y+'" width="'+((b[1]-b[0])*sc)+'" height="'+barH+'" rx="5" fill="'+(b[2]||'#c9a86a')+'" stroke="#6b5530" stroke-width="2"/>';y+=barH+8;});
+  const ry=y+2;p+='<rect x="'+(pad-12)+'" y="'+ry+'" width="'+(L*sc+24)+'" height="56" rx="4" fill="#fbf3d6" stroke="#8a7a4a" stroke-width="2"/>';
+  for(let i=0;i<=L*10;i++){const x=pad+i*sc/10;const len=i%10===0?22:i%5===0?15:9;p+='<line x1="'+x.toFixed(1)+'" y1="'+ry+'" x2="'+x.toFixed(1)+'" y2="'+(ry+len)+'" stroke="#333" stroke-width="'+(i%10?1:2)+'"/>';if(i%10===0)p+='<text x="'+x.toFixed(1)+'" y="'+(ry+42)+'" text-anchor="middle" font-family="Andika,Arial,sans-serif" font-size="17" font-weight="bold" fill="#222">'+(i/10)+'</text>';}
+  return '<svg class="ruler" viewBox="0 0 '+W+' '+(ry+60)+'" xmlns="http://www.w3.org/2000/svg">'+p+'</svg>';}
+function messen(lv){
+  if(lv<2){const a=lv===0?0:R(1,5);const len=uniq(()=>R(2,15-a));const b=a+len;
+    return {prompt:'Wie lang ist der Streifen?',pic:()=>rulerSVG([[a,b]]),type:'choice',optCls:'word2',options:numOpts(len,[b,len+1,len-1,a+len+1],3,x=>x+' cm'),ans:len,hint:()=>lv===0?'Lies ab, wo der Streifen endet.':'Der Streifen beginnt nicht bei 0! Zähle die Zentimeter vom Anfang bis zum Ende.',after:len+' cm'};}
+  const a=R(1,9),b=R(1,9);if(a===b)return messen(2);const A=[0,a+R(3,5)],B=[0,b+R(3,5)];if(A[1]===B[1])B[1]++;if(B[1]>15)B[1]=15;const d=Math.abs(A[1]-B[1]);const longer=A[1]>B[1]?'blaue':'gelbe';
+  return {prompt:'Wie viel länger ist der <b>'+longer+'</b> Streifen?',pic:()=>rulerSVG([[0,A[1],'#8ec5ef'],[0,B[1],'#f2d46b']]),type:'choice',optCls:'word2',options:numOpts(d,[d+1,d+2,Math.max(A[1],B[1])],3,x=>x+' cm'),ans:d,hint:()=>'Lies beide Längen ab und rechne den Unterschied aus.',after:A[1]+' cm und '+B[1]+' cm: Unterschied '+d+' cm'};}
+const OBJ=[['ein Bleistift',15,'cm','✏️'],['ein Radiergummi',4,'cm',''],['ein Lineal',30,'cm','📏'],['eine Tür',2,'m','🚪'],['ein Bus',12,'m','🚌'],['ein Schuh',20,'cm','👟'],['ein Bett',2,'m','🛏️'],['ein Fußballfeld',100,'m','⚽'],['ein Daumen',5,'cm','👍'],['ein Buch',25,'cm','📖'],['ein Baum',10,'m','🌳'],['eine Giraffe',5,'m','🦒'],['ein Löffel',15,'cm','🥄'],['ein Auto',4,'m','🚗'],['eine Banane',20,'cm','🍌'],['ein Schwimmbecken',25,'m','🏊'],['eine Tafel',4,'m',''],['ein Handy',15,'cm','📱']];
+function schaetzen(lv){
+  if(lv===0){const o=uniq(()=>pick(OBJ));return {prompt:cap(o[0])+' ist '+o[1]+' ___ lang. <b>cm</b> oder <b>m</b>?',say:cap(o[0])+' ist '+o[1]+' … lang. Zentimeter oder Meter?',pic:()=>emo(o[3]),type:'choice',optCls:'let',options:chOpts(['cm','m']),ans:o[2],hint:()=>'1 cm ist so breit wie ein Fingernagel. 1 m ist ein großer Schritt.',after:o[1]+' '+o[2]};}
+  if(lv===1){const o=uniq(()=>pick(OBJ));const ans=o[1]+' '+o[2];const alt=o[1]+' '+(o[2]==='cm'?'m':'cm');const third=o[2]==='cm'?(o[1]*10)+' m':(o[1]>2?1:30)+' cm';
+    return {prompt:'Wie lang ist '+o[0]+'?',pic:()=>emo(o[3]),type:'choice',optCls:'word2',options:chOpts(shuffle(uniqArr([ans,alt,third]))),ans:ans,hint:()=>'Stell dir das Ding vor. Ist es kürzer als ein Lineal oder länger als du?'};}
+  const items=uniq(()=>{const a=shuffle(OBJ.slice());const out=[];for(const x of a){const cm=x[2]==='m'?x[1]*100:x[1];if(!out.some(y=>y.cm===cm))out.push({n:x[0].replace(/^(ein|eine) /,''),cm:cm,e:x[3]});if(out.length===3)break;}return out;});
+  const ans=items.slice().sort((a,b)=>a.cm-b.cm).map(x=>x.n);
+  return {prompt:'Ordne: vom <b>kürzesten</b> zum <b>längsten</b>.',legend:'Tippe der Reihe nach an: zuerst das Kürzeste. Zum Zurücknehmen unten auf ein Feld tippen.',type:'order',items:shuffle(items.map(x=>({html:(x.e?x.e+' ':'')+x.n,k:x.n}))),ans:ans,hint:'Was ist am kürzesten? Tippe es zuerst an.'};}
+function cap(s){return s[0].toUpperCase()+s.slice(1);}
+const REP=[['1 cm',[['die Breite eines Fingernagels','☝️'],['eine Ameise','🐜'],['ein Marienkäfer','🐞']]],
+['10 cm',[['die Breite einer Kinderhand','✋'],['ein Stück Kreide','🖍️'],['ein Teelöffel','🥄']]],
+['einen halben Meter (50 cm)',[['ein Kinderschritt','👣'],['eine Katze','🐈'],['ein Schulranzen','🎒']]],
+['1 m',[['ein großer Schritt','🚶'],['die Breite einer Tür','🚪'],['ein Meterstab','📏']]],
+['50 m',[['ein großes Schwimmbecken','🏊'],['die 50-m-Laufbahn beim Sportfest','🏃']]],
+['100 m',[['ein Fußballfeld','⚽'],['die 100-m-Laufbahn','🏟️']]]];
+const RSHORT={'1 cm':'1 cm','10 cm':'10 cm','einen halben Meter (50 cm)':'½ m (50 cm)','1 m':'1 m','50 m':'50 m','100 m':'100 m'};
+function repTask(lv){
+  if(lv===0){const k=uniq(()=>R(0,REP.length-1));const r=REP[k];const right=pick(r[1]);const others=shuffle(REP.filter((x,i)=>Math.abs(i-k)>=2)).slice(0,2).map(x=>pick(x[1]));
+    return {prompt:'Was ist ungefähr <b>'+r[0]+'</b> lang?',type:'choice',optCls:'repopt',options:shuffle([right].concat(others)).map(o=>({html:'<span class="em">'+o[1]+'</span><small>'+o[0]+'</small>',val:o[0]})),ans:right[0],hint:()=>'Stell dir die Länge vor: 1 cm ist ganz klein, 1 m ist ein großer Schritt, 100 m ist ein Fußballfeld.',after:right[0]+' ≈ '+RSHORT[r[0]]};}
+  if(lv===1){const k=R(0,REP.length-1);const o=uniq(()=>pick(REP[k][1]));const ans=RSHORT[REP[k][0]];const near=REP.filter((x,i)=>Math.abs(i-k)>=2).map(x=>RSHORT[x[0]]);
+    return {prompt:'Wie lang ist das ungefähr?',pic:()=>emo(o[1])+'<div class="word">'+o[0]+'</div>',type:'choice',optCls:'word2',options:chOpts(shuffle([ans].concat(shuffle(near).slice(0,2)))),ans:ans,hint:()=>'Vergleiche: Fingernagel 1 cm · Kinderhand 10 cm · Kinderschritt ½ m · großer Schritt 1 m · Fußballfeld 100 m.'};}
+  if(Math.random()<.35){const R4=[['ein Schulbuch','📘'],['ein Blatt Papier (lange Seite)','📄'],['ein Kinderschuh','👟']];const right=pick(R4);const others=[pick(REP[0][1]),pick(REP[3][1])];
+    return {prompt:'Was ist ungefähr <b>einen Viertelmeter (¼ m = 25 cm)</b> lang?',type:'choice',optCls:'repopt',options:shuffle([right].concat(others)).map(o=>({html:'<span class="em">'+o[1]+'</span><small>'+o[0]+'</small>',val:o[0]})),ans:right[0],hint:()=>'¼ m ist die Hälfte von einem halben Meter: 25 cm. Das ist etwas kürzer als ein Lineal (30 cm).',after:right[0]+' ≈ ¼ m (25 cm)'};}
+  const q=uniq(()=>pick([['Wie viele Zentimeter sind ¼ m?',25,[4,40,50]],['Wie viele Viertelmeter (¼ m) sind 1 m?',4,[2,3,25]],['Wie viele Zentimeter sind ½ m?',50,[5,20,25]],['Wie viele Viertelmeter sind ½ m?',2,[4,1,25]],['Wie viele Kinderschritte (50 cm) sind ungefähr 1 m?',2,[1,5,10]],['Wie viele Fingernägel (1 cm) passen ungefähr in 10 cm?',10,[5,100,2]],['Wie viele große Schritte (1 m) sind ungefähr 50 m?',50,[10,100,5]],['Wie viele 50-m-Bahnen sind so lang wie ein Fußballfeld (100 m)?',2,[5,10,1]],['Wie viele halbe Meter sind 1 m?',2,[5,10,4]],['Wie viele Meterstäbe (1 m) braucht man für 10 m?',10,[5,100,20]],['Wie viele Kinderhände (10 cm) sind ungefähr ½ m?',5,[2,10,50]]]));
+  return {prompt:q[0],type:'choice',options:numOpts(q[1],q[2],3),ans:q[1],hint:()=>'1 m = 100 cm · ½ m = 50 cm · 100 m = 2 · 50 m'};}
+const fl=cm=>cm%100===0?(cm/100)+' m':cm<100?cm+' cm':Math.floor(cm/100)+' m '+(cm%100)+' cm';
+function umrechnen(lv){
+  if(lv===0){const m=uniq(()=>R(1,9));return {prompt:'<b>'+m+' m</b> sind wie viele Zentimeter?',type:'choice',optCls:'word2',options:numOpts(m*100,[m*10,m*1000,m*100+10],3,x=>x+' cm'),ans:m*100,hint:()=>'1 m = 100 cm.'};}
+  if(lv===1){const cm=uniq(()=>R(1,4)*100+R(1,9)*10);const s=fl(cm);return {prompt:'<b>'+s+'</b> sind wie viele Zentimeter?',type:'choice',optCls:'word2',options:numOpts(cm,[Math.floor(cm/100)*10+cm%100,cm+100,cm-100,Math.floor(cm/100)+cm%100],3,x=>x+' cm'),ans:cm,hint:()=>'1 m = 100 cm. Rechne: '+Math.floor(cm/100)+' m = '+Math.floor(cm/100)*100+' cm, dann noch '+(cm%100)+' cm dazu.'};}
+  if(Math.random()<.5){const cm=uniq(()=>R(1,4)*100+R(1,19)*5);const ans=fl(cm);const o=uniqArr([fl(cm+100),fl(cm>200?cm-100:cm+200),Math.floor(cm/10)+' m']).filter(x=>x!==ans);
+    return {prompt:'<b>'+cm+' cm</b> sind wie viel?',type:'choice',optCls:'word2',options:chOpts(shuffle([ans].concat(o.slice(0,2)))),ans:ans,hint:()=>'Jede 100 cm sind 1 m.'};}
+  if(Math.random()<.35){const q=pick([['½ m','50 cm'],['¼ m','25 cm'],['¾ m','75 cm'],['1 ½ m','150 cm']]);const o=uniqArr([q[1],'25 cm','50 cm','75 cm','40 cm','150 cm']).filter(x=>x!==q[1]);
+    return {prompt:'<b>'+q[0]+'</b> sind wie viele Zentimeter?',type:'choice',optCls:'word2',options:chOpts(shuffle([q[1]].concat(shuffle(o).slice(0,2)))),ans:q[1],hint:()=>'1 m = 100 cm · ½ m = 50 cm · ¼ m = 25 cm (die Hälfte von 50 cm)'};}
+  const a=R(1,3)*100+R(0,9)*10,b=Math.random()<.25?a:a+pick([-30,-10,10,30,50]);const ans=a>b?'>':a<b?'<':'=';
+  return {prompt:'Vergleiche: <b>&lt;</b>, <b>&gt;</b> oder <b>=</b>?',pic:()=>wbox(fl(a)+' <span class="gap">○</span> '+b+' cm'),type:'choice',optCls:'let',options:chOpts(['<','=','>']),ans:ans,hint:()=>'Rechne beides in cm um: 1 m = 100 cm.',after:fl(a)+' = '+a+' cm'};}
+const NAMEN=['Tim','Lea','Ali','Mia','Ben','Emma','Noah','Lina'];
+function laengeRechnen(lv){
+  if(lv===0){const a=uniq(()=>R(1,8)*10),b=R(1,9-a/10)*10;return {prompt:'Rechne:',pic:()=>wbox(a+' cm + '+b+' cm = ?'),type:'choice',optCls:'word2',options:numOpts(a+b,[a+b+10,a+b-10,a+b+20],3,x=>x+' cm'),ans:a+b,hint:()=>'Rechne wie mit Zahlen: '+a+' + '+b+'.'};}
+  if(lv===1){const [n1,n2]=shuffle(NAMEN.slice()).slice(0,2);const a=R(10,14)*10,b=R(6,9)*10+R(0,1)*5;const d=a-b;
+    return {prompt:'<b>'+n1+'</b> springt <b>'+fl(a)+'</b> weit. <b>'+n2+'</b> springt <b>'+b+' cm</b> weit. Wie viel weiter springt '+n1+'?',type:'choice',optCls:'word2',options:numOpts(d,[d+10,d-10,d+100,a+b],3,x=>x+' cm'),ans:d,hint:()=>'Rechne zuerst '+fl(a)+' in cm um: '+a+' cm.',after:a+' cm − '+b+' cm = '+d+' cm'};}
+  if(Math.random()<.5){const x=uniq(()=>R(1,19)*5);return {prompt:'Ein Band ist <b>'+x+' cm</b> lang. Wie viel fehlt bis <b>1 m</b>?',type:'choice',optCls:'word2',options:numOpts(100-x,[110-x,90-x,x],3,v=>v+' cm'),ans:100-x,hint:()=>'1 m = 100 cm. Ergänze bis 100.',after:x+' cm + '+(100-x)+' cm = 1 m'};}
+  const a=R(2,7)*10+R(0,1)*5,b=R(3,8)*10;const s=a+b;return {prompt:'Lena legt zwei Stäbe hintereinander: <b>'+a+' cm</b> und <b>'+b+' cm</b>. Wie lang sind sie zusammen?',type:'choice',optCls:'word2',options:chOpts(shuffle(uniqArr([fl(s),fl(s+10),fl(s-10)]))),ans:fl(s),hint:()=>'Addiere. Mehr als 100 cm? Dann sind es 1 m und der Rest in cm.'};}
+
+/* ---------- Merkhilfen ---------- */
+const MERK={
+uhr:SYM('uhr','sym')+' Der <b>kurze</b> Zeiger zeigt die <b>Stunde</b>, der <b>lange</b> Zeiger die <b>Minuten</b>.<br>Langer Zeiger auf 12: volle Stunde · auf 6: <b>halb</b> (halb 9 = 8:30) · auf 3: <b>Viertel nach</b> · auf 9: <b>Viertel vor</b>',
+uhr2:SYM('uhr','sym')+' Am Nachmittag zählt man weiter: <b>1 Uhr = 13 Uhr</b>, 2 Uhr = 14 Uhr … 12 Uhr nachts = 24 Uhr.<br>1 Stunde = <b>60 Minuten</b> · halbe Stunde = 30 Minuten · Viertelstunde = 15 Minuten',
+jz:SYM('uhr','sym')+' <b>Frühling</b> 🌷 März, April, Mai · <b>Sommer</b> ☀️ Juni, Juli, August<br><b>Herbst</b> 🍂 September, Oktober, November · <b>Winter</b> ⛄ Dezember, Januar, Februar<br><b>Im Kalender:</b> Frühling ab 20. März · Sommer ab 21. Juni · Herbst ab 22. September · Winter ab 21. Dezember',
+zeit:SYM('uhr','sym')+' 1 Minute = 60 Sekunden · 1 Stunde = 60 Minuten · 1 Tag = 24 Stunden · 1 Woche = 7 Tage<br>1 Jahr = 12 Monate = 365 Tage · <b>Schaltjahr</b> (alle 4 Jahre) = 366 Tage, dann hat der Februar 29 Tage',
+kal:SYM('uhr','sym')+' <b>Wochentage:</b> Montag, Dienstag, Mittwoch, Donnerstag, Freitag, Samstag, Sonntag<br><b>Monate:</b> Januar, Februar, März, April, Mai, Juni, Juli, August, September, Oktober, November, Dezember<br>31 Tage: Jan, März, Mai, Juli, Aug, Okt, Dez · 30 Tage: April, Juni, Sept, Nov · Februar 28 (Schaltjahr 29)',
+geld:SYM('geld','sym')+' <b>1 € = 100 ct</b><br>Münzen: 1 ct, 2 ct, 5 ct, 10 ct, 20 ct, 50 ct, 1 €, 2 € · Scheine: 5 €, 10 €, 20 €, 50 €, 100 €',
+rueck:SYM('geld','sym')+' <b>Rückgeld</b>: Rechne vom Preis bis zum bezahlten Geld weiter (ergänzen).<br><i>Preis 7 € · bezahlt 10 € · 7 € + 3 € = 10 € → Rückgeld 3 €</i>',
+rep:SYM('laenge','sym')+' <b>So lang ist ungefähr …</b><br>1 cm: Fingernagel · 10 cm: Kinderhand · ¼ m (25 cm): Schulbuch · ½ m: Kinderschritt · 1 m: großer Schritt, Tür · 50 m: Schwimmbecken · 100 m: Fußballfeld',
+laenge:SYM('laenge','sym')+' <b>1 m = 100 cm</b> · ½ m = 50 cm · ¼ m = 25 cm<br>Lege das Lineal bei der <b>0</b> an. 1 cm ist etwa so breit wie ein Fingernagel, 1 m ist ein großer Schritt.'};
+
+const ST=[
+{t:'Uhr lesen',g:'Uhrzeit',d:'volle, halbe, Viertelstunden, Minuten',m:'uhr',icon:clockSVG(8,30,{small:1}),gen:[()=>uhrLesen(0),()=>uhrLesen(1),()=>uhrLesen(2)]},
+{t:'Uhr stellen',g:'Uhrzeit',d:'Zeiger richtig stellen',m:'uhr',icon:clockSVG(3,15,{small:1}),gen:[()=>uhrStellen(0),()=>uhrStellen(1),()=>uhrStellen(2)]},
+{t:'Analog und digital',g:'Uhrzeit',d:'14:30 = halb 3',m:'uhr2',icon:'14:30',gen:[()=>uhrDigital(0),()=>uhrDigital(1),()=>uhrDigital(2)]},
+{t:'Zeitspannen',g:'Uhrzeit',d:'Wie spät ist es in 2 Stunden?',m:'uhr2',icon:'8:00 → 10:00',gen:[()=>uhrSpanne(0),()=>uhrSpanne(1),()=>uhrSpanne(2)]},
+{t:'Wochentage und Monate',g:'Uhrzeit',d:'vor, nach, wie viele Tage?',m:'kal',icon:'Mo Di Mi',gen:[()=>kalTask(0),()=>kalTask(1),()=>kalTask(2)]},
+{t:'Jahreszeiten',g:'Uhrzeit',d:'Welche Monate gehören dazu?',m:'jz',icon:'🌷 ☀️ 🍂 ⛄',gen:[()=>jzTask(0),()=>jzTask(1),()=>jzTask(2)]},
+{t:'Zeiteinheiten',g:'Uhrzeit',d:'Woche, Tag, Stunde, Jahr, Schaltjahr',m:'zeit',icon:'365 Tage',gen:[()=>einhTask(0),()=>einhTask(1),()=>einhTask(2)]},
+{t:'Münzen und Scheine',g:'Geld',d:'Geld erkennen',m:'geld',icon:itemSVG(200),gen:[()=>geldErkennen(0),()=>geldErkennen(1),()=>geldErkennen(2)]},
+{t:'Geld zählen',g:'Geld',d:'Wie viel Geld ist das?',m:'geld',icon:itemSVG(1000),gen:[()=>geldZaehlen(0),()=>geldZaehlen(1),()=>geldZaehlen(2)]},
+{t:'Geld legen',g:'Geld',d:'Beträge legen',m:'geld',icon:itemSVG(50)+itemSVG(100),gen:[()=>geldLegen(0),()=>geldLegen(1),()=>geldLegen(2)]},
+{t:'Einkaufen und Rückgeld',g:'Geld',d:'Bezahlen und ergänzen',m:'rueck',icon:'🛒',gen:[()=>rueckgeld(0),()=>rueckgeld(1),()=>rueckgeld(2)]},
+{t:'Euro und Cent',g:'Geld',d:'umrechnen und vergleichen',m:'geld',icon:'1 € = 100 ct',gen:[()=>geldUmrechnen(0),()=>geldUmrechnen(1),()=>geldUmrechnen(2)]},
+{t:'Messen',g:'Längen',d:'mit dem Lineal',m:'laenge',icon:'📏',gen:[()=>messen(0),()=>messen(1),()=>messen(2)]},
+{t:'Schätzen',g:'Längen',d:'cm oder m?',m:'laenge',icon:'✏️ 15 cm',gen:[()=>schaetzen(0),()=>schaetzen(1),()=>schaetzen(2)]},
+{t:'Was ist so lang?',g:'Längen',d:'1 cm, ½ m, 1 m, 50 m, 100 m',m:'rep',icon:'🐜 → ⚽',gen:[()=>repTask(0),()=>repTask(1),()=>repTask(2)]},
+{t:'Meter und Zentimeter',g:'Längen',d:'1 m = 100 cm',m:'laenge',icon:'1 m = 100 cm',gen:[()=>umrechnen(0),()=>umrechnen(1),()=>umrechnen(2)]},
+{t:'Rechnen mit Längen',g:'Längen',d:'Wie viel weiter?',m:'laenge',icon:'20 cm + 30 cm',gen:[()=>laengeRechnen(0),()=>laengeRechnen(1),()=>laengeRechnen(2)]}
+];
+const GROUPS=['Uhrzeit','Geld','Längen'];
+const GSYM={'Uhrzeit':'uhr','Geld':'geld','Längen':'laenge'};
+const LV=['leicht','mittel','schwer'];
+function colorize(t,m){}
+function doneColor(){}
+
+/* ---------- Sprache ---------- */
+function say(t){try{if(!window.speechSynthesis)return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='de-DE';u.rate=.85;const v=speechSynthesis.getVoices().filter(x=>/^de/i.test(x.lang));if(v.length)u.voice=v[0];speechSynthesis.speak(u);}catch(e){}}
+function plain(h){const d=document.createElement('div');d.innerHTML=h;return d.textContent.replace(/[👧👦]/gu,'');}
+
+/* ---------- Anzeige ---------- */
+let cur=null;
+function renderTask(t,report0,merkKey,showMerk){S0.help=showMerk?1:0;cur={t:t};if(!t._col){colorize(t,merkKey);t._col=1;}
+  const report=(ok,h)=>{report0(ok,h);if(ok)doneColor();};
+  const fb=$('#fb');fb.className='';fb.textContent='';
+  const pr=$('#prompt');pr.innerHTML='';const sp=el('button','spk','&#128264;');sp.title='Vorlesen';sp.onclick=()=>say(t.say?plain(t.prompt)+' '+t.say:plain(t.prompt));pr.appendChild(sp);pr.appendChild(el('span','',t.prompt));
+  $('#help').innerHTML=showMerk&&MERK[merkKey]?'<div class="merk">'+MERK[merkKey]+'</div>':'';
+  $('#pic').innerHTML=t.pic?t.pic():'';
+  const A=$('#answer');A.innerHTML='';
+  if(t.type==='choice'){const o=el('div','opts');t.options.forEach(op=>{const b=el('button','opt '+(t.optCls||''),op.html);b.onclick=()=>{if(cur.locked()||b.classList.contains('bad'))return;if(op.val===t.ans){b.classList.add('good');report(true);}else{b.classList.add('bad');report(false,t.hint?t.hint(op.val):'Schau noch einmal genau.');}};o.appendChild(b);});A.appendChild(o);cur.check=null;}
+  else if(t.type==='tap'){const box=el('div','taps '+t.unit);cur.sel=t.tokens.map(()=>false);cur.btns=[];
+    t.tokens.forEach((tk,k)=>{const b=el('button','tapb',tk.html);b.onclick=()=>{if(cur.locked())return;cur.sel[k]=!cur.sel[k];b.classList.toggle('on',cur.sel[k]);b.classList.remove('bad');};box.appendChild(b);cur.btns.push(b);});
+    if(t.tail)box.appendChild(el('span','tail',t.tail));A.appendChild(box);
+    const ck=el('button','check','Prüfen');A.appendChild(ck);
+    cur.check=()=>{if(cur.locked())return;if(!cur.sel.some(Boolean)){fb.className='warn';fb.textContent='Tippe zuerst an.';return;}
+      const wrong=t.tokens.map((tk,k)=>cur.sel[k]&&!tk.ok);const miss=t.tokens.filter((tk,k)=>tk.ok&&!cur.sel[k]).length;
+      if(!wrong.some(Boolean)&&!miss){cur.btns.forEach((b,k)=>{if(cur.sel[k])b.classList.add('good');});report(true);return;}
+      cur.btns.forEach((b,k)=>{if(wrong[k]){b.classList.add('bad');cur.sel[k]=false;b.classList.remove('on');}});
+      report(false,(wrong.some(Boolean)?'Ein Wort passt nicht. ':'')+(miss?'Es fehlt noch '+(miss===1?'eins':'etwas')+'. ':'')+(t.hint?t.hint():''));};
+    ck.onclick=cur.check;}
+  else if(t.type==='custom'){const box=el('div','custom');A.appendChild(box);const m=t.mount(box);cur.custom=m;const ck=el('button','check','Prüfen');A.appendChild(ck);
+    cur.check=()=>{if(cur.locked())return;const r=m.check();if(r.ok)report(true);else report(false,r.hint);};ck.onclick=cur.check;}
+  else{const slots=el('div','slots');const pool=el('div','opts');cur.seq=[];
+    const draw=()=>{slots.innerHTML='';t.ans.forEach((x,k)=>{const s=el('button','slot'+(cur.seq[k]!=null?' full':''),(cur.seq[k]!=null?t.items[cur.seq[k]].html:''));s.onclick=()=>{if(cur.locked()||cur.seq[k]==null)return;cur.seq.splice(k,1);draw();};slots.appendChild(s);});
+      pool.innerHTML='';t.items.forEach((it,k)=>{const b=el('button','opt ord'+(cur.seq.includes(k)?' usedx':''),it.html);b.onclick=()=>{if(cur.locked()||cur.seq.includes(k))return;cur.seq.push(k);draw();};pool.appendChild(b);});};
+    A.appendChild(pool);A.appendChild(slots);A.appendChild(el('div','legend',t.legend||'Tippe der Reihe nach an. Zum Zurücknehmen unten auf ein Feld tippen.'));
+    const ck=el('button','check','Prüfen');A.appendChild(ck);draw();cur.draw=draw;
+    cur.check=()=>{if(cur.locked())return;if(cur.seq.length<t.ans.length){fb.className='warn';fb.textContent='Lege zuerst alle Silben.';return;}
+      const got=cur.seq.map(k=>t.items[k].k);if(got.every((x,k)=>x===t.ans[k]))report(true);else{const k=got.findIndex((x,j)=>x!==t.ans[j]);cur.seq=cur.seq.slice(0,k);draw();report(false,'Platz '+(k+1)+' stimmt noch nicht. '+t.hint);}};
+    ck.onclick=cur.check;}
+}
+function solution(){const t=cur.t;if(t.type==='custom')return '<b>'+t.solution+'</b>';if(t.type==='choice')return '<b>'+t.ans+'</b>'+(t.after?' ('+t.after+')':'');if(t.type==='tap')return '<b>'+t.tokens.filter(x=>x.ok).map(x=>x.html).join(', ')+'</b>';return '<b>'+t.ans.join(' – ')+'</b>';}
+function showSolution(){setTimeout(doneColor,0);const t=cur.t;if(t.type==='choice')document.querySelectorAll('#answer .opt').forEach((b,k)=>{if(t.options[k].val===t.ans)b.classList.add('good');});
+  else if(t.type==='tap')cur.btns.forEach((b,k)=>{b.classList.remove('bad','on');if(t.tokens[k].ok)b.classList.add('good');});
+  else if(t.type==='custom')cur.custom.solve();
+  else{cur.seq=t.ans.map(a=>t.items.findIndex(x=>x.k===a));cur.draw();}}
+function solveAuto(){const t=cur.t;if(t.type==='choice'){document.querySelectorAll('#answer .opt')[t.options.findIndex(o=>o.val===t.ans)].click();}
+  else if(t.type==='tap'){t.tokens.forEach((tk,k)=>{if(tk.ok)cur.btns[k].click();});cur.check();}
+  else if(t.type==='custom'){cur.custom.solve();cur.check();}
+  else{t.ans.forEach(a=>{const k=t.items.findIndex(x=>x.k===a);document.querySelectorAll('#answer .opt.ord')[k].click();});cur.check();}}
+function validate(t,tag,errs){
+  if(t.type==='choice'){const vs=t.options.map(o=>o.val);if(!vs.includes(t.ans))errs.push(tag+' Lösung fehlt '+t.ans+' in '+vs);if(new Set(vs).size!==vs.length)errs.push(tag+' doppelt '+vs);if(vs.length<2)errs.push(tag+' zu wenig');
+    vs.forEach(v=>{if(v==null||v===''||/undefined|null|NaN/.test(String(v)))errs.push(tag+' leer '+vs);});}
+  if(t.type==='tap'){if(!t.tokens.some(x=>x.ok))errs.push(tag+' nichts zu tippen');}
+  if(t.type==='order'){if(new Set(t.ans).size!==t.ans.length)errs.push(tag+' Silben doppelt');}
+  if(/undefined|NaN|null/.test(t.prompt+(t.pic?t.pic():'')))errs.push(tag+' Text kaputt: '+t.prompt);}
+
+/* ---------- Werkstatt ---------- */
+const S={lv:0,help:false,st:0,tasks:[],i:0,tries:0,locked:false,res:[],best:{}};
+try{const b=JSON.parse(localStorage.getItem('gr_best')||'{}');if(b&&typeof b==='object')S.best=b;}catch(e){}
+S.hidden=new Set(typeof DEFAULT_HIDDEN!=='undefined'?DEFAULT_HIDDEN:[]);S.edit=false;try{const raw=localStorage.getItem('gr_hidden');if(raw!=null){const h=JSON.parse(raw);if(Array.isArray(h))S.hidden=new Set(h);}}catch(e){}
+function saveHidden(){try{localStorage.setItem('gr_hidden',JSON.stringify([...S.hidden]));}catch(e){}}
+function saveBest(){try{localStorage.setItem('gr_best',JSON.stringify(S.best));}catch(e){}}
+function seg(id,key,cb){document.querySelectorAll(id+' button').forEach(b=>{b.onclick=()=>{S[key]=+b.dataset.v;mark(id,S[key]);cb&&cb();};});mark(id,S[key]);}
+function mark(id,v){document.querySelectorAll(id+' button').forEach(b=>b.classList.toggle('on',+b.dataset.v===+v));}
+function buildHome(){const box=$('#stations');box.innerHTML='';$('#editBtn').classList.toggle('on',S.edit);$('#editBtn').textContent=S.edit?'Fertig ✓':'Stationen ein-/ausblenden';$('#editHint').classList.toggle('hidden',!S.edit);
+  GROUPS.forEach(g=>{const ids=ST.map((s,i)=>s.g===g?i:-1).filter(i=>i>=0);if(!S.edit&&ids.every(i=>S.hidden.has(i)))return;
+    const hd=el('div','group',SYM(GSYM[g],'sym')+' '+g);if(S.edit){const allOff=ids.every(i=>S.hidden.has(i));const gb=el('button','plain small',allOff?'Gruppe einblenden':'Gruppe ausblenden');gb.onclick=()=>{ids.forEach(i=>allOff?S.hidden.delete(i):S.hidden.add(i));saveHidden();buildHome();};hd.appendChild(gb);}
+    box.appendChild(hd);const grid=el('div','grid');
+    ST.forEach((s,id)=>{if(s.g!==g)return;const off=S.hidden.has(id);if(off&&!S.edit)return;const b=el('button','st'+(off?' off':''));const best=S.best[id]||{};
+      b.innerHTML='<div class="ic"><span>'+s.icon+'</span></div><b><span class="nr">'+(id+1)+'</span>'+s.t+'</b><small>'+s.d+'</small><div class="stars">'+(S.edit?(off?'🚫 ausgeblendet':'👁 sichtbar'):LV.map((l,k)=>best[k]!=null?l[0].toUpperCase()+': '+'★'.repeat(best[k]):'').filter(Boolean).join('  '))+'</div>';
+      b.onclick=()=>{if(S.edit){off?S.hidden.delete(id):S.hidden.add(id);saveHidden();buildHome();}else start(id,S.lv);};grid.appendChild(b);});box.appendChild(grid);});}
+$('#editBtn').onclick=()=>{S.edit=!S.edit;buildHome();};
+function start(id,lv){S.st=id;S.lv=lv;used=new Set();S.tasks=[];
+  for(let i=0;i<6;i++)S.tasks.push(ST[id].gen[lv](i));
+  S.i=0;S.res=[];$('#home').classList.add('hidden');$('#end').classList.add('hidden');$('#game').classList.remove('hidden');
+  $('#title').innerHTML='<span class="nr" style="display:inline-block;background:var(--z);color:#fff;border-radius:50%;width:2rem;height:2rem;text-align:center;line-height:2rem;font-size:1.1rem;margin-right:.4rem">'+(id+1)+'</span>'+ST[id].t;
+  mark('#gLv',lv);render();}
+function dots(){const d=$('#dots');d.innerHTML='';for(let i=0;i<6;i++){const x=el('i');if(i<S.res.length)x.className=S.res[i];else if(i===S.i)x.className='cur';d.appendChild(x);}}
+function render(){const t=S.tasks[S.i];S.tries=0;S.locked=false;$('#next').disabled=true;renderTask(t,report,ST[S.st].m,S.help);cur.locked=()=>S.locked;dots();}
+const PRAISE=['Super!','Richtig!','Klasse!','Prima!','Toll gemacht!','Stark!'];
+function report(ok,hint){if(S.locked)return;const fb=$('#fb');const t=cur.t;
+  if(ok){S.locked=true;S.res[S.i]=S.tries===0?'star':'ok';fb.className='ok';fb.innerHTML=pick(PRAISE)+(S.tries===0?' ★':'')+(t.after?' <span style="font-weight:normal">'+t.after+'</span>':'');finish();return;}
+  S.tries++;
+  if(S.tries>=3){S.locked=true;S.res[S.i]='miss';fb.className='warn';fb.innerHTML='Schau dir die Lösung an: '+solution();showSolution();finish();return;}
+  fb.className='warn';fb.textContent=hint||'Versuche es noch einmal.';}
+function finish(){dots();const n=$('#next');n.disabled=false;n.textContent=S.i<5?'Weiter →':'Fertig ✓';}
+$('#next').onclick=()=>{if(S.i<5){S.i++;render();}else endRound();};
+function endRound(){const st=S.res.filter(r=>r==='star').length;S.best[S.st]=S.best[S.st]||{};S.best[S.st][S.lv]=Math.max(S.best[S.st][S.lv]||0,st);saveBest();
+  $('#endS').textContent='★'.repeat(st)+'☆'.repeat(6-st);$('#endT').textContent=st>=5?'Super gemacht!':st>=3?'Gut gemacht!':'Geschafft!';
+  $('#endP').textContent=ST[S.st].t+' – '+LV[S.lv]+': '+st+' von 6 Sternen.'+(st>=5&&S.lv<2?' Probier doch die nächste Stufe!':st<3&&S.lv>0?' Tipp: Üb noch einmal oder nimm eine leichtere Stufe.':'');
+  $('#harder').classList.toggle('hidden',S.lv>=2);$('#end').classList.remove('hidden');}
+$('#again').onclick=()=>start(S.st,S.lv);
+$('#harder').onclick=()=>start(S.st,Math.min(2,S.lv+1));
+$('#other').onclick=goHome;$('#homeBtn').onclick=goHome;
+function goHome(){$('#end').classList.add('hidden');$('#game').classList.add('hidden');$('#home').classList.remove('hidden');buildHome();try{speechSynthesis.cancel();}catch(e){}}
+$('#helpBtn').onclick=()=>{S.help=!S.help;S0.help=S.help?1:0;$('#helpBtn').classList.toggle('on',S.help);const t=S.tasks[S.i];const m=MERK[ST[S.st].m];$('#help').innerHTML=S.help&&m?'<div class="merk">'+m+'</div>':'';$('#pic').innerHTML=t.pic?t.pic():'';};
+$('#fsBtn').onclick=()=>{try{if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen();}catch(e){}};
+seg('#sLv','lv');seg('#gLv','lv',()=>start(S.st,S.lv));
+document.addEventListener('keydown',e=>{if($('#game').classList.contains('hidden'))return;if(e.key==='Enter'){if(!$('#next').disabled)$('#next').click();else if(cur&&cur.check)cur.check();}});
+buildHome();
+window.__selftest=function(rounds){rounds=rounds||20;const errs=[];let count=0;const keep=S.best;
+  [false,true].forEach(h=>{S.help=h;ST.forEach((s,id)=>{for(let lv=0;lv<3;lv++)for(let r=0;r<rounds;r++){
+    try{start(id,lv);for(let i=0;i<6;i++){const t=S.tasks[i];count++;const tag=s.t+'/'+LV[lv]+'#'+i;validate(t,tag,errs);
+      if(r%4===3&&t.type==='choice'&&t.options.length>2){const bad=t.options.findIndex(o=>o.val!==t.ans);document.querySelectorAll('#answer .opt')[bad].click();if(S.locked)errs.push(tag+' falsch gesperrt');solveAuto();if(S.res[i]!=='ok')errs.push(tag+' 2. Versuch');}
+      else{solveAuto();if(!S.locked||S.res[i]!=='star')errs.push(tag+' nicht gelöst: '+$('#fb').textContent);}
+      if(i<5){S.i++;render();}}}catch(e){errs.push(s.t+'/'+lv+' '+e.message+' '+e.stack.split('\n')[1]);}
+  }});});S.best={};saveBest();S.hidden=new Set();saveHidden();goHome();return {count:count,errs:errs.slice(0,40),nerr:errs.length};};
+</script>
+</body>
+</html>
