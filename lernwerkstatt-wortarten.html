@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lernwerkstatt Wortarten</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--z:#1d4e89;--e:#2f8f3a;--el:#a6dc8f;--f:#8ec5ef;--bg:#faf6ee;--card:#fff;--line:#d9cfbd;--ink:#2b2b2b;--ok:#2e8b57;--warn:#d97a12;--hl:#ffe27a;--beige:#efdcb5;--beigel:#a8844f;--muted:#6b6250}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{font-family:"Andika","Andika New Basic","Century Gothic","Segoe UI","Helvetica Neue",Arial,sans-serif;background:var(--bg);color:var(--ink);font-size:18px;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
+button{font-family:inherit;cursor:pointer;color:inherit}
+.cz{color:var(--z)}.ce{color:var(--e)}.ck{color:var(--ink)}
+body.nocol .cz,body.nocol .ce,body.nocol .wz,body.nocol .we{color:inherit}
+.wz{color:var(--z)}.we{color:var(--e)}.wk{color:var(--ink)}
+.hidden{display:none!important}
+/* Start */
+#home{max-width:1150px;margin:0 auto;padding:1.2rem 1.2rem 2rem}
+#home h1{font-size:2.3rem;margin:.2rem 0 .2rem;display:flex;align-items:center;gap:.6rem}
+#home .sub{color:var(--muted);margin:0 0 1rem;font-size:1.1rem}
+.settings{display:flex;flex-wrap:wrap;gap:.6rem 1.4rem;align-items:center;background:var(--card);border:2px solid var(--line);border-radius:1rem;padding:.7rem 1rem;margin-bottom:1rem}
+.settings span{font-weight:bold}
+.seg{display:inline-flex;border:2px solid var(--line);border-radius:.8rem;overflow:hidden}
+.seg button{border:0;background:#fff;padding:.45rem .9rem;font-size:1.05rem}
+.seg button+button{border-left:2px solid var(--line)}
+.seg button.on{background:var(--z);color:#fff}
+.group{margin:1.1rem 0 .5rem;font-size:1.25rem;color:var(--muted);font-weight:bold;border-bottom:2px solid var(--line);padding-bottom:.2rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(205px,1fr));gap:.8rem}
+.st{background:var(--card);border:2px solid var(--line);border-radius:1rem;padding:.7rem .7rem .6rem;text-align:left;display:flex;flex-direction:column;gap:.35rem;min-height:170px;transition:transform .1s}
+.st:active{transform:scale(.97)}
+.st .ic{height:74px;display:flex;align-items:center;justify-content:center}
+.st .ic svg{max-height:74px;max-width:100%}
+.st b{font-size:1.15rem}
+.st .nr{display:inline-block;background:var(--z);color:#fff;border-radius:50%;width:1.6rem;height:1.6rem;text-align:center;line-height:1.6rem;font-size:.95rem;margin-right:.3rem}
+.st small{color:var(--muted);font-size:.9rem}
+.st .stars{font-size:.95rem;color:#c8961a;min-height:1.1rem}
+.foot{margin-top:1.4rem;color:var(--muted);text-align:right;font-size:.95rem}
+/* Game */
+#game{height:100%;display:flex;flex-direction:column}
+header{display:flex;align-items:center;gap:.6rem;padding:.5rem .8rem;background:var(--card);border-bottom:2px solid var(--line);flex-wrap:wrap}
+header h2{margin:0;font-size:1.35rem;flex:1;min-width:150px}
+.plain{border:2px solid var(--line);background:#fff;border-radius:.7rem;padding:.4rem .8rem;font-size:1.05rem}
+.plain.on{background:var(--hl);border-color:#e0b800}
+#homeBtn{font-size:1.5rem;padding:.2rem .9rem}
+#dots{display:flex;gap:.4rem;justify-content:center;padding:.6rem 0 .1rem}
+#dots i{width:1.1rem;height:1.1rem;border-radius:50%;border:2px solid var(--line);background:#fff}
+#dots i.cur{border-color:var(--z)}
+#dots i.star{background:#f2c230;border-color:#d9a400}
+#dots i.ok{background:var(--el);border-color:var(--e)}
+#dots i.miss{background:#f5c58f;border-color:var(--warn)}
+main{flex:1;overflow:auto;display:flex;flex-direction:column;align-items:center;padding:.4rem 1rem 1rem;gap:.8rem}
+#prompt{font-size:1.75rem;font-weight:bold;text-align:center;display:flex;align-items:center;gap:.6rem;justify-content:center;flex-wrap:wrap}
+#prompt .big{font-size:2.3rem}
+.spk{border:2px solid var(--line);background:#fff;border-radius:50%;width:2.6rem;height:2.6rem;font-size:1.3rem;padding:0;flex:none}
+.legend{font-size:1.1rem;color:var(--muted);display:flex;gap:1.2rem;flex-wrap:wrap;justify-content:center}
+.legend b{font-size:1.5rem;color:var(--ink)}
+#pic{display:flex;justify-content:center;align-items:center;max-width:100%}
+.pic{display:block;max-width:100%}
+svg.dienes{height:230px}
+svg.field{height:300px}
+svg.strahl{width:min(980px,94vw)}
+svg.kette{width:min(900px,94vw)}
+svg.money{max-height:260px;width:auto;max-width:min(700px,92vw)}
+#answer{display:flex;flex-direction:column;align-items:center;gap:.8rem;width:100%}
+.opts{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center}
+.opt{min-width:7rem;padding:.6rem 1.2rem;font-size:2.4rem;font-weight:bold;background:#fff;border:3px solid var(--line);border-radius:1rem}
+.opt.word{font-size:1.9rem;min-width:13rem}
+.opt.pic{padding:.5rem;min-width:0;display:flex;align-items:center;justify-content:center;width:min(300px,29vw);height:230px}
+.opt.pic.four{width:min(250px,22vw);height:210px}
+.opt.pic svg{max-width:100%;max-height:100%}
+.opt.pic .wordbox{font-size:1.7rem}
+.opt.arrow{font-size:3rem;min-width:5.5rem}
+.opt.bad{border-color:var(--warn);background:#fde9d2;opacity:.6}
+.opt.good{border-color:var(--ok);background:#dff3e4}
+.eq{font-size:2.4rem;font-weight:bold;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;justify-content:center}
+.eq .op{color:var(--muted)}
+.eq .lab{font-size:1.6rem}
+.fld{min-width:4.6rem;height:4rem;border:3px dashed #b8ab92;border-radius:.8rem;background:#fff;font-size:2.3rem;font-weight:bold;padding:0 .4rem}
+.fld.act{border-style:solid;border-color:#e0b800;background:#fff8d6}
+.fld.bad{border-style:solid;border-color:var(--warn);background:#fde9d2}
+.fld.good{border-style:solid;border-color:var(--ok);background:#dff3e4}
+.keys{display:grid;grid-template-columns:repeat(6,4.4rem);gap:.45rem}
+.key{height:4rem;font-size:2.1rem;font-weight:bold;background:#fff;border:2px solid var(--line);border-radius:.8rem}
+.key.wide{grid-column:span 2;font-size:1.4rem}
+.key:active,.opt:active,.tool:active{transform:scale(.95)}
+.check{background:var(--z);color:#fff;border:0;border-radius:.9rem;font-size:1.5rem;padding:.6rem 1.8rem;font-weight:bold}
+.tools{display:flex;gap:.6rem;flex-wrap:wrap;justify-content:center}
+.tool{background:#fff;border:2px solid var(--line);border-radius:.8rem;font-size:1.4rem;padding:.5rem 1rem;font-weight:bold;min-width:5rem}
+.tool.z{border-color:var(--z);color:var(--z)}
+.tool.e{border-color:var(--e);color:var(--e)}
+#fb{min-height:3.2rem;font-size:1.4rem;font-weight:bold;text-align:center;padding:.4rem 1rem;border-radius:.8rem;max-width:900px}
+#fb.ok{background:#dff3e4;color:#1d6b3e}
+#fb.warn{background:#fdebd3;color:#8a4a00}
+footer{display:flex;justify-content:flex-end;padding:.5rem 1rem;border-top:2px solid var(--line);background:var(--card)}
+#next{font-size:1.5rem;padding:.6rem 2rem;border-radius:.9rem;border:0;background:var(--ok);color:#fff;font-weight:bold}
+#next:disabled{background:#c9c2b4}
+/* Tafel */
+table.tafel{border-collapse:collapse;font-weight:bold;font-size:1.35rem;background:#fff}
+table.tafel td{border:1.5px solid #bdb19a;width:2.9rem;height:2.45rem;text-align:center;padding:0}
+table.tafel tr:nth-child(5) td{border-bottom:3px solid #8e8270}
+table.tafel td:nth-child(5){border-right:3px solid #8e8270}
+table.tafel.click td{cursor:pointer}
+table.tafel td.hl{background:var(--hl)}
+table.tafel td.start{background:var(--hl);outline:3px solid #e0b800;outline-offset:-3px}
+table.tafel td.bad{background:#f8cf9c}
+table.tafel td.good{background:#bfe8c5}
+.cross{display:grid;grid-template-columns:repeat(3,6rem);grid-template-rows:repeat(3,5rem);gap:0}
+.cross>div{border:2px solid #bdb19a;background:#fff;display:flex;align-items:center;justify-content:center;font-size:2.2rem;font-weight:bold}
+.cross>div.no{border:0;background:transparent}
+.cross>div.mid{background:var(--hl)}
+.cross .fld{min-width:5.2rem;height:4.2rem;border-radius:.5rem}
+/* Stellenwerttafel */
+table.swt{border-collapse:collapse;background:#fff;font-weight:bold}
+table.swt th{font-size:2rem;padding:.2rem 1.5rem;border:2px solid #8e8270;color:#fff}
+table.swt th.hz{background:var(--z)}table.swt th.he{background:var(--e)}
+table.swt td{border:2px solid #8e8270;vertical-align:middle;text-align:center;padding:.5rem;min-width:9.5rem;height:8rem}
+table.swt td.num{height:auto;font-size:2.4rem;padding:.3rem}
+.pl{display:inline-grid;grid-template-columns:repeat(5,1.5rem);gap:.3rem}
+.pl i{width:1.5rem;height:1.5rem;border-radius:50%;display:block}
+.pl i.pz{background:var(--z)}.pl i.pe{background:var(--el);border:2px solid var(--e)}
+.pl i.mv{outline:3px dashed var(--warn);outline-offset:2px}
+table.swt th.hh{background:#8a6d3b}table.swt td.tdh{min-width:5rem}
+.pl i.ph{background:#c9a86a;border:2px solid #8a6d3b;border-radius:.2rem}
+.gh{fill:none;stroke:#333;stroke-width:3}.gz{stroke:var(--z);stroke-width:5;stroke-linecap:round}.ge{fill:var(--e)}
+svg.geheim{height:90px;max-width:92vw}
+.tiles{display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center}
+.tile{font-size:1.8rem;font-weight:bold;background:#fff;border:2px solid var(--line);border-radius:.7rem;padding:.4rem .9rem}
+.tile.used{opacity:.3}
+.wline{min-height:4.2rem;min-width:22rem;border-bottom:4px solid #b8ab92;font-size:2.4rem;font-weight:bold;display:flex;align-items:flex-end;justify-content:center;padding:0 .5rem}
+.zdt{font-size:1.2rem;color:var(--muted);font-weight:bold}
+.settings input{font:inherit;font-size:1.1rem;width:7rem;padding:.35rem .5rem;border:2px solid var(--line);border-radius:.6rem}
+.mvnote{font-size:1.4rem;font-weight:bold;color:var(--muted)}
+.wordbig{font-size:3rem;font-weight:bold;background:#fff;border:3px solid var(--line);border-radius:1rem;padding:.6rem 1.6rem}
+.seq{display:flex;align-items:center;gap:.3rem;flex-wrap:wrap;justify-content:center;font-size:2.3rem;font-weight:bold}
+.seq .box{min-width:4.8rem;height:4rem;border:3px solid var(--line);border-radius:.8rem;background:#fff;display:flex;align-items:center;justify-content:center}
+.seq .ar{color:var(--muted);font-size:1.6rem}
+.nb{border-collapse:collapse;background:#fff}
+.nb th{font-size:1.05rem;padding:.3rem .5rem;border:2px solid #bdb19a;background:#f3ecdf}
+.nb td{border:2px solid #bdb19a;padding:.4rem;text-align:center;font-size:2.3rem;font-weight:bold;min-width:6rem}
+.nb td.mid{background:var(--hl)}
+.arrows{display:inline-flex;gap:.3rem;align-items:center}
+.arr{display:inline-flex;width:3rem;height:3rem;border:2px solid var(--line);border-radius:.6rem;background:#fff;align-items:center;justify-content:center;font-size:2rem}
+/* SVG classes */
+.db{fill:var(--beige);stroke:var(--beigel);stroke-width:1}
+.dbo{fill:none;stroke:#7d6136;stroke-width:1.6}
+.du{fill:var(--beige);stroke:#7d6136;stroke-width:1.4}
+.lbl{font:bold 15px sans-serif;fill:var(--muted);text-anchor:middle}
+.fd{fill:var(--z)}.fe{fill:#fff;stroke:#b9b0a0;stroke-width:1.6}
+.fclick circle{cursor:pointer}
+.ax{stroke:#333;stroke-width:3}
+.tk{stroke:#333;stroke-width:2}
+.sl{font:bold 22px sans-serif;fill:#333;text-anchor:middle}
+.mk{fill:var(--warn)}
+.kb{fill:var(--z);stroke:#0f2f57;stroke-width:1}.kw{fill:#fff;stroke:#777;stroke-width:1.2}
+.ks{stroke:#777;stroke-width:1.5}
+.clip{fill:#555}
+.kclick circle{cursor:pointer}
+.n10{fill:#f3c9c2;stroke:#a85a4e;stroke-width:2}.n5{fill:#dcdcd5;stroke:#7d7d73;stroke-width:2}
+.mt{font:bold 22px sans-serif;fill:#333;text-anchor:middle}
+.gold{fill:#e2c25a;stroke:#9f8020;stroke-width:1.5}.silv{fill:#d5d9dd;stroke:#8a9097;stroke-width:1.5}
+.ct{font:bold 15px sans-serif;fill:#222;text-anchor:middle}
+.mclick g{cursor:pointer}
+/* End */
+#end{position:fixed;inset:0;background:rgba(40,35,25,.45);display:flex;align-items:center;justify-content:center;z-index:5}
+#end .box{background:#fff;border-radius:1.4rem;padding:1.6rem 2rem;text-align:center;max-width:620px}
+#end h3{font-size:2.2rem;margin:.2rem 0}
+#end .stars{font-size:3rem;color:#e0a800;letter-spacing:.2rem;margin:.4rem 0 1rem}
+#end .row{display:flex;gap:.7rem;flex-wrap:wrap;justify-content:center}
+#end button{font-size:1.3rem;padding:.6rem 1.2rem;border-radius:.8rem;border:2px solid var(--line);background:#fff;font-weight:bold}
+#end button.main{background:var(--ok);color:#fff;border-color:var(--ok)}
+@media (max-width:700px){.keys{grid-template-columns:repeat(4,4rem)}#prompt{font-size:1.4rem}svg.field{height:240px}svg.dienes{height:180px}}
+
+/* Signatur */
+.sig{position:fixed;right:.7rem;bottom:.4rem;width:min(6.2rem,11vh);opacity:.85;pointer-events:none;z-index:3}
+.sig svg{display:block;width:100%;height:auto}
+#game:not(.hidden) ~ .sig{right:auto;left:.5rem;bottom:.25rem;width:min(4.6rem,8vh)}
+#game footer{padding-left:5.6rem}
+.emo{font-size:6rem;line-height:1.1;text-align:center}
+.word{font-size:2.4rem;font-weight:bold;text-align:center;letter-spacing:.03em}
+.wbig{font-size:3rem}
+.sent{font-size:2.3rem;font-weight:bold;text-align:center;line-height:1.5;max-width:min(1000px,94vw)}
+.big2{font-size:2.8rem}
+.mk2{background:var(--hl);border-radius:.35rem;padding:0 .25rem;box-shadow:0 0 0 2px #e0b800 inset}
+.gap{color:var(--warn);padding:0 .15rem}
+.hint2{color:var(--muted);font-size:1.3rem;font-weight:normal}
+.opt.word2{font-size:2.1rem;min-width:9rem}
+.opt.let{font-size:2.8rem;min-width:5.5rem}
+.opt.ord{font-size:2.3rem}
+.opt.usedx{opacity:.25}
+.taps{display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center;align-items:flex-end;max-width:min(1000px,96vw)}
+.tapb{background:#fff;border:3px solid var(--line);border-radius:.8rem;font-weight:bold;font-size:2.2rem;padding:.25rem .7rem}
+.taps.letter .tapb{min-width:4.2rem;height:4.6rem;font-size:2.8rem;padding:0}
+.taps.letter{gap:.35rem}
+.tapb.on{background:var(--hl);border-color:#e0b800}
+.tapb.good{background:#dff3e4;border-color:var(--ok)}
+.tapb.bad{background:#fde9d2;border-color:var(--warn)}
+.tail{font-size:2.2rem;font-weight:bold;margin-left:-.3rem}
+#help{display:flex;justify-content:center;width:100%}
+.merk{background:#fffbe8;border:2px dashed #e0b800;border-radius:1rem;padding:.5rem 1.1rem;font-size:1.2rem;line-height:1.55;max-width:min(880px,94vw);text-align:center}
+.ptab{border-collapse:collapse;margin:.2rem auto .3rem;font-size:1.2rem}
+.ptab td{border:1.5px solid #d9c27a;padding:.15rem .6rem;background:#fff}
+.vh{background:#ffe9a8;border-radius:.3rem;padding:0 .2rem}
+.steig{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;justify-content:center}
+.sbox,.fld.fake{display:inline-flex;align-items:center;justify-content:center;min-width:10rem;height:4.4rem;border:3px solid var(--line);border-radius:.8rem;background:#fff;font-size:2.1rem;font-weight:bold;padding:0 .6rem}
+.fld.fake{border-style:dashed;color:var(--muted)}
+.steig .ar{color:var(--muted);font-size:1.8rem}
+.slab{display:flex;gap:.4rem;justify-content:center;flex-wrap:wrap;color:var(--muted);font-size:1rem}
+.slab span{min-width:10.9rem;text-align:center}
+.sb{color:var(--warn);padding:0 .25rem}
+.slots{display:flex;gap:.6rem;flex-wrap:wrap;justify-content:center}
+.slot{min-width:7rem;height:4.2rem;border:3px dashed #b8ab92;border-radius:.9rem;background:#fff;font-size:2.2rem;font-weight:bold;display:flex;align-items:center;justify-content:center;padding:0 .8rem}
+.slot.full{border-style:solid;border-color:var(--z)}
+.st .ic{font-size:1.45rem;font-weight:bold;color:var(--ink);text-align:center;line-height:1.2}
+@media (max-width:700px){.emo{font-size:4.2rem}.sent{font-size:1.6rem}.word{font-size:1.8rem}.wbig{font-size:2.2rem}.big2{font-size:2rem}.opt.word2{font-size:1.6rem;min-width:7rem}.tapb{font-size:1.6rem}.taps.letter .tapb{min-width:3rem;height:3.6rem;font-size:2rem}.sbox,.fld.fake{min-width:7rem;font-size:1.5rem;height:3.4rem}.slab span{min-width:7.5rem}.merk{font-size:1rem}}
+@media (max-height:560px) and (orientation:landscape){.emo{font-size:3.4rem}main{gap:.4rem}.sent{font-size:1.6rem}.wbig{font-size:2.2rem}}
+#pic{flex-direction:column;gap:.3rem}
+.wN{color:#cf2e2e}.wV{color:#1f5fbf}.wA{color:#2a8a3a}.wT{color:#e07a10}
+.tapb.cN,.opt.cN{color:#cf2e2e}.tapb.cV,.opt.cV{color:#1f5fbf}.tapb.cA,.opt.cA{color:#2a8a3a}.tapb.cT,.opt.cT{color:#e07a10}
+.tapb.good.cN,.tapb.good.cV,.tapb.good.cA,.tapb.good.cT{font-weight:bold}
+.merk .wN,.merk .wV,.merk .wA,.merk .wT{font-weight:bold}
+</style>
+</head>
+<body>
+<div id="home">
+  <h1>Lernwerkstatt: Wortarten</h1>
+  <p class="sub">Nomen, Artikel, Verben, Adjektive, Laute und Silben. Jede Station hat 6 Aufgaben und drei Stufen. Die Merkhilfe zeigt, wie man eine Wortart erkennt.</p>
+  <div class="settings">
+    <span>Stufe:</span>
+    <div class="seg" id="sLv"><button data-v="0">leicht</button><button data-v="1">mittel</button><button data-v="2">schwer</button></div>
+  </div>
+  <div id="stations"></div>
+</div>
+<div id="game" class="hidden">
+  <header>
+    <button class="plain" id="homeBtn" title="Zurück zu den Stationen" aria-label="Zurück zu den Stationen">&#8592;</button>
+    <h2 id="title"></h2>
+    <div class="seg" id="gLv"><button data-v="0">leicht</button><button data-v="1">mittel</button><button data-v="2">schwer</button></div>
+    <button class="plain" id="helpBtn">Merkhilfe</button>
+    <button class="plain" id="fsBtn">Vollbild</button>
+  </header>
+  <div id="dots"></div>
+  <main><div id="help"></div><div id="prompt"></div><div id="pic"></div><div id="answer"></div><div id="fb"></div></main>
+  <footer><button id="next" disabled>Weiter &#8594;</button></footer>
+</div>
+<div id="end" class="hidden"><div class="box">
+  <h3 id="endT">Geschafft!</h3>
+  <div class="stars" id="endS"></div>
+  <p id="endP" style="font-size:1.2rem"></p>
+  <div class="row"><button id="again">Nochmal spielen</button><button id="harder" class="main">Schwerer</button><button id="other">Andere Station</button></div>
+</div></div>
+<div class="sig" title="by J.Otto"><svg viewBox="478 66 164 152" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Maus mit Schild: by J.Otto"><circle cx="526" cy="92" r="20" fill="#c3beb7"/><circle cx="526" cy="92" r="13" fill="#f4b6c2"/><circle cx="594" cy="92" r="20" fill="#c3beb7"/><circle cx="594" cy="92" r="13" fill="#f4b6c2"/><path d="M522 170 A38 38 0 0 1 598 170 Z" fill="#c3beb7"/><circle cx="560" cy="136" r="38" fill="#c3beb7"/><ellipse cx="545" cy="132" rx="5.5" ry="6.5" fill="#2b2b2b"/><circle cx="547" cy="129" r="1.8" fill="#fff"/><ellipse cx="575" cy="132" rx="5.5" ry="6.5" fill="#2b2b2b"/><circle cx="577" cy="129" r="1.8" fill="#fff"/><ellipse cx="536" cy="147" rx="6.5" ry="4" fill="#f7a9b8"/><ellipse cx="584" cy="147" rx="6.5" ry="4" fill="#f7a9b8"/><circle cx="560" cy="145" r="5" fill="#ef7f97"/><path d="M555 152 Q560 157 565 152" fill="none" stroke="#5a4a44" stroke-width="2" stroke-linecap="round"/><path d="M549 147 L526 143 M549 151 L526 155 M571 147 L594 143 M571 151 L594 155" stroke="#8d867e" stroke-width="1.4" stroke-linecap="round"/><rect x="485" y="168" width="150" height="44" rx="8" fill="#f6ecd8" stroke="#a8854a" stroke-width="2"/><text x="560" y="197" text-anchor="middle" font-family="Verdana,DejaVu Sans,FreeSans,Arial,sans-serif" font-size="19" font-weight="bold" font-style="italic" fill="#6b4f2a">by J.Otto</text><ellipse cx="530" cy="170" rx="11" ry="8" fill="#c3beb7"/><ellipse cx="590" cy="170" rx="11" ry="8" fill="#c3beb7"/><path d="M524 166 L524 172 M530 165 L530 172 M536 166 L536 172 M584 166 L584 172 M590 165 L590 172 M596 166 L596 172" stroke="#9c958d" stroke-width="1.2" stroke-linecap="round"/></svg></div>
+<script>
+"use strict";
+/* ---------- Helfer ---------- */
+const $=s=>document.querySelector(s);
+function el(tag,cls,html){const e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e;}
+const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+const uniqArr=a=>a.filter((x,k)=>a.indexOf(x)===k);
+let used=new Set();
+function uniq(fn){for(let k=0;k<80;k++){const v=fn();const s=JSON.stringify(v);if(!used.has(s)){used.add(s);return v;}}return fn();}
+const S0={help:0};
+const big=w=>'<span class="wbig">'+w+'</span>';
+
+const SIL34=[['Banane','Ba-na-ne','🍌'],['Tomate','To-ma-te','🍅'],['Rakete','Ra-ke-te','🚀'],['Melone','Me-lo-ne','🍉'],['Giraffe','Gi-raf-fe','🦒'],['Krokodil','Kro-ko-dil','🐊'],['Karotte','Ka-rot-te','🥕'],['Telefon','Te-le-fon','☎️'],['Kaninchen','Ka-nin-chen','🐇'],['Elefant','E-le-fant','🐘'],['Pinguin','Pin-gu-in','🐧'],['Erdbeere','Erd-bee-re','🍓'],['Hubschrauber','Hub-schrau-ber','🚁'],['Luftballon','Luft-bal-lon','🎈'],['Schneeflocke','Schnee-flo-cke','❄️'],['Zitrone','Zi-tro-ne','🍋'],['Ameise','A-mei-se','🐜'],['Schmetterling','Schmet-ter-ling','🦋'],['Regenschirm','Re-gen-schirm','☂️'],['Federball','Fe-der-ball','🏸'],['Bilderbuch','Bil-der-buch','📖'],['Schneckenhaus','Schne-cken-haus','🐌'],
+['Schokolade','Scho-ko-la-de','🍫'],['Apfelsine','Ap-fel-si-ne','🍊'],['Badewanne','Ba-de-wan-ne','🛁'],['Regenwolke','Re-gen-wol-ke','🌧️'],['Sonnenblume','Son-nen-blu-me','🌻'],['Kindergarten','Kin-der-gar-ten',''],['Marmelade','Mar-me-la-de',''],['Taschenlampe','Ta-schen-lam-pe','🔦'],['Kugelschreiber','Ku-gel-schrei-ber','🖊️'],['Federmäppchen','Fe-der-mäpp-chen',''],['Wasserflasche','Was-ser-fla-sche',''],['Spielzeugauto','Spiel-zeug-au-to','🚗'],['Wackelpudding','Wa-ckel-pud-ding',''],['Hamsterkäfig','Hams-ter-kä-fig',''],['Alligator','Al-li-ga-tor','🐊']].map(x=>({w:x[0],syl:x[1].split('-'),e:x[2]}));
+/* ---------- Wortschatz ---------- */
+/* [Wort, Artikel, Mehrzahl, Bild, Silben, mehrdeutiges Bild] */
+const NOUNS=[
+['Hund','der','Hunde','🐕','Hund'],['Katze','die','Katzen','🐈','Kat-ze'],['Maus','die','Mäuse','🐁','Maus'],['Apfel','der','Äpfel','🍎','Ap-fel'],
+['Banane','die','Bananen','🍌','Ba-na-ne'],['Ball','der','Bälle','⚽','Ball'],['Baum','der','Bäume','🌳','Baum'],['Buch','das','Bücher','📖','Buch'],
+['Haus','das','Häuser','🏠','Haus'],['Auto','das','Autos','🚗','Au-to'],['Ei','das','Eier','🥚','Ei'],['Fisch','der','Fische','🐟','Fisch'],
+['Frosch','der','Frösche','🐸','Frosch'],['Fuchs','der','Füchse','🦊','Fuchs'],['Giraffe','die','Giraffen','🦒','Gi-raf-fe'],['Igel','der','Igel','🦔','I-gel'],
+['Kuh','die','Kühe','🐄','Kuh'],['Löwe','der','Löwen','🦁','Lö-we'],['Biene','die','Bienen','🐝','Bie-ne'],['Schnecke','die','Schnecken','🐌','Schne-cke'],
+['Sonne','die',null,'☀️','Son-ne'],['Mond','der','Monde','🌙','Mond'],['Stern','der','Sterne','⭐','Stern'],['Blume','die','Blumen','🌷','Blu-me'],
+['Tomate','die','Tomaten','🍅','To-ma-te'],['Zitrone','die','Zitronen','🍋','Zi-tro-ne'],['Rakete','die','Raketen','🚀','Ra-ke-te'],['Uhr','die','Uhren','⏰','Uhr'],
+['Schuh','der','Schuhe','👟','Schuh'],['Hose','die','Hosen','👖','Ho-se'],['Jacke','die','Jacken','🧥','Ja-cke',1],['Kerze','die','Kerzen','🕯️','Ker-ze'],
+['Brot','das','Brote','🍞','Brot'],['Käse','der',null,'🧀','Kä-se'],['Pferd','das','Pferde','🐎','Pferd'],['Schaf','das','Schafe','🐑','Schaf'],
+['Schwein','das','Schweine','🐖','Schwein'],['Ente','die','Enten','🦆','En-te'],['Vogel','der','Vögel','🐦','Vo-gel'],['Elefant','der','Elefanten','🐘','E-le-fant'],
+['Zebra','das','Zebras','🦓','Ze-bra'],['Tiger','der','Tiger','🐅','Ti-ger'],['Bär','der','Bären','🐻','Bär'],['Eule','die','Eulen','🦉','Eu-le'],
+['Zug','der','Züge','🚆','Zug',1],['Boot','das','Boote','⛵','Boot',1],['Fahrrad','das','Fahrräder','🚲','Fahr-rad'],['Schlüssel','der','Schlüssel','🔑','Schlüs-sel'],
+['Glocke','die','Glocken','🔔','Glo-cke'],['Herz','das','Herzen','❤️','Herz'],['Hut','der','Hüte','🎩','Hut'],['Krone','die','Kronen','👑','Kro-ne'],
+['Pilz','der','Pilze','🍄','Pilz'],['Kirsche','die','Kirschen','🍒','Kir-sche'],['Erdbeere','die','Erdbeeren','🍓','Erd-bee-re'],['Möhre','die','Möhren','🥕','Möh-re',1],
+['Ameise','die','Ameisen','🐜','A-mei-se'],['Eis','das',null,'🍦','Eis'],['Kleid','das','Kleider','👗','Kleid'],['Zahn','der','Zähne','🦷','Zahn'],
+['Nase','die','Nasen','👃','Na-se'],['Ohr','das','Ohren','👂','Ohr'],['Auge','das','Augen','👁️','Au-ge'],['Hand','die','Hände','✋','Hand'],
+['Gurke','die','Gurken','🥒','Gur-ke'],['Kuchen','der','Kuchen','🍰','Ku-chen',1],['Löffel','der','Löffel','🥄','Löf-fel'],['Pinguin','der','Pinguine','🐧','Pin-gu-in'],
+['Delfin','der','Delfine','🐬','Del-fin'],['Wal','der','Wale','🐋','Wal'],['Raupe','die','Raupen','🐛','Rau-pe'],['Schmetterling','der','Schmetterlinge','🦋','Schmet-ter-ling'],
+['Zelt','das','Zelte','⛺','Zelt'],['Wolke','die','Wolken','☁️','Wol-ke'],['Baby','das','Babys','👶','Ba-by'],['Sofa','das','Sofas','🛋️','So-fa',1],
+['Bett','das','Betten','🛏️','Bett'],['Tür','die','Türen','🚪','Tür'],['Geschenk','das','Geschenke','🎁','Ge-schenk'],['Brille','die','Brillen','👓','Bril-le'],
+['Kamel','das','Kamele','🐫','Ka-mel'],['Krokodil','das','Krokodile','🐊','Kro-ko-dil'],['Schildkröte','die','Schildkröten','🐢','Schild-krö-te'],
+['Tasse','die','Tassen','☕','Tas-se',1],['Taube','die','Tauben','🕊️','Tau-be'],['Seife','die','Seifen','🧼','Sei-fe'],['Mütze','die','Mützen','🧢','Müt-ze',1],
+['Würfel','der','Würfel','🎲','Wür-fel'],['Kürbis','der','Kürbisse','🎃','Kür-bis'],['Mädchen','das','Mädchen','👧','Mäd-chen'],['Feuer','das',null,'🔥','Feu-er'],
+['Tisch','der','Tische','🪑','Tisch',2],['Lampe','die','Lampen','💡','Lam-pe',1],['Kind','das','Kinder','🧒','Kind',1],['Gabel','die','Gabeln','🍴','Ga-bel',1],
+['Tasche','die','Taschen','👜','Ta-sche',1],['Pizza','die','Pizzas','🍕','Piz-za'],['Kaktus','der','Kakteen','🌵','Kak-tus'],['Blatt','das','Blätter','🍃','Blatt',1]
+].map(a=>({w:a[0],a:a[1],pl:a[2],e:a[3],syl:a[4].split('-'),amb:!!a[5],nopic:a[5]===2}));
+const PICN=NOUNS.filter(n=>!n.amb);
+const PLN=NOUNS.filter(n=>n.pl);
+const VERBS=['laufen','springen','schlafen','lesen','schreiben','malen','singen','tanzen','spielen','schwimmen','lachen','weinen','kochen','backen','rufen','fliegen','bauen','sitzen','hüpfen','klettern','werfen','fangen','rechnen','turnen','gehen','fahren','waschen','putzen','kaufen','hören','sehen','trinken','helfen','träumen','bellen','rennen','denken','basteln','schaukeln','fragen'];
+const ADJ=['groß','klein','dick','dünn','lang','kurz','alt','jung','schnell','langsam','laut','leise','warm','kalt','heiß','nass','trocken','süß','sauer','hell','dunkel','lustig','traurig','müde','schön','rund','weich','hart','stark','mutig','frech','nett','leer','voll','bunt','rot','grün','gelb','fröhlich','wild'];
+/* Sätze: Wort/Wortart  T=Artikel N=Nomen V=Verb(:Grundform) A=Adjektiv x=anderes */
+const SENT=['Der/T Hund/N bellt/V:bellen laut/A','Die/T kleine/A Katze/N schläft/V:schlafen','Das/T Kind/N malt/V:malen ein/T Bild/N','Ein/T Vogel/N singt/V:singen schön/A',
+'Die/T Maus/N frisst/V:fressen den/T Käse/N','Der/T Ball/N ist/V:sein rund/A','Die/T Oma/N liest/V:lesen ein/T dickes/A Buch/N','Der/T Junge/N rennt/V:rennen schnell/A',
+'Die/T Sonne/N scheint/V:scheinen hell/A','Das/T Eis/N ist/V:sein kalt/A und/x süß/A','Die/T Kinder/N spielen/V:spielen im/x Garten/N','Der/T grüne/A Frosch/N springt/V:springen hoch/A',
+'Ein/T Fisch/N schwimmt/V:schwimmen im/x Meer/N','Die/T müde/A Eule/N schläft/V:schlafen am/x Tag/N','Papa/N kocht/V:kochen eine/T heiße/A Suppe/N','Der/T Igel/N hat/V:haben spitze/A Stacheln/N',
+'Das/T Baby/N lacht/V:lachen fröhlich/A','Die/T Lehrerin/N schreibt/V:schreiben an/x die/T Tafel/N','Ein/T großer/A Elefant/N trinkt/V:trinken Wasser/N','Der/T Bär/N klettert/V:klettern auf/x den/T Baum/N',
+'Die/T Biene/N fliegt/V:fliegen zur/x Blume/N','Das/T braune/A Pferd/N läuft/V:laufen schnell/A','Wir/x bauen/V:bauen eine/T hohe/A Burg/N','Die/T alte/A Uhr/N tickt/V:ticken leise/A',
+'Der/T Apfel/N ist/V:sein rot/A und/x saftig/A','Die/T Schnecke/N kriecht/V:kriechen langsam/A','Ich/x esse/V:essen eine/T gelbe/A Banane/N','Das/T Auto/N fährt/V:fahren auf/x der/T Straße/N',
+'Der/T kleine/A Hase/N hüpft/V:hüpfen über/x die/T Wiese/N','Opa/N backt/V:backen einen/T leckeren/A Kuchen/N','Die/T Kinder/N singen/V:singen ein/T lustiges/A Lied/N','Der/T Wind/N ist/V:sein kalt/A',
+'Mama/N trägt/V:tragen eine/T warme/A Jacke/N','Ein/T Pinguin/N schwimmt/V:schwimmen schnell/A','Die/T Katze/N fängt/V:fangen eine/T Maus/N','Ich/x lese/V:lesen ein/T spannendes/A Buch/N'
+].map(s=>s.split(' ').map(t=>{const [w,tag]=t.split('/');const [ty,inf]=tag.split(':');return {w:w,t:ty,inf:inf};}));
+const TYPE={N:'Nomen',V:'Verb',A:'Adjektiv',T:'Artikel'};
+const TYPEPL={N:'Nomen',V:'Verben',A:'Adjektive',T:'Artikel'};
+
+/* Verben im Präsens */
+const PRON=[{p:'ich',k:'ich'},{p:'du',k:'du'},{p:'er',k:'er'},{p:'sie <small>👧</small>',k:'er',s:'sie'},{p:'es',k:'er'},{p:'wir',k:'wir'},{p:'ihr',k:'ihr'},{p:'sie <small>👧👦</small>',k:'sie',s:'sie'}];
+const REG=['spielen','malen','lachen','singen','kochen','bauen','hüpfen','turnen','lernen','hören','kaufen','schreiben','trinken','springen','schwimmen','gehen','stehen','fliegen','kommen','machen','holen','suchen','wohnen','rufen','bellen','fragen','zeigen','träumen','lieben','winken'];
+const STRONG={laufen:['läufst','läuft'],fahren:['fährst','fährt'],schlafen:['schläfst','schläft'],tragen:['trägst','trägt'],fangen:['fängst','fängt'],lesen:['liest','liest'],sehen:['siehst','sieht'],essen:['isst','isst'],geben:['gibst','gibt'],helfen:['hilfst','hilft'],nehmen:['nimmst','nimmt'],sprechen:['sprichst','spricht'],werfen:['wirfst','wirft']};
+const IRR={sein:{ich:'bin',du:'bist',er:'ist',wir:'sind',ihr:'seid',sie:'sind'},haben:{ich:'habe',du:'hast',er:'hat',wir:'haben',ihr:'habt',sie:'haben'}};
+function conj(v){if(IRR[v])return IRR[v];const st=v.slice(0,-2);const c={ich:st+'e',du:st+'st',er:st+'t',wir:v,ihr:st+'t',sie:v};if(STRONG[v]){c.du=STRONG[v][0];c.er=STRONG[v][1];}return c;}
+const sayP=p=>p.s||p.p;
+
+/* Adjektive */
+const STEIG=[['groß','größer','am größten'],['klein','kleiner','am kleinsten'],['schnell','schneller','am schnellsten'],['langsam','langsamer','am langsamsten'],['laut','lauter','am lautesten'],
+['leise','leiser','am leisesten'],['alt','älter','am ältesten'],['jung','jünger','am jüngsten'],['lang','länger','am längsten'],['kurz','kürzer','am kürzesten'],['warm','wärmer','am wärmsten'],
+['kalt','kälter','am kältesten'],['dick','dicker','am dicksten'],['dünn','dünner','am dünnsten'],['schön','schöner','am schönsten'],['süß','süßer','am süßesten'],['stark','stärker','am stärksten'],
+['klug','klüger','am klügsten'],['hell','heller','am hellsten'],['schwer','schwerer','am schwersten'],['leicht','leichter','am leichtesten'],['hoch','höher','am höchsten',1],
+['dunkel','dunkler','am dunkelsten',1],['gut','besser','am besten',1],['viel','mehr','am meisten',1],['gern','lieber','am liebsten',1]];
+const STEIGS=[['Der Elefant ist ___ als die Maus.','groß',1],['Ein Auto fährt ___ als ein Fahrrad.','schnell',1],['Im Winter ist es ___ als im Sommer.','kalt',1],['Opa ist ___ als Papa.','alt',1],
+['Der Turm ist ___ als das Haus.','hoch',1],['Eine Feder ist ___ als ein Stein.','leicht',1],['Das Baby ist ___ als seine Schwester.','jung',1],['Ein Löwe brüllt ___ als eine Katze.','laut',1],
+['Ich esse Eis ___ als Spinat.','gern',1],['Die Giraffe ist von allen Tieren ___.','groß',2],['Von allen Tieren ist die Schnecke ___.','langsam',2],['Lea rechnet gut. Tom rechnet besser. Ali rechnet ___.','gut',2],
+['Der Gepard läuft von allen Tieren ___.','schnell',2],['Der Kirchturm ist von allen Häusern im Dorf ___.','hoch',2],['Mein Bruder ist 8, ich bin 10. Ich bin ___ als er.','alt',1],['Im Sommer ist es ___ als im Winter.','warm',1]];
+const OPP=[['groß',['klein']],['dick',['dünn']],['lang',['kurz']],['alt',['jung','neu']],['hell',['dunkel']],['laut',['leise']],['schnell',['langsam']],['warm',['kalt']],['heiß',['kalt']],
+['nass',['trocken']],['voll',['leer']],['hart',['weich']],['schwer',['leicht']],['süß',['sauer']],['fröhlich',['traurig']],['stark',['schwach']],['sauber',['schmutzig']],['früh',['spät']],
+['wach',['müde']],['mutig',['ängstlich']],['viel',['wenig']],['gesund',['krank']],['arm',['reich']],['hoch',['tief','niedrig']],['offen',['geschlossen']],['lustig',['traurig']],['richtig',['falsch']],['eckig',['rund']]];
+const OPPMAP={};OPP.forEach(([a,bs])=>{OPPMAP[a]=(OPPMAP[a]||[]).concat(bs);bs.forEach(b=>{OPPMAP[b]=(OPPMAP[b]||[]).concat([a]);});});
+const OPPW=Object.keys(OPPMAP);
+const SYN=[['groß','riesig'],['klein','winzig'],['kalt','eisig'],['schnell','flink'],['fröhlich','lustig'],['müde','schläfrig'],['nass','feucht'],['schön','hübsch'],['leise','still'],['stark','kräftig']];
+
+/* Laute */
+const VOW='aeiou';
+const isV=c=>VOW.includes(c.toLowerCase());
+const CONS='bcdfghjklmnpqrstvwxyz';
+const LETW=NOUNS.filter(n=>!/[äöüÄÖÜßyY]/.test(n.w)&&n.w.length>=3&&n.w.length<=8);
+const UMLW=[['Bär','🐻'],['Käse','🧀'],['Löwe','🦁'],['Möhre','🥕'],['Löffel','🥄'],['Tür','🚪'],['Schlüssel','🔑'],['Mädchen','👧'],['Kürbis','🎃'],['Würfel','🎲'],['Zähne','🦷'],['Füße','🦶'],['Mütze','🧢'],['Schildkröte','🐢'],['Bücher','📚'],['Hüte','🎩'],['Äpfel','🍎'],['Frösche','🐸'],['Gemüse','🥦'],['Brötchen',''],['Märchen',''],['Käfer','']];
+const ZW=[['Baum','🌳'],['Haus','🏠'],['Maus','🐁'],['Auto','🚗'],['Auge','👁️'],['Raupe','🐛'],['Taube','🕊️'],['Frau','👩'],['Ei','🥚'],['Eis','🍦'],['Schwein','🐖'],['Bein','🦵'],['Kleid','👗'],['Seife','🧼'],['Reis','🍚'],['Ameise','🐜'],['Zeitung','📰'],
+['Eule','🦉'],['Feuer','🔥'],['Euro','💶'],['neun','9️⃣'],['Freund',''],['heute',''],['Leute',''],['Beule',''],['Bäume','🌳'],['Häuser','🏘️'],['Mäuse','🐁'],['Räuber',''],['träumen',''],['Läufer','🏃'],['Kaiser','👑'],['Mai','']];
+const ZWROOT={'Bäume':'Baum','Häuser':'Haus','Mäuse':'Maus','Räuber':'rauben','träumen':'Traum','Läufer':'laufen'};
+function zwOf(w){const m=w.toLowerCase().match(/äu|au|ei|eu|ai/);return m?m[0]:null;}
+
+/* ---------- Bausteine ---------- */
+const emo=(e,n)=>'<div class="emo">'+Array(n||1).fill(e).join('')+'</div>';
+function wordPic(n,showWord){return (n.nopic?'':emo(n.e))+(showWord||n.amb?'<div class="word">'+n.w+'</div>':'');}
+function sentHTML(s,mark){return '<div class="sent">'+s.map((t,k)=>k===mark?'<span class="mk2">'+t.w+'</span>':t.w).join(' ')+'.</div>';}
+const WC={N:'wN',V:'wV',A:'wA',T:'wT'};
+function sentHTMLc(s){return '<div class="sent">'+s.map(t=>WC[t.t]?'<span class="'+WC[t.t]+'">'+t.w+'</span>':t.w).join(' ')+'.</div>';}
+function sentPlain(s){return s.map(t=>t.w).join(' ')+'.';}
+const TT={'N':'nomen','V':'verb','A':'adj'};
+function deUml(w){return w.replace(/äu/g,'au').replace(/ä/g,'a').replace(/ö/g,'o').replace(/ü/g,'u').replace(/Ä/g,'A').replace(/Ö/g,'O').replace(/Ü/g,'U');}
+function umlaut(w){let i=w.lastIndexOf('au');if(i>=0)return w.slice(0,i)+'äu'+w.slice(i+2);const m=[...w].map((c,k)=>'aouAOU'.includes(c)?k:-1).filter(k=>k>=0);if(!m.length)return w;const k=m[m.length-1];const map={a:'ä',o:'ö',u:'ü',A:'Ä',O:'Ö',U:'Ü'};return w.slice(0,k)+map[w[k]]+w.slice(k+1);}
+function plWrong(n){const w=n.w;const c=w.endsWith('e')?[w+'s',umlaut(w)+'n',w]:[w+'s',w+'en',w+'e',w+'er',umlaut(w)+'e',umlaut(w)+'er',w];return uniqArr(c.filter(x=>x!==n.pl&&!(/eu/i.test(w)&&x!==w&&x!==w+'s'&&x!==w+'en'&&x!==w+'e'&&x!==w+'er')));}
+function wordsOf(type){return type==='N'?NOUNS.map(n=>n.w):type==='V'?VERBS:ADJ;}
+function chOpts(list){return list.map(x=>({html:x,val:x}));}
+function letterTokens(w,okFn){return [...w].map((c,k)=>({html:c,ok:okFn(c,k)}));}
+
+/* ---------- Merkhilfen ---------- */
+const MERK={
+nomen:'<b>Nomen</b> sind Namen für Menschen, Tiere, Pflanzen und Dinge.<br>Nomen schreibt man <b>groß</b>.<br>Probe: Passt <b>der, die, das</b> oder <b>ein, eine</b> davor? → <i>der Hund, die Blume</i>',
+verb:'<b>Verben</b> sagen, was jemand <b>tut</b>.<br>Probe: Passt <b>ich, du, er</b> davor? → <i>ich laufe, du läufst</i><br>Die Grundform endet auf <b>-en</b> oder <b>-n</b>: <i>laufen, klettern</i>',
+adj:'<b>Adjektive</b> sagen, <b>wie</b> etwas ist.<br>Probe: Passt das Wort zwischen Artikel und Nomen? → <i>der <b>große</b> Hund</i><br>Man kann sie oft steigern: <i>groß – größer – am größten</i>',
+mix:'<b>Nomen:</b> der, die, das passt davor · groß geschrieben<br><b>Verb:</b> ich, du, er passt davor · was man tut<br><b>Adjektiv:</b> wie etwas ist · <i>der ___ Hund</i><br><b>Artikel:</b> der, die, das, ein, eine',
+artb:'<b>Bestimmte Artikel:</b> der · die · das<br><i>der Hund · die Katze · das Pferd</i><br>Tipp: Sprich laut: <i>der Hund</i> – klingt das richtig?',
+artu:'<b>Bestimmte Artikel:</b> der · die · das<br><b>Unbestimmte Artikel:</b> ein · eine<br><i>der Hund → ein Hund · die Katze → eine Katze · das Pferd → ein Pferd</i>',
+mz:'<b>Einzahl:</b> eins → <i>der Hund</i><br><b>Mehrzahl:</b> viele → <i>die Hunde</i><br>In der Mehrzahl heißt der Artikel immer <b>die</b>.',
+pers:'<table class="ptab"><tr><td>ich</td><td>spiel<b>e</b></td><td>wir</td><td>spiel<b>en</b></td></tr><tr><td>du</td><td>spiel<b>st</b></td><td>ihr</td><td>spiel<b>t</b></td></tr><tr><td>er, sie, es</td><td>spiel<b>t</b></td><td>sie <small>👧👦</small></td><td>spiel<b>en</b></td></tr></table>Manchmal ändert sich der Selbstlaut/Vokal: <i>du läufst, er liest</i>',
+gf:'Die <b>Grundform</b> steht im Wörterbuch.<br>Sie endet auf <b>-en</b> oder <b>-n</b>: <i>spielen, laufen, klettern</i><br>Tipp: Sag <b>wir …</b> → <i>wir laufen</i> → Grundform <i>laufen</i>',
+geg:'<b>Gegenteile</b> sind ganz verschieden:<br><i>groß ↔ klein · laut ↔ leise · warm ↔ kalt</i>',
+steig:'<table class="ptab"><tr><td>Grundstufe</td><td>Vergleichsstufe</td><td>Höchststufe</td></tr><tr><td><b>groß</b></td><td><b>größer</b> als</td><td><b>am größten</b></td></tr></table>Ausnahmen: <i>gut – besser – am besten · viel – mehr – am meisten · gern – lieber – am liebsten</i>',
+sl:'<b>Selbstlaute/Vokale:</b> <span class="vh">a e i o u</span><br>Alle anderen Buchstaben sind <b>Mitlaute/Konsonanten</b>.',
+ml:'<b>Mitlaute/Konsonanten</b> sind alle Buchstaben, die keine Selbstlaute/Vokale sind.<br><b>Selbstlaute/Vokale:</b> <span class="vh">a e i o u</span> · Mitlaute/Konsonanten z. B. <i>b, d, k, m, s, t</i>',
+ul:'<b>Umlaute:</b> <span class="vh">ä ö ü</span><br><i>a → ä · o → ö · u → ü</i><br><i>der Apfel → die Äpfel</i>',
+zl:'<b>Zwielaute:</b> zwei Selbstlaute/Vokale, ein Laut<br><span class="vh">au · ei · eu · äu</span> (selten: ai)<br>Tipp: <b>äu</b> schreibt man, wenn es ein Wort mit <b>au</b> gibt: <i>Baum → Bäume</i>',
+silb:'Sprich das Wort langsam und <b>schwinge</b> mit.<br>Jeder Schwung ist eine <b>Silbe</b>: <i>Ba – na – ne</i> = 3 Silben<br>In jeder Silbe steckt ein Selbstlaut/Vokal.'
+};
+
+const LBL={Nomen:'wN',Verb:'wV',Verben:'wV',Adjektiv:'wA',Adjektive:'wA',Artikel:'wT'};
+const span=(c,x)=>'<span class="'+c+'">'+x+'</span>';
+Object.keys(MERK).forEach(k=>{MERK[k]=MERK[k].replace(/(Nomen|Verben|Verb|Adjektive|Adjektiv|Artikel)/g,m=>span(LBL[m],m)).replace(/(spiel<b>[a-z]+<\/b>)/g,'<span class="wV">$1</span>');});
+const ARTRE=/^(der|die|das|ein|eine|Der|Die|Das)$/,ARTN=/^(der|die|das|ein|eine) (\S+)$/;
+function colTN(x){if(ARTRE.test(x))return span('wT',x);const m=x.match(ARTN);if(m)return span('wT',m[1])+' '+span('wN',m[2]);return x;}
+const PRONS=['ich','du','er','wir','ihr'];
+function colorize(t,m){
+  t.prompt=t.prompt.replace(/<b>(Nomen|Verben|Verb|Adjektive|Adjektiv|Artikel)<\/b>/g,(a,w)=>'<b class="'+LBL[w]+'">'+w+'</b>');
+  if(t.type!=='choice')return;
+  t.options.forEach(o=>{const x=String(o.val);
+    if(m==='artb'||m==='artu'||m==='mz'||m==='ul')o.html=colTN(x);
+    else if((m==='pers'||m==='gf')&&!PRONS.includes(x))o.html=span('wV',x);
+    else if(m==='geg'||m==='steig')o.html=span('wA',x);
+    else if(m==='mix'&&LBL[x])o.html=span(LBL[x],x);});
+  if(['artu','mz','ul'].includes(m)&&t.pic){const f=t.pic;t.pic=()=>f().replace(/>(der|die|das|ein|eine) ([A-ZÄÖÜ][a-zäöüß]+)/g,(a,b,c)=>'>'+span('wT',b)+' '+span('wN',c));}
+  if(m==='artb'&&t.pic&&!t.sent){const f=t.pic;t.pic=()=>f().replace(/___ ([A-ZÄÖÜ][a-zäöüß]+)/,(a,c)=>'___ '+span('wN',c));}
+}
+function doneColor(){const t=cur.t;if(t.sent&&t.type!=='tap')$('#pic').innerHTML=sentHTMLc(t.sent);
+  if(t.type==='tap'&&t.sent)cur.btns.forEach((b,k)=>{const ty=t.tokens[k].ty;if(WC[ty])b.classList.add('c'+ty);});
+  if(t.ansT)document.querySelectorAll('#answer .opt').forEach((b,k)=>{if(t.options[k].val===t.ans)b.classList.add('c'+t.ansT);});}
+
+/* ---------- Generatoren ---------- */
+function typeChoice(type,n){const others=['N','V','A'].filter(x=>x!==type);const right=uniq(()=>pick(wordsOf(type)));const o=[right];
+  const need=n-1;for(let k=0;k<need;k++){const ty=others[k%2];let w;do{w=pick(wordsOf(ty));}while(o.includes(w));o.push(w);}
+  return o;}
+function probeTask(type){const right=uniq(()=>pick(wordsOf(type)));const o=[right];const others=['N','V','A'].filter(x=>x!==type);
+  while(o.length<4){const w=pick(wordsOf(pick(others)));if(!o.includes(w))o.push(w);}
+  const pr={N:'Vor welches Wort passt <b>der, die</b> oder <b>das</b>?',V:'Welches Wort passt? <b>ich ___ · wir ___</b>',A:'Welches Wort passt in die Lücke? <b>der ___ Hund</b>'}[type];
+  const hint={N:'Sprich: der …, die …, das … – bei welchem Wort klingt das richtig?',V:'Sprich: ich …, wir … – was kann man tun?',A:'Sprich: der … Hund – welches Wort sagt, wie der Hund ist?'}[type];
+  return {ansT:type,prompt:pr,type:'choice',optCls:'word2',options:chOpts(shuffle(o)),ans:right,hint:()=>hint};}
+function tapSent(type,minN){const s=uniq(()=>pick(SENT.filter(x=>x.filter(t=>t.t===type).length>=(minN||1))));
+  return {prompt:'Tippe alle <b>'+TYPEPL[type]+'</b> an.',say:'Tippe alle '+TYPEPL[type]+' an. '+sentPlain(s),type:'tap',unit:'word',sent:s,tokens:s.map(t=>({html:t.w,ok:t.t===type,ty:t.t})),tail:'.',hint:()=>({N:'Bei Nomen passt der, die oder das davor.',V:'Verben sagen, was jemand tut.',A:'Adjektive sagen, wie etwas ist.'}[type])};}
+const HINT3={N:'Nomen schreibt man groß. Passt der, die oder das davor?',V:'Was kann man tun? Passt ich davor?',A:'Wie ist etwas? Passt es zwischen der und Hund?'};
+function pickType(type,n){const o=typeChoice(type,n);const right=o[0];return {ansT:type,prompt:'Welches Wort ist ein <b>'+TYPE[type]+'</b>?',type:'choice',optCls:'word2',options:chOpts(shuffle(o)),ans:right,hint:()=>HINT3[type]};}
+
+function artPic(n,showWord){return wordPic(n,showWord)+'';}
+function opt3(a,b,c){return [a,b,c];}
+
+function persTask(lv){
+  if(lv===0){const v=uniq(()=>pick(REG));const P=pick(PRON.slice(0,5));const c=conj(v);const ans=c[P.k];const o=uniqArr([c.ich,c.du,c.er]);
+    return {prompt:'Welche Form passt? <span class="hint2">('+v+')</span>',say:'Welche Form passt? '+v,pic:()=>'<div class="sent big2">'+P.p+' ___</div>',type:'choice',optCls:'word2',options:chOpts(shuffle(o)),ans:ans,hint:()=>'Schau in die Tabelle: '+sayP(P)+' … Welche Endung passt?',after:sayP(P)+' '+ans};}
+  if(lv===1){if(Math.random()<.5){const v=uniq(()=>pick(REG));const P=pick(PRON);const c=conj(v);const ans=c[P.k];const o=uniqArr([c.ich,c.du,c.er,c.wir]);
+      return {prompt:'Welche Form passt? <span class="hint2">('+v+')</span>',say:'Welche Form passt? '+v,pic:()=>'<div class="sent big2">'+P.p+' ___</div>',type:'choice',optCls:'word2',options:chOpts(shuffle(o)),ans:ans,hint:()=>'Welche Endung gehört zu '+sayP(P)+'?',after:sayP(P)+' '+ans};}
+    return revPers(pick(REG));}
+  const v=uniq(()=>pick(Object.keys(STRONG).concat(['sein','haben','sein','haben'])));
+  if(Math.random()<.4)return revPers(v);
+  const P=pick(PRON.filter(p=>IRR[v]||p.k==='du'||p.k==='er'));const c=conj(v);const ans=c[P.k];const st=v.slice(0,-2);
+  let o=[ans];const wr=IRR[v]?[c.ich,c.du,c.er,c.wir,c.ihr]:[st+(P.k==='du'?'st':'t'),c.ich,c.wir,P.k==='du'?c.er:c.du];
+  shuffle(wr).forEach(x=>{if(o.length<4&&!o.includes(x))o.push(x);});
+  return {prompt:'Welche Form passt? <span class="hint2">('+v+')</span>',say:'Welche Form passt? '+v,pic:()=>'<div class="sent big2">'+P.p+' ___</div>',type:'choice',optCls:'word2',options:chOpts(shuffle(o)),ans:ans,hint:()=>IRR[v]?'Dieses Verb ist besonders. Sprich laut: '+sayP(P)+' …':'Achtung: Bei du und er ändert sich hier der Selbstlaut/Vokal.',after:sayP(P)+' '+ans};}
+function revPers(v){const c=conj(v);const keys=['ich','du','er','wir','ihr'];const k=pick(keys);const form=c[k];
+  const disp={ich:'ich',du:'du',er:'er',wir:'wir',ihr:'ihr'};
+  const valid=key=>c[key]===form;let o=[disp[k]];shuffle(keys.filter(x=>x!==k&&!valid(x))).forEach(x=>{if(o.length<3)o.push(disp[x]);});
+  return {prompt:'Wer passt dazu?',say:'Wer passt dazu? '+form,pic:()=>'<div class="sent big2">___ '+form+'</div>',type:'choice',optCls:'word2',options:chOpts(shuffle(o)),ans:disp[k],hint:()=>'Sprich jedes Wort mit der Form: ich '+form+', du '+form+' … Was klingt richtig?',after:disp[k]+' '+form};}
+
+function gfTask(lv){
+  if(lv<2){const v=uniq(()=>lv===0?pick(REG):pick(Object.keys(STRONG)));const P=pick(PRON.filter(p=>p.k==='du'||p.k==='er'||(lv===0&&p.k==='ich')));const f=conj(v)[P.k];
+    const st=v.slice(0,-2);let wrong;if(lv===0)wrong=st;else{const du=conj(v).du;wrong=(st.endsWith('s')?du.slice(0,-1):du.slice(0,-2))+'en';}
+    const o=uniqArr([v,f,wrong]);
+    return {prompt:'Wie heißt die <b>Grundform</b>?',say:sayP(P)+' '+f,pic:()=>'<div class="sent big2">'+P.p+' <b>'+f+'</b></div>',type:'choice',optCls:'word2',options:chOpts(shuffle(o)),ans:v,hint:()=>'Sag: wir … Die Grundform endet auf -en.'};}
+  const s=uniq(()=>pick(SENT.filter(x=>x.some(t=>t.t==='V'&&t.w!==t.inf))));const k=s.findIndex(t=>t.t==='V');const t=s[k];const inf=t.inf;
+  let o=[inf,t.w];[inf.slice(0,-1),t.w.replace(/s?t$|e$/,'')+'en',umlaut(inf)].forEach(x=>{if(o.length<3&&!o.includes(x))o.push(x);});
+  return {prompt:'Wie heißt die <b>Grundform</b> von <b>'+t.w+'</b>?',say:sentPlain(s)+' Wie heißt die Grundform von '+t.w+'?',pic:()=>sentHTML(s,k),sent:s,type:'choice',optCls:'word2',options:chOpts(shuffle(o)),ans:inf,hint:()=>'Sag: wir … Die Grundform endet auf -en oder -n.'};}
+
+function oppWrong(w,n){const bad=new Set([w].concat(OPPMAP[w]));return shuffle(OPPW.filter(x=>!bad.has(x)&&!SYN.some(p=>(p[0]===w&&p[1]===x)||(p[1]===w&&p[0]===x)))).slice(0,n);}
+function gegTask(lv){
+  if(lv<2){const w=uniq(()=>pick(OPPW));const ans=pick(OPPMAP[w]);const o=[ans].concat(oppWrong(w,lv===0?2:3));
+    return {prompt:'Was ist das <b>Gegenteil</b> von <b>'+w+'</b>?',say:'Was ist das Gegenteil von '+w+'?',type:'choice',optCls:'word2',options:chOpts(shuffle(o)),ans:ans,hint:()=>'Das Gegenteil ist ganz anders. Was ist nicht '+w+'?'};}
+  const syn=uniq(()=>pick(SYN));const pairs=shuffle(OPP.slice()).slice(0,3).map(p=>p[0]+' – '+p[1][0]);const bad=syn[0]+' – '+syn[1];pairs.push(bad);
+  return {prompt:'Welches Paar ist <b>kein</b> Gegenteil?',type:'choice',optCls:'word2',options:chOpts(shuffle(pairs)),ans:bad,hint:()=>'Bei einem Paar bedeuten beide Wörter fast das Gleiche.'};}
+
+function steigTask(lv){
+  if(lv<2){const r=uniq(()=>pick(lv===0?STEIG.filter(x=>!x[3]):STEIG));const pos=lv===0?1:R(1,2);const ans=r[pos];
+    let wr=pos===1?[deUml(r[1])!==r[1]?deUml(r[1]):null,umlaut(r[0])!==r[0]?umlaut(r[0])+'er':null,r[0],r[2]]:[deUml(r[2])!==r[2]?deUml(r[2]):null,'am '+r[1]+'sten',r[1],r[0]];wr=wr.filter(x=>x&&x!==ans);
+    const o=[ans];shuffle(wr).forEach(x=>{if(o.length<3&&!o.includes(x))o.push(x);});
+    const cells=r.slice(0,3).map((x,k)=>k===pos?'<span class="fld fake">?</span>':'<span class="sbox">'+x+'</span>').join('<span class="ar">›</span>');
+    return {prompt:'Welches Wort fehlt?',say:r.slice(0,3).map((x,k)=>k===pos?'…':x).join(', '),pic:()=>'<div class="steig">'+cells+'</div><div class="slab"><span>Grundstufe</span><span>Vergleichsstufe</span><span>Höchststufe</span></div>',type:'choice',optCls:'word2',options:chOpts(shuffle(o)),ans:ans,hint:()=>pos===1?'Vergleichsstufe: Hänge -er an. Manchmal kommt ein Umlaut dazu.':'Höchststufe: am … -sten.'};}
+  const s=uniq(()=>pick(STEIGS));const r=STEIG.find(x=>x[0]===s[1]);const ans=r[s[2]];const o=shuffle([r[0],r[1],r[2]]);
+  return {prompt:'Welche Form passt?',say:s[0].replace('___','…'),pic:()=>'<div class="sent">'+s[0].replace('___','<span class="gap">___</span>')+'</div>',type:'choice',optCls:'word2',options:chOpts(o),ans:ans,hint:()=>s[2]===1?'Wenn zwei verglichen werden (… als …), nimm die Vergleichsstufe.':'Wenn es von allen am meisten ist, nimm die Höchststufe: am …',after:s[0].replace('___',ans)};}
+
+function artbTask(lv){
+  if(lv<2){const n=uniq(()=>pick(lv===0?PICN.filter(x=>!x.nopic):NOUNS));
+    return {prompt:'Welcher Artikel passt?',say:n.w,pic:()=>(lv===0?emo(n.e):'')+'<div class="word wbig">___ '+n.w+'</div>',type:'choice',optCls:'word2',options:chOpts(['der','die','das']),ans:n.a,hint:()=>'Sprich laut: der '+n.w+', die '+n.w+', das '+n.w+'. Was klingt richtig?',after:n.a+' '+n.w};}
+  const s=uniq(()=>pick(SENT.filter(x=>/^(Der|Die|Das)$/.test(x[0].w))));const ans=s[0].w.toLowerCase();const rest=s.slice(1).map(t=>t.w).join(' ')+'.';
+  return {prompt:'Welcher Artikel fehlt im Satz?',say:'… '+rest,pic:()=>'<div class="sent"><span class="gap">___</span> '+rest+'</div>',sent:s,type:'choice',optCls:'word2',options:chOpts(['Der','Die','Das']),ans:s[0].w,hint:()=>'Schau auf das Nomen nach der Lücke. Sprich: der …, die …, das …',after:sentPlain(s)};}
+function artuTask(lv){
+  if(lv===0){const n=uniq(()=>pick(PICN));const ans=n.a==='die'?'eine':'ein';return {prompt:'<b>ein</b> oder <b>eine</b>?',say:n.w,pic:()=>wordPic(n,true),type:'choice',optCls:'word2',options:chOpts(['ein','eine']),ans:ans,hint:()=>'Sprich laut: ein '+n.w+' oder eine '+n.w+'?',after:ans+' '+n.w};}
+  if(lv===1){const n=uniq(()=>pick(NOUNS));const u=n.a==='die'?'eine':'ein';
+    if(Math.random()<.5)return {prompt:'Wie heißt es mit <b>bestimmtem</b> Artikel?',say:u+' '+n.w,pic:()=>'<div class="word wbig">'+u+' '+n.w+'</div>',type:'choice',optCls:'word2',options:chOpts(['der '+n.w,'die '+n.w,'das '+n.w]),ans:n.a+' '+n.w,hint:()=>'Bestimmte Artikel sind der, die, das. Sprich laut.'};
+    return {prompt:'Wie heißt es mit <b>unbestimmtem</b> Artikel?',say:n.a+' '+n.w,pic:()=>'<div class="word wbig">'+n.a+' '+n.w+'</div>',type:'choice',optCls:'word2',options:chOpts(['ein '+n.w,'eine '+n.w]),ans:u+' '+n.w,hint:()=>'Unbestimmte Artikel sind ein und eine.'};}
+  if(Math.random()<.5){const s=uniq(()=>pick(SENT.filter(x=>x.some(t=>t.t==='T'))));const ks=s.map((t,k)=>t.t==='T'?k:-1).filter(k=>k>=0);const k=pick(ks);const w=s[k].w.toLowerCase();const ans=/^ein/.test(w)?'unbestimmt':'bestimmt';
+    return {prompt:'Ist der Artikel <b>'+s[k].w+'</b> bestimmt oder unbestimmt?',say:sentPlain(s)+' Ist der Artikel '+s[k].w+' bestimmt oder unbestimmt?',pic:()=>sentHTML(s,k),sent:s,type:'choice',optCls:'word2',options:chOpts(['bestimmt','unbestimmt']),ans:ans,hint:()=>'Unbestimmt sind ein, eine, einen. Bestimmt sind der, die, das, den.'};}
+  const arts=shuffle(['der','die','das','ein','eine']).slice(0,4);if(!arts.some(a=>a.startsWith('ein')))arts[0]=pick(['ein','eine']);if(arts.every(a=>a.startsWith('ein')))arts[1]='der';
+  return {prompt:'Tippe alle <b>unbestimmten</b> Artikel an.',type:'tap',unit:'word',tokens:arts.map(a=>({html:a,ok:a.startsWith('ein')})),hint:()=>'Unbestimmte Artikel sind ein und eine.'};}
+
+function mzTask(lv){
+  if(lv===0){const n=uniq(()=>pick(PLN.filter(x=>!x.amb&&!x.nopic)));const many=Math.random()<.5;const ans=many?'Mehrzahl':'Einzahl';
+    return {prompt:'<b>Einzahl</b> oder <b>Mehrzahl</b>?',say:many?'die '+n.pl:n.a+' '+n.w,pic:()=>emo(n.e,many?3:1)+'<div class="word">'+(many?'die '+n.pl:n.a+' '+n.w)+'</div>',type:'choice',optCls:'word2',options:chOpts(['Einzahl','Mehrzahl']),ans:ans,hint:()=>'Einzahl heißt eins, Mehrzahl heißt viele.'};}
+  if(lv===1){const n=uniq(()=>pick(PLN));const o=['die '+n.pl].concat(shuffle(plWrong(n)).slice(0,2).map(x=>'die '+x));
+    return {prompt:'Wie heißt die <b>Mehrzahl</b>?',say:n.a+' '+n.w,pic:()=>(n.amb||n.nopic?'':emo(n.e,3))+'<div class="word wbig">'+n.a+' '+n.w+' → ?</div>',type:'choice',optCls:'word2',options:chOpts(shuffle(o)),ans:'die '+n.pl,hint:()=>'Sprich: ein '+n.w+', zwei … Wie sagst du?'};}
+  const n=uniq(()=>pick(PLN.filter(x=>x.pl!==x.w)));const right=n.a+' '+n.w;const arts=['der','die','das'].filter(a=>a!==n.a);let wrongSing=n.pl.replace(/(en|er|e|n|s)$/,'');if(wrongSing===n.w||wrongSing===n.pl)wrongSing=n.pl;
+  const o=uniqArr([right,arts[0]+' '+n.w,arts[1]+' '+n.w,n.a+' '+wrongSing]).slice(0,4);
+  return {prompt:'Wie heißt die <b>Einzahl</b> mit Artikel?',say:'die '+n.pl,pic:()=>'<div class="word wbig">die '+n.pl+' → ?</div>',type:'choice',optCls:'word2',options:chOpts(shuffle(o)),ans:right,hint:()=>'Sprich: viele '+n.pl+', aber nur ein … Welcher Artikel passt?'};}
+
+function slTask(lv){
+  if(lv===0){const v=uniq(()=>pick([...VOW]));const o=[v].concat(shuffle([...CONS].filter(c=>c!=='y'&&c!=='q'&&c!=='x')).slice(0,2));return {prompt:'Welcher Buchstabe ist ein <b>Selbstlaut/Vokal</b>?',type:'choice',optCls:'let',options:chOpts(shuffle(o)),ans:v,hint:()=>'Die Selbstlaute/Vokale sind a, e, i, o und u.'};}
+  if(lv===1){const n=uniq(()=>pick(LETW.filter(x=>x.w.length<=6)));return {prompt:'Tippe alle <b>Selbstlaute/Vokale</b> an.',say:n.w,pic:()=>n.nopic?'':emo(n.e),type:'tap',unit:'letter',tokens:letterTokens(n.w,c=>isV(c)),hint:()=>'Die Selbstlaute/Vokale sind a, e, i, o und u.'};}
+  const n=uniq(()=>pick(LETW.filter(x=>[...x.w].some((c,k)=>k>0&&isV(c)))));const ps=[...n.w].map((c,k)=>k>0&&isV(c)?k:-1).filter(k=>k>0);const k=pick(ps);
+  return {prompt:'Welcher <b>Selbstlaut/Vokal</b> fehlt?',say:n.w,pic:()=>(n.nopic?'':emo(n.e))+'<div class="word wbig">'+n.w.slice(0,k)+'<span class="gap">_</span>'+n.w.slice(k+1)+'</div>',type:'choice',optCls:'let',options:chOpts(['a','e','i','o','u']),ans:n.w[k],hint:()=>'Sprich das Wort langsam und deutlich.',after:n.w};}
+function mlTask(lv){
+  if(lv===0){const c=uniq(()=>pick([...'bdfghklmnprstwz']));const o=[c].concat(shuffle([...VOW]).slice(0,2));return {prompt:'Welcher Buchstabe ist ein <b>Mitlaut/Konsonant</b>?',type:'choice',optCls:'let',options:chOpts(shuffle(o)),ans:c,hint:()=>'a, e, i, o, u sind Selbstlaute/Vokale. Alle anderen sind Mitlaute/Konsonanten.'};}
+  if(lv===1){const n=uniq(()=>pick(LETW.filter(x=>x.w.length<=6)));return {prompt:'Tippe alle <b>Mitlaute/Konsonanten</b> an.',say:n.w,pic:()=>n.nopic?'':emo(n.e),type:'tap',unit:'letter',tokens:letterTokens(n.w,c=>!isV(c)),hint:()=>'Alle Buchstaben außer a, e, i, o, u sind Mitlaute/Konsonanten.'};}
+  const n=uniq(()=>pick(LETW.filter(x=>!x.amb&&!x.nopic)));const w=n.w.toLowerCase();const ps=[...w].map((c,k)=>!isV(c)&&!/sch|ch|ck|qu/.test(w.slice(Math.max(0,k-2),k+3))?k:-1).filter(k=>k>=0);
+  if(!ps.length)return mlTask(1);const k=pick(ps);const c=w[k];const PAIR={d:'t',t:'d',b:'p',p:'b',g:'k',k:'g',f:'w',w:'f'};const o=[c].concat(shuffle([...'bdfghklmnprstwz'].filter(x=>x!==c&&x!==PAIR[c]&&!(x===c))).slice(0,3));
+  const disp=n.w.slice(0,k)+'<span class="gap">_</span>'+n.w.slice(k+1);const UP=k===0&&n.w[0]!==n.w[0].toLowerCase();const o2=UP?o.map(x=>x.toUpperCase()):o;
+  return {prompt:'Welcher <b>Mitlaut/Konsonant</b> fehlt?',say:n.w,pic:()=>emo(n.e)+'<div class="word wbig">'+disp+'</div>',type:'choice',optCls:'let',options:chOpts(shuffle(o2)),ans:UP?c.toUpperCase():c,hint:()=>'Sprich das Wort langsam. Welchen Laut hörst du an dieser Stelle?',after:n.w};}
+function ulTask(lv){
+  if(lv===0){if(Math.random()<.5){const u=uniq(()=>pick(['ä','ö','ü']));const o=[u].concat(shuffle(['a','o','u','e']).slice(0,2));return {prompt:'Welcher Buchstabe ist ein <b>Umlaut</b>?',type:'choice',optCls:'let',options:chOpts(shuffle(o)),ans:u,hint:()=>'Umlaute haben zwei Pünktchen: ä, ö, ü.'};}
+    const u=uniq(()=>pick(UMLW.filter(x=>x[1])));const o=[u[0]].concat(shuffle(LETW.filter(x=>!x.amb)).slice(0,2).map(x=>x.w));
+    return {prompt:'Welches Wort hat einen <b>Umlaut</b>?',type:'choice',optCls:'word2',options:chOpts(shuffle(o)),ans:u[0],hint:()=>'Suche die zwei Pünktchen: ä, ö, ü.'};}
+  if(lv===1){const u=uniq(()=>pick(UMLW));const w=u[0];const k=[...w].findIndex(c=>'äöüÄÖÜ'.includes(c));const ans=w[k].toLowerCase();
+    return {prompt:'Welcher <b>Umlaut</b> fehlt?',say:w,pic:()=>(u[1]?emo(u[1]):'')+'<div class="word wbig">'+w.slice(0,k)+'<span class="gap">_</span>'+w.slice(k+1)+'</div>',type:'choice',optCls:'let',options:chOpts(k===0?['Ä','Ö','Ü']:['ä','ö','ü']),ans:k===0?ans.toUpperCase():ans,hint:()=>'Tippe auf den Lautsprecher und hör genau hin.',after:w};}
+  const n=uniq(()=>pick(PLN.filter(x=>/[äöüÄÖÜ]/.test(x.pl)&&!/[äöüÄÖÜ]/.test(x.w))));const plain=n.pl.replace(/äu/,'au').replace(/[äÄ]/,m=>m==='ä'?'a':'A').replace(/[öÖ]/,m=>m==='ö'?'o':'O').replace(/[üÜ]/,m=>m==='ü'?'u':'U');
+  const o=uniqArr(['die '+n.pl,'die '+plain,'die '+umlaut(n.w)]);
+  return {prompt:'Wie heißt die <b>Mehrzahl</b>? Achte auf den Umlaut.',say:n.a+' '+n.w,pic:()=>'<div class="word wbig">'+n.a+' '+n.w+' → ?</div>',type:'choice',optCls:'word2',options:chOpts(shuffle(o)),ans:'die '+n.pl,hint:()=>'In der Mehrzahl wird oft a zu ä, o zu ö, u zu ü.'};}
+function zlTask(lv){
+  if(lv===0){const z=uniq(()=>pick(ZW.filter(x=>x[1]&&['au','ei','eu'].includes(zwOf(x[0])))));const ans=zwOf(z[0]);
+    return {prompt:'Welchen <b>Zwielaut</b> hörst du?',say:z[0],pic:()=>emo(z[1])+'<div class="word wbig">'+z[0]+'</div>',type:'choice',optCls:'let',options:chOpts(['au','ei','eu']),ans:ans,hint:()=>'Sprich das Wort langsam. Schau, welche zwei Buchstaben zusammen klingen.'};}
+  const pool=lv===1?ZW.filter(x=>['au','ei','eu'].includes(zwOf(x[0]))):ZW.filter(x=>['eu','äu'].includes(zwOf(x[0])));const z=uniq(()=>pick(pool));const zz=zwOf(z[0]);const i=z[0].toLowerCase().indexOf(zz);
+  const disp=z[0].slice(0,i)+'<span class="gap">__</span>'+z[0].slice(i+2);const o=lv===1?['au','ei','eu']:['eu','äu'];
+  return {prompt:'Welcher <b>Zwielaut</b> fehlt?',say:z[0],pic:()=>(z[1]?emo(z[1]):'')+'<div class="word wbig">'+disp+'</div>',type:'choice',optCls:'let',options:chOpts(o),ans:zz,
+    hint:()=>lv===2?'eu und äu klingen gleich. Gibt es ein verwandtes Wort mit au? Dann schreibt man äu.':'Tippe auf den Lautsprecher und hör genau hin.',after:z[0]+(ZWROOT[z[0]]?' (wie '+ZWROOT[z[0]]+')':'')};}
+function silbTask(lv){
+  if(lv<2){const n=uniq(()=>pick(lv===0?PICN.filter(x=>x.syl.length<=3):NOUNS));const k=n.syl.length;const o=[1,2,3,4];
+    return {prompt:'Wie viele <b>Silben</b> hat das Wort?',say:n.w,pic:()=>(lv===0||!n.amb?(n.nopic?'':emo(n.e)):'')+'<div class="word wbig">'+(S0.help?n.syl.join('<span class="sb">·</span>'):n.w)+'</div>',type:'choice',options:chOpts(o.map(String)),ans:String(k),hint:()=>'Sprich das Wort langsam und klatsche bei jeder Silbe.',after:n.syl.join(' – ')};}
+  const n=uniq(()=>Math.random()<.75?pick(SIL34):pick(NOUNS.filter(x=>x.syl.length>=2&&uniqArr(x.syl).length===x.syl.length)));
+  return {prompt:'Lege die Silben in die richtige Reihenfolge.',legend:'Tippe die Silben der Reihe nach an. Zum Zurücknehmen unten auf ein Feld tippen.',say:n.w,pic:()=>n.amb||n.nopic||!n.e?'':emo(n.e),type:'order',items:shuffle(n.syl.map(s=>({html:s.toLowerCase()===s&&false?s:s,k:s}))),ans:n.syl.slice(),hint:'Sprich das Wort langsam. Welche Silbe hörst du zuerst?',join:''};}
+
+function mixTask(lv){
+  if(lv===0){const ty=pick(['N','V','A']);const w=uniq(()=>pick(wordsOf(ty)));return {prompt:'Welche <b>Wortart</b> ist das?',say:w,pic:()=>'<div class="word wbig">'+w+'</div>',type:'choice',optCls:'word2',options:chOpts(['Nomen','Verb','Adjektiv']),ans:TYPE[ty],hint:()=>HINT3[ty]};}
+  if(lv===1){const s=uniq(()=>pick(SENT));const ks=s.map((t,k)=>t.t!=='x'?k:-1).filter(k=>k>=0);const k=pick(ks);const ty=s[k].t;
+    return {prompt:'Welche Wortart ist <b>'+s[k].w+'</b>?',say:sentPlain(s)+' Welche Wortart ist '+s[k].w+'?',pic:()=>sentHTML(s,k),sent:s,type:'choice',optCls:'word2',options:chOpts(['Nomen','Verb','Adjektiv','Artikel']),ans:TYPE[ty],hint:()=>ty==='T'?'der, die, das, ein, eine sind Artikel.':HINT3[ty]};}
+  const ty=pick(['N','V','A']);const odd=pick(['N','V','A'].filter(x=>x!==ty));const ws=shuffle(wordsOf(ty).slice()).slice(0,3);const o=pick(wordsOf(odd));
+  return {prompt:'Welches Wort passt <b>nicht</b> dazu?',type:'choice',optCls:'word2',options:chOpts(shuffle(ws.concat([o]))),ans:o,hint:()=>'Drei Wörter haben die gleiche Wortart. Welches ist anders?'};}
+
+/* ---------- Stationen ---------- */
+const ST=[
+{t:'Nomen erkennen',g:'So erkenne ich Wortarten',d:'Menschen, Tiere, Pflanzen, Dinge',m:'nomen',icon:'<span class="wT">der</span> <span class="wN">Hund</span>',gen:[()=>pickType('N',3),()=>probeTask('N'),()=>tapSent('N',2)]},
+{t:'Verben erkennen',g:'So erkenne ich Wortarten',d:'Was tut jemand?',m:'verb',icon:'ich <span class="wV">laufe</span>',gen:[()=>pickType('V',3),()=>probeTask('V'),()=>tapSent('V',1)]},
+{t:'Adjektive erkennen',g:'So erkenne ich Wortarten',d:'Wie ist etwas?',m:'adj',icon:'<span class="wT">der</span> <span class="wA">große</span> <span class="wN">Hund</span>',gen:[()=>pickType('A',3),()=>probeTask('A'),()=>tapSent('A',1)]},
+{t:'Wortarten-Mix',g:'So erkenne ich Wortarten',d:'Nomen, Verb, Adjektiv, Artikel',m:'mix',icon:'<span class="wN">N</span> · <span class="wV">V</span> · <span class="wA">A</span> · <span class="wT">Art</span>',gen:[()=>mixTask(0),()=>mixTask(1),()=>mixTask(2)]},
+{t:'der, die, das',g:'Nomen und Artikel',d:'Bestimmter Artikel',m:'artb',icon:'<span class="wT">der · die · das</span>',gen:[()=>artbTask(0),()=>artbTask(1),()=>artbTask(2)]},
+{t:'ein, eine',g:'Nomen und Artikel',d:'Bestimmt und unbestimmt',m:'artu',icon:'<span class="wT">ein · eine</span>',gen:[()=>artuTask(0),()=>artuTask(1),()=>artuTask(2)]},
+{t:'Einzahl und Mehrzahl',g:'Nomen und Artikel',d:'eins oder viele?',m:'mz',icon:'🍎 → 🍎🍎🍎',gen:[()=>mzTask(0),()=>mzTask(1),()=>mzTask(2)]},
+{t:'Personalformen',g:'Verben',d:'ich spiele, du spielst …',m:'pers',icon:'ich <span class="wV">spiele</span>',gen:[()=>persTask(0),()=>persTask(1),()=>persTask(2)]},
+{t:'Grundform',g:'Verben',d:'er läuft → laufen',m:'gf',icon:'<span class="wV">läuft → laufen</span>',gen:[()=>gfTask(0),()=>gfTask(1),()=>gfTask(2)]},
+{t:'Gegenteile',g:'Adjektive',d:'groß ↔ klein',m:'geg',icon:'<span class="wA">groß ↔ klein</span>',gen:[()=>gegTask(0),()=>gegTask(1),()=>gegTask(2)]},
+{t:'Adjektive steigern',g:'Adjektive',d:'groß – größer – am größten',m:'steig',icon:'<span class="wA">groß · größer · am größten</span>',gen:[()=>steigTask(0),()=>steigTask(1),()=>steigTask(2)]},
+{t:'Selbstlaute/<wbr>Vokale',g:'Buchstaben und Laute',d:'a, e, i, o, u',m:'sl',icon:'a e i o u',gen:[()=>slTask(0),()=>slTask(1),()=>slTask(2)]},
+{t:'Mitlaute/<wbr>Konsonanten',g:'Buchstaben und Laute',d:'b, d, k, m, s …',m:'ml',icon:'b d k m s',gen:[()=>mlTask(0),()=>mlTask(1),()=>mlTask(2)]},
+{t:'Umlaute',g:'Buchstaben und Laute',d:'ä, ö, ü',m:'ul',icon:'ä ö ü',gen:[()=>ulTask(0),()=>ulTask(1),()=>ulTask(2)]},
+{t:'Zwielaute',g:'Buchstaben und Laute',d:'au, ei, eu, äu',m:'zl',icon:'au ei eu äu',gen:[()=>zlTask(0),()=>zlTask(1),()=>zlTask(2)]},
+{t:'Silben',g:'Buchstaben und Laute',d:'Schwingen und klatschen',m:'silb',icon:'Ba · na · ne',gen:[()=>silbTask(0),()=>silbTask(1),()=>silbTask(2)]}
+];
+const GROUPS=['So erkenne ich Wortarten','Nomen und Artikel','Verben','Adjektive','Buchstaben und Laute'];
+const LV=['leicht','mittel','schwer'];
+
+/* ---------- Sprache ---------- */
+function say(t){try{if(!window.speechSynthesis)return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='de-DE';u.rate=.85;const v=speechSynthesis.getVoices().filter(x=>/^de/i.test(x.lang));if(v.length)u.voice=v[0];speechSynthesis.speak(u);}catch(e){}}
+function plain(h){const d=document.createElement('div');d.innerHTML=h;return d.textContent.replace(/[👧👦]/gu,'');}
+
+/* ---------- Anzeige ---------- */
+let cur=null;
+function renderTask(t,report0,merkKey,showMerk){S0.help=showMerk?1:0;cur={t:t};if(!t._col){colorize(t,merkKey);t._col=1;}
+  const report=(ok,h)=>{report0(ok,h);if(ok)doneColor();};
+  const fb=$('#fb');fb.className='';fb.textContent='';
+  const pr=$('#prompt');pr.innerHTML='';const sp=el('button','spk','&#128264;');sp.title='Vorlesen';sp.onclick=()=>say(t.say?plain(t.prompt)+' '+t.say:plain(t.prompt));pr.appendChild(sp);pr.appendChild(el('span','',t.prompt));
+  $('#help').innerHTML=showMerk&&MERK[merkKey]?'<div class="merk">'+MERK[merkKey]+'</div>':'';
+  $('#pic').innerHTML=t.pic?t.pic():'';
+  const A=$('#answer');A.innerHTML='';
+  if(t.type==='choice'){const o=el('div','opts');t.options.forEach(op=>{const b=el('button','opt '+(t.optCls||''),op.html);b.onclick=()=>{if(cur.locked()||b.classList.contains('bad'))return;if(op.val===t.ans){b.classList.add('good');report(true);}else{b.classList.add('bad');report(false,t.hint?t.hint(op.val):'Schau noch einmal genau.');}};o.appendChild(b);});A.appendChild(o);cur.check=null;}
+  else if(t.type==='tap'){const box=el('div','taps '+t.unit);cur.sel=t.tokens.map(()=>false);cur.btns=[];
+    t.tokens.forEach((tk,k)=>{const b=el('button','tapb',tk.html);b.onclick=()=>{if(cur.locked())return;cur.sel[k]=!cur.sel[k];b.classList.toggle('on',cur.sel[k]);b.classList.remove('bad');};box.appendChild(b);cur.btns.push(b);});
+    if(t.tail)box.appendChild(el('span','tail',t.tail));A.appendChild(box);
+    const ck=el('button','check','Prüfen');A.appendChild(ck);
+    cur.check=()=>{if(cur.locked())return;if(!cur.sel.some(Boolean)){fb.className='warn';fb.textContent='Tippe zuerst an.';return;}
+      const wrong=t.tokens.map((tk,k)=>cur.sel[k]&&!tk.ok);const miss=t.tokens.filter((tk,k)=>tk.ok&&!cur.sel[k]).length;
+      if(!wrong.some(Boolean)&&!miss){cur.btns.forEach((b,k)=>{if(cur.sel[k])b.classList.add('good');});report(true);return;}
+      cur.btns.forEach((b,k)=>{if(wrong[k]){b.classList.add('bad');cur.sel[k]=false;b.classList.remove('on');}});
+      report(false,(wrong.some(Boolean)?'Ein Wort passt nicht. ':'')+(miss?'Es fehlt noch '+(miss===1?'eins':'etwas')+'. ':'')+(t.hint?t.hint():''));};
+    ck.onclick=cur.check;}
+  else if(t.type==='custom'){const box=el('div','custom');A.appendChild(box);const m=t.mount(box);cur.custom=m;const ck=el('button','check','Prüfen');A.appendChild(ck);
+    cur.check=()=>{if(cur.locked())return;const r=m.check();if(r.ok)report(true);else report(false,r.hint);};ck.onclick=cur.check;}
+  else{const slots=el('div','slots');const pool=el('div','opts');cur.seq=[];
+    const draw=()=>{slots.innerHTML='';t.ans.forEach((x,k)=>{const s=el('button','slot'+(cur.seq[k]!=null?' full':''),(cur.seq[k]!=null?t.items[cur.seq[k]].html:''));s.onclick=()=>{if(cur.locked()||cur.seq[k]==null)return;cur.seq.splice(k,1);draw();};slots.appendChild(s);});
+      pool.innerHTML='';t.items.forEach((it,k)=>{const b=el('button','opt ord'+(cur.seq.includes(k)?' usedx':''),it.html);b.onclick=()=>{if(cur.locked()||cur.seq.includes(k))return;cur.seq.push(k);draw();};pool.appendChild(b);});};
+    A.appendChild(pool);A.appendChild(slots);A.appendChild(el('div','legend',t.legend||'Tippe der Reihe nach an. Zum Zurücknehmen unten auf ein Feld tippen.'));
+    const ck=el('button','check','Prüfen');A.appendChild(ck);draw();cur.draw=draw;
+    cur.check=()=>{if(cur.locked())return;if(cur.seq.length<t.ans.length){fb.className='warn';fb.textContent='Lege zuerst alle '+(t.what||'Silben')+'.';return;}
+      const got=cur.seq.map(k=>t.items[k].k);if(got.every((x,k)=>x===t.ans[k]))report(true);else{const k=got.findIndex((x,j)=>x!==t.ans[j]);cur.seq=cur.seq.slice(0,k);draw();report(false,'Platz '+(k+1)+' stimmt noch nicht. '+t.hint);}};
+    ck.onclick=cur.check;}
+}
+function solution(){const t=cur.t;if(t.type==='custom')return '<b>'+t.solution+'</b>';if(t.type==='choice')return '<b>'+t.ans+'</b>'+(t.after?' ('+t.after+')':'');if(t.type==='tap')return '<b>'+t.tokens.filter(x=>x.ok).map(x=>x.html).join(', ')+'</b>';return '<b>'+t.ans.join(' – ')+'</b>';}
+function showSolution(){setTimeout(doneColor,0);const t=cur.t;if(t.type==='choice')document.querySelectorAll('#answer .opt').forEach((b,k)=>{if(t.options[k].val===t.ans)b.classList.add('good');});
+  else if(t.type==='tap')cur.btns.forEach((b,k)=>{b.classList.remove('bad','on');if(t.tokens[k].ok)b.classList.add('good');});
+  else if(t.type==='custom')cur.custom.solve();
+  else{cur.seq=t.ans.map(a=>t.items.findIndex(x=>x.k===a));cur.draw();}}
+function solveAuto(){const t=cur.t;if(t.type==='choice'){document.querySelectorAll('#answer .opt')[t.options.findIndex(o=>o.val===t.ans)].click();}
+  else if(t.type==='tap'){t.tokens.forEach((tk,k)=>{if(tk.ok)cur.btns[k].click();});cur.check();}
+  else if(t.type==='custom'){cur.custom.solve();cur.check();}
+  else{t.ans.forEach(a=>{const k=t.items.findIndex(x=>x.k===a);document.querySelectorAll('#answer .opt.ord')[k].click();});cur.check();}}
+function validate(t,tag,errs){
+  if(t.type==='choice'){const vs=t.options.map(o=>o.val);if(!vs.includes(t.ans))errs.push(tag+' Lösung fehlt '+t.ans+' in '+vs);if(new Set(vs).size!==vs.length)errs.push(tag+' doppelt '+vs);if(vs.length<2)errs.push(tag+' zu wenig');
+    vs.forEach(v=>{if(v==null||v===''||/undefined|null|NaN/.test(String(v)))errs.push(tag+' leer '+vs);});}
+  if(t.type==='tap'){if(!t.tokens.some(x=>x.ok))errs.push(tag+' nichts zu tippen');}
+  if(t.type==='order'){if(new Set(t.ans).size!==t.ans.length)errs.push(tag+' Silben doppelt');}
+  if(/undefined|NaN|null/.test(t.prompt+(t.pic?t.pic():'')))errs.push(tag+' Text kaputt: '+t.prompt);}
+
+/* ---------- Werkstatt ---------- */
+const S={lv:0,help:false,st:0,tasks:[],i:0,tries:0,locked:false,res:[],best:{}};
+try{const b=JSON.parse(localStorage.getItem('wa_best')||'{}');if(b&&typeof b==='object')S.best=b;}catch(e){}
+function saveBest(){try{localStorage.setItem('wa_best',JSON.stringify(S.best));}catch(e){}}
+function seg(id,key,cb){document.querySelectorAll(id+' button').forEach(b=>{b.onclick=()=>{S[key]=+b.dataset.v;mark(id,S[key]);cb&&cb();};});mark(id,S[key]);}
+function mark(id,v){document.querySelectorAll(id+' button').forEach(b=>b.classList.toggle('on',+b.dataset.v===+v));}
+function buildHome(){const box=$('#stations');box.innerHTML='';
+  GROUPS.forEach(g=>{box.appendChild(el('div','group',g));const grid=el('div','grid');
+    ST.forEach((s,id)=>{if(s.g!==g)return;const b=el('button','st');const best=S.best[id]||{};
+      b.innerHTML='<div class="ic"><span>'+s.icon+'</span></div><b><span class="nr">'+(id+1)+'</span>'+s.t+'</b><small>'+s.d+'</small><div class="stars">'+LV.map((l,k)=>best[k]!=null?l[0].toUpperCase()+': '+'★'.repeat(best[k]):'').filter(Boolean).join('  ')+'</div>';
+      b.onclick=()=>start(id,S.lv);grid.appendChild(b);});box.appendChild(grid);});}
+function start(id,lv){S.st=id;S.lv=lv;used=new Set();S.tasks=[];
+  for(let i=0;i<6;i++)S.tasks.push(ST[id].gen[lv](i));
+  S.i=0;S.res=[];$('#home').classList.add('hidden');$('#end').classList.add('hidden');$('#game').classList.remove('hidden');
+  $('#title').innerHTML='<span class="nr" style="display:inline-block;background:var(--z);color:#fff;border-radius:50%;width:2rem;height:2rem;text-align:center;line-height:2rem;font-size:1.1rem;margin-right:.4rem">'+(id+1)+'</span>'+ST[id].t;
+  mark('#gLv',lv);render();}
+function dots(){const d=$('#dots');d.innerHTML='';for(let i=0;i<6;i++){const x=el('i');if(i<S.res.length)x.className=S.res[i];else if(i===S.i)x.className='cur';d.appendChild(x);}}
+function render(){const t=S.tasks[S.i];S.tries=0;S.locked=false;$('#next').disabled=true;renderTask(t,report,ST[S.st].m,S.help);cur.locked=()=>S.locked;dots();}
+const PRAISE=['Super!','Richtig!','Klasse!','Prima!','Toll gemacht!','Stark!'];
+function report(ok,hint){if(S.locked)return;const fb=$('#fb');const t=cur.t;
+  if(ok){S.locked=true;S.res[S.i]=S.tries===0?'star':'ok';fb.className='ok';fb.innerHTML=pick(PRAISE)+(S.tries===0?' ★':'')+(t.after?' <span style="font-weight:normal">'+t.after+'</span>':'');finish();return;}
+  S.tries++;
+  if(S.tries>=3){S.locked=true;S.res[S.i]='miss';fb.className='warn';fb.innerHTML='Schau dir die Lösung an: '+solution();showSolution();finish();return;}
+  fb.className='warn';fb.textContent=hint||'Versuche es noch einmal.';}
+function finish(){dots();const n=$('#next');n.disabled=false;n.textContent=S.i<5?'Weiter →':'Fertig ✓';}
+$('#next').onclick=()=>{if(S.i<5){S.i++;render();}else endRound();};
+function endRound(){const st=S.res.filter(r=>r==='star').length;S.best[S.st]=S.best[S.st]||{};S.best[S.st][S.lv]=Math.max(S.best[S.st][S.lv]||0,st);saveBest();
+  $('#endS').textContent='★'.repeat(st)+'☆'.repeat(6-st);$('#endT').textContent=st>=5?'Super gemacht!':st>=3?'Gut gemacht!':'Geschafft!';
+  $('#endP').textContent=ST[S.st].t+' – '+LV[S.lv]+': '+st+' von 6 Sternen.'+(st>=5&&S.lv<2?' Probier doch die nächste Stufe!':st<3&&S.lv>0?' Tipp: Üb noch einmal oder nimm eine leichtere Stufe.':'');
+  $('#harder').classList.toggle('hidden',S.lv>=2);$('#end').classList.remove('hidden');}
+$('#again').onclick=()=>start(S.st,S.lv);
+$('#harder').onclick=()=>start(S.st,Math.min(2,S.lv+1));
+$('#other').onclick=goHome;$('#homeBtn').onclick=goHome;
+function goHome(){$('#end').classList.add('hidden');$('#game').classList.add('hidden');$('#home').classList.remove('hidden');buildHome();try{speechSynthesis.cancel();}catch(e){}}
+$('#helpBtn').onclick=()=>{S.help=!S.help;S0.help=S.help?1:0;$('#helpBtn').classList.toggle('on',S.help);const t=S.tasks[S.i];const m=MERK[ST[S.st].m];$('#help').innerHTML=S.help&&m?'<div class="merk">'+m+'</div>':'';$('#pic').innerHTML=t.pic?t.pic():'';};
+$('#fsBtn').onclick=()=>{try{if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen();}catch(e){}};
+seg('#sLv','lv');seg('#gLv','lv',()=>start(S.st,S.lv));
+document.addEventListener('keydown',e=>{if($('#game').classList.contains('hidden'))return;if(e.key==='Enter'){if(!$('#next').disabled)$('#next').click();else if(cur&&cur.check)cur.check();}});
+buildHome();
+window.__selftest=function(rounds){rounds=rounds||20;const errs=[];let count=0;const keep=S.best;
+  [false,true].forEach(h=>{S.help=h;ST.forEach((s,id)=>{for(let lv=0;lv<3;lv++)for(let r=0;r<rounds;r++){
+    try{start(id,lv);for(let i=0;i<6;i++){const t=S.tasks[i];count++;const tag=s.t+'/'+LV[lv]+'#'+i;validate(t,tag,errs);
+      if(r%4===3&&t.type==='choice'&&t.options.length>2){const bad=t.options.findIndex(o=>o.val!==t.ans);document.querySelectorAll('#answer .opt')[bad].click();if(S.locked)errs.push(tag+' falsch gesperrt');solveAuto();if(S.res[i]!=='ok')errs.push(tag+' 2. Versuch');}
+      else{solveAuto();if(!S.locked||S.res[i]!=='star')errs.push(tag+' nicht gelöst: '+$('#fb').textContent);}
+      if(i<5){S.i++;render();}}}catch(e){errs.push(s.t+'/'+lv+' '+e.message+' '+e.stack.split('\n')[1]);}
+  }});});S.best={};saveBest();goHome();return {count:count,errs:errs.slice(0,40),nerr:errs.length};};
+</script>
+</body>
+</html>
